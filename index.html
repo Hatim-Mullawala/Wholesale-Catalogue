@@ -20,7 +20,7 @@
         .image-box { width: 100%; height: 200px; background: #eee; border-radius: 4px; margin-bottom: 12px; overflow: hidden; }
         .image-box img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* Category Section Headers */
+        /* Black Category Headers */
         .category-header { background: var(--dark-bg); color: var(--primary-gold); padding: 12px 20px; font-size: 20px; font-weight: bold; text-transform: uppercase; margin-top: 30px; border-radius: 4px; border-left: 5px solid var(--primary-gold); }
         
         .brand-tag { font-size: 12px; font-weight: bold; color: var(--primary-gold); text-transform: uppercase; margin-bottom: 5px; }
@@ -59,13 +59,13 @@
 
 <div id="catalog-container">
     <div style="text-align: center; padding: 50px; font-size: 18px; color: #666; font-family: sans-serif;">
-        <span style="display: block; margin-bottom: 10px;">🔄</span>
+        <span style="display: block; margin-bottom: 10px; font-size: 30px;">🔄</span>
         Syncing Wholesale Inventory...
     </div>
 </div>
 
 <script>
-    // 1. PASTE YOUR NEW WHOLESALE GOOGLE SHEET CSV LINK HERE
+    // 1. UPDATE THIS LINK WITH YOUR WHOLESALE SHEET CSV
     const sheetURL = 'YOUR_WHOLESALE_CSV_URL_HERE';
 
     function handleImageError(img, bImg, nImg, kImg) {
@@ -78,7 +78,7 @@
             img.src = kImg; 
         } else { 
             img.onerror = null; 
-            img.src = 'https://via.placeholder.com/250?text=Photo+Required'; 
+            img.src = 'https://via.placeholder.com/250?text=Photo+Coming+Soon'; 
         }
     }
 
@@ -86,13 +86,13 @@
         try {
             const response = await fetch(sheetURL);
             const data = await response.text();
+            // Splits rows and removes empty lines
             const rows = data.split('\n').filter(row => row.trim() !== '').slice(1);
             
             const products = rows.map(row => {
-                // Simple CSV parser that handles basic commas
                 const cols = row.split(',').map(c => c.trim());
                 return {
-                    category: cols[0] || 'Uncategorized',
+                    category: cols[0] || 'General Hardware',
                     brand: cols[1] || '',
                     name: cols[2] || '',
                     specs: cols[3] || '',
@@ -102,7 +102,8 @@
 
             renderGrid(products);
         } catch (error) {
-            document.getElementById('catalog-container').innerHTML = '<p style="text-align:center; color:red;">Error loading wholesale data. Please check CSV link.</p>';
+            document.getElementById('catalog-container').innerHTML = 
+                '<p style="text-align:center; padding: 50px; color:red;">Unable to load Wholesale Data. Check your Internet or CSV link.</p>';
         }
     }
 
@@ -112,16 +113,16 @@
         let html = "";
 
         products.forEach(p => {
-            // Logic to create a new black bar when category changes
+            // Logic for Category Divider Bars
             if (p.category !== currentCategory) {
-                if (html !== "") html += `</div>`; // Close previous grid
+                if (html !== "") html += `</div>`; 
                 currentCategory = p.category;
                 html += `<div class="category-header">${currentCategory}</div><div class="product-grid">`;
             }
 
             const clean = (t) => (t || '').toLowerCase().trim().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
             
-            // USING THE 'WHOLESALE' FOLDER FOR IMAGES
+            // POINTED TO THE 'WHOLESALE' FOLDER
             const bImg = `wholesale/${clean(p.brand)}-${clean(p.name)}.jpg`;
             const nImg = `wholesale/${clean(p.name)}.jpg`;
             const kImg = `wholesale/${clean(p.keyword)}.jpg`;
