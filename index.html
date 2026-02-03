@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wholesale Catalogue - Hatimi Hardware</title>
+    <style>
+        :root { --primary-gold: #b38728; --dark-bg: #1a1a1a; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; }
+        
+        /* Header Layout */
+        .catalog-header { width: 100%; background: white; border-bottom: 5px solid var(--primary-gold); padding-bottom: 15px; margin-bottom: 20px; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        
+        /* Product Grid Styling */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; padding: 20px 0; }
+        .product-card { background: white; border-radius: 8px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; flex-direction: column; transition: transform 0.2s; }
+        .product-card:hover { transform: translateY(-5px); }
+        
+        .image-box { width: 100%; height: 200px; background: #eee; border-radius: 4px; margin-bottom: 12px; overflow: hidden; }
+        .image-box img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* Category Section Headers */
+        .category-header { background: var(--dark-bg); color: var(--primary-gold); padding: 12px 20px; font-size: 20px; font-weight: bold; text-transform: uppercase; margin-top: 30px; border-radius: 4px; border-left: 5px solid var(--primary-gold); }
+        
+        .brand-tag { font-size: 12px; font-weight: bold; color: var(--primary-gold); text-transform: uppercase; margin-bottom: 5px; }
+        .product-name { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 8px; }
+        .specs { font-size: 13px; color: #666; margin-bottom: 15px; flex-grow: 1; }
+        
+        .price-contact-btn { background: var(--primary-gold); color: white; text-decoration: none; text-align: center; padding: 10px; border-radius: 4px; font-weight: bold; font-size: 14px; text-transform: uppercase; }
+
+        @media print { .header-actions { display: none; } }
+    </style>
+</head>
+<body>
+
+<header class="catalog-header">
+    <div class="header-content">
+        <div class="logo-box" style="display: flex; align-items: center; gap: 12px;">
+            <img src="logo.png" alt="Logo" onerror="this.src='https://via.placeholder.com/80x80?text=HATIMI'" style="height: 70px; width: auto; object-fit: contain;">
+            <div class="shop-info">
+                <h1 style="margin: 0; color: var(--primary-gold); font-size: 32px; text-transform: uppercase; line-height: 1.1;">Hatimi Hardware</h1>
+                <p style="margin: 4px 0 0 0; font-weight: 800; color: #444; font-size: 16px; letter-spacing: 0.5px;">Quality Fittings • Trusted Tools</p>
+            </div>
+        </div>
+
+        <div style="flex-grow: 1;"></div>
+
+        <div class="header-actions" style="display: flex; gap: 10px;">
+            <button onclick="location.reload()" title="Refresh" style="background: #f8f8f8; border: 1px solid #ddd; padding: 10px; border-radius: 50%; cursor: pointer; display: flex;">
+                <svg style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#b38728" d="M12,18A6,6 0 0,1 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12A8,8 0 0,0 12,20V23L16,19L12,15V18M12,4V1L8,5L12,9V6A6,6 0 0,1 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12A8,8 0 0,0 12,4Z" /></svg>
+            </button>
+            <button onclick="window.print()" title="Print" style="background: #f8f8f8; border: 1px solid #ddd; padding: 10px; border-radius: 50%; cursor: pointer; display: flex;">
+                <svg style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#b38728" d="M18,3H6V7H18M19,12A1,1 0 0,1 18,11A1,1 0 0,1 19,10A1,1 0 0,1 20,11A1,1 0 0,1 19,12M16,19H8V14H16M19,8H5A3,3 0 0,0 2,11V17H6V21H18V17H22V11A3,3 0 0,0 19,8Z" /></svg>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div id="catalog-container">
+    <div style="text-align: center; padding: 50px; font-size: 18px; color: #666; font-family: sans-serif;">
+        <span style="display: block; margin-bottom: 10px;">🔄</span>
+        Syncing Wholesale Inventory...
+    </div>
+</div>
+
+<script>
+    // 1. PASTE YOUR NEW WHOLESALE GOOGLE SHEET CSV LINK HERE
+    const sheetURL = 'YOUR_WHOLESALE_CSV_URL_HERE';
+
+    function handleImageError(img, bImg, nImg, kImg) {
+        let step = parseInt(img.getAttribute('data-step') || '1');
+        if (step === 1) { 
+            img.setAttribute('data-step', '2'); 
+            img.src = nImg; 
+        } else if (step === 2) { 
+            img.setAttribute('data-step', '3'); 
+            img.src = kImg; 
+        } else { 
+            img.onerror = null; 
+            img.src = 'https://via.placeholder.com/250?text=Photo+Required'; 
+        }
+    }
+
+    async function loadData() {
+        try {
+            const response = await fetch(sheetURL);
+            const data = await response.text();
+            const rows = data.split('\n').filter(row => row.trim() !== '').slice(1);
+            
+            const products = rows.map(row => {
+                // Simple CSV parser that handles basic commas
+                const cols = row.split(',').map(c => c.trim());
+                return {
+                    category: cols[0] || 'Uncategorized',
+                    brand: cols[1] || '',
+                    name: cols[2] || '',
+                    specs: cols[3] || '',
+                    keyword: cols[4] || 'hardware'
+                };
+            });
+
+            renderGrid(products);
+        } catch (error) {
+            document.getElementById('catalog-container').innerHTML = '<p style="text-align:center; color:red;">Error loading wholesale data. Please check CSV link.</p>';
+        }
+    }
+
+    function renderGrid(products) {
+        const container = document.getElementById('catalog-container');
+        let currentCategory = "";
+        let html = "";
+
+        products.forEach(p => {
+            // Logic to create a new black bar when category changes
+            if (p.category !== currentCategory) {
+                if (html !== "") html += `</div>`; // Close previous grid
+                currentCategory = p.category;
+                html += `<div class="category-header">${currentCategory}</div><div class="product-grid">`;
+            }
+
+            const clean = (t) => (t || '').toLowerCase().trim().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+            
+            // USING THE 'WHOLESALE' FOLDER FOR IMAGES
+            const bImg = `wholesale/${clean(p.brand)}-${clean(p.name)}.jpg`;
+            const nImg = `wholesale/${clean(p.name)}.jpg`;
+            const kImg = `wholesale/${clean(p.keyword)}.jpg`;
+
+            const waMsg = encodeURIComponent(`Wholesale Inquiry: ${p.brand} ${p.name}`);
+
+            html += `
+                <div class="product-card">
+                    <div class="image-box">
+                        <img src="${bImg}" data-step="1" onerror="handleImageError(this, '${bImg}', '${nImg}', '${kImg}')">
+                    </div>
+                    <div class="brand-tag">${p.brand}</div>
+                    <div class="product-name">${p.name}</div>
+                    <div class="specs">${p.specs}</div>
+                    <a href="https://wa.me/919406648766?text=${waMsg}" class="price-contact-btn" target="_blank">GET BULK QUOTE</a>
+                </div>`;
+        });
+        container.innerHTML = html + "</div>";
+    }
+
+    loadData();
+</script>
+</body>
+</html>
