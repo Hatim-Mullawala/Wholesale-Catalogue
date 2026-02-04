@@ -2,111 +2,152 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hand Tools Catalogue</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wholesale Catalogue - Hatimi Hardware</title>
     <style>
-        /* --- ORIGINAL MASTER TEMPLATE --- */
-        body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f4f4; }
+        :root { --primary-gold: #b38728; --dark-bg: #333; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; }
 
-        /* THE HEADER WITH LOGO AND TITLE */
-        .header-container {
-            background-color: white; padding: 10px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 2px solid #333;
+        .search-container { background: white; padding: 15px 0; display: flex; justify-content: center; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 1000; }
+        .search-box { width: 60%; max-width: 700px; padding: 12px 25px; border: 1.5px solid var(--primary-gold); border-radius: 50px; font-size: 16px; outline: none; }
+
+        .main-wrapper { max-width: 1300px; margin: 20px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 25px rgba(0,0,0,0.06); }
+
+        .catalog-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 25px; border-bottom: 3px solid var(--primary-gold); margin-bottom: 30px; }
+        .logo-section { display: flex; align-items: center; gap: 18px; }
+        .logo-img { height: 75px; width: auto; }
+        .brand-name { margin: 0; font-size: 34px; font-weight: 800; color: #b38728; text-transform: uppercase; }
+        .tagline { margin: 0; font-size: 17px; color: #444; font-weight: 700; }
+
+        /* THE GOLDEN CIRCULAR ICONS */
+        .action-buttons { display: flex; gap: 15px; }
+        .icon-btn { 
+            background: white; 
+            border: 1px solid #f0f0f0; 
+            border-radius: 50%; 
+            width: 50px; 
+            height: 50px; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
+            transition: 0.3s;
         }
-        .logo-box { width: 100px; }
-        .logo-box img { max-width: 100%; height: auto; }
-        .header-title { flex-grow: 1; text-align: center; font-size: 1.5rem; font-weight: bold; }
-        .header-icons { width: 100px; text-align: right; font-size: 1.2rem; }
+        .icon-btn:hover { box-shadow: 0 6px 15px rgba(179, 135, 40, 0.2); }
 
-        .category-header {
-            background-color: #333; color: white; padding: 10px 20px;
-            font-size: 1.2rem; font-weight: bold; position: sticky; top: 0; z-index: 1000;
-        }
+        .category-header { background: #333; color: #fff; padding: 14px 20px; font-size: 15px; font-weight: bold; text-transform: uppercase; margin-top: 40px; border-left: 10px solid var(--primary-gold); border-radius: 5px 5px 0 0; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 25px; padding: 25px; border: 1px solid #eee; border-top: none; margin-bottom: 30px; border-radius: 0 0 10px 10px; }
+        
+        .product-card { background: white; border: 1.5px solid #efefef; border-radius: 12px; padding: 20px; text-align: center; display: flex; flex-direction: column; height: auto; transition: 0.3s; }
+        .img-holder { height: 160px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; }
+        .img-holder img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-        .product-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 15px; padding: 20px;
-        }
+        .p-brand { color: var(--primary-gold); font-size: 11px; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; }
+        .p-name { font-size: 19px; font-weight: 800; color: #222; margin-bottom: 12px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
+        .p-specs { font-size: 14px; color: #555; font-weight: 600; margin-bottom: 25px; flex-grow: 1; display: flex; align-items: center; justify-content: center; line-height: 1.5; min-height: 40px; }
 
-        .product-card {
-            background: white; border-radius: 5px; padding: 15px;
-            display: flex; flex-direction: column; align-items: center; text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
+        .btn-request { border: 1.5px solid #d4af37; color: #8c6d12; background: white; padding: 10px; border-radius: 6px; font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 11px; }
 
-        .img-holder { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
-        .img-holder img { max-width: 100%; max-height: 100%; object-fit: contain; }
-
-        .p-brand { font-size: 0.8rem; color: #888; font-weight: bold; margin-bottom: 5px; }
-        .p-name { font-size: 1rem; font-weight: bold; margin-bottom: 5px; }
-        .p-specs { font-size: 0.9rem; color: #666; margin-bottom: 15px; }
-
-        .btn-request {
-            background-color: #27ae60; color: white; text-decoration: none;
-            padding: 10px; border-radius: 4px; font-weight: bold; width: 100%;
-        }
+        @media print { .search-container, .action-buttons { display: none; } }
     </style>
 </head>
 <body>
 
-    <div class="header-container">
-        <div class="logo-box"><img src="logo.png" alt="Logo"></div>
-        <div class="header-title">Hand Tools Catalogue</div>
-        <div class="header-icons">🔍 🛒</div>
+<div class="search-container">
+    <input type="text" id="searchInput" class="search-box" placeholder="Search product or brand..." onkeyup="filterProducts()">
+</div>
+
+<div class="main-wrapper">
+    <header class="catalog-header">
+        <div class="logo-section">
+            <img src="logo.png" class="logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/80'">
+            <div>
+                <h1 class="brand-name">Hatimi Hardware</h1>
+                <p class="tagline">Quality Fittings • Trusted Tools</p>
+            </div>
+        </div>
+        <div class="action-buttons">
+            <button class="icon-btn" onclick="location.reload()" title="Refresh">
+                <svg width="24" height="24" viewBox="0 0 24 24"><path fill="#b38728" d="M12,18A6,6 0 0,1 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12A8,8 0 0,0 12,20V23L16,19L12,15V18M12,4V1L8,5L12,9V6A6,6 0 0,1 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12A8,8 0 0,0 12,4Z"/></svg>
+            </button>
+            <button class="icon-btn" onclick="window.print()" title="Print">
+                <svg width="24" height="24" viewBox="0 0 24 24"><path fill="#b38728" d="M18,3H6V7H18M19,12A1,1 0 0,1 18,11A1,1 0 0,1 19,10A1,1 0 0,1 20,11A1,1 0 0,1 19,12M16,19H8V14H16M19,8H5A3,3 0 0,0 2,11V17H6V21H18V17H22V11A3,3 0 0,0 19,8Z"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <div id="catalog-container">
+        <p style="text-align:center; padding: 50px;">Syncing Wholesale Catalogue...</p>
     </div>
+</div>
 
-    <div id="catalog-container"></div>
+<script>
+    const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqfLPTM9QCajpUToFw0B2UTKUIv-0d3P5ldQxLWKYfD98PPVf5ZEDXITZuTrdNPh8D8dDKcJxO1D4O/pub?gid=897547923&single=true&output=csv';
+    let allProducts = [];
 
-    <script>
-        const sheetURL = "YOUR_TOOLS_SHEET_CSV_URL"; // Enter your Tools CSV link here
-
-        async function loadData() {
-            try {
-                const response = await fetch(sheetURL);
-                const data = await response.text();
-                const rows = data.split('\n').filter(r => r.trim() !== '').slice(1);
-                
-                let products = rows.map(row => {
-                    const cols = row.split(',').map(c => c.trim().replace(/^"|"$/g, ''));
-                    return { cat: cols[0], brand: cols[1], name: cols[2], specs: cols[3] };
-                });
-
-                products.sort((a, b) => a.cat.localeCompare(b.cat));
-                renderGrid(products);
-            } catch (e) { console.error(e); }
+    function parseCSVLine(line) {
+        const result = [];
+        let cell = '';
+        let inQuotes = false;
+        for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            if (char === '"' && line[i+1] === '"') { cell += '"'; i++; }
+            else if (char === '"') { inQuotes = !inQuotes; }
+            else if (char === ',' && !inQuotes) { result.push(cell.trim()); cell = ''; }
+            else { cell += char; }
         }
+        result.push(cell.trim());
+        return result;
+    }
 
-        function renderGrid(products) {
-            const container = document.getElementById('catalog-container');
-            let currentCat = "";
-            let html = "";
-
-            products.forEach(p => {
-                if (p.cat !== currentCat) {
-                    if (html !== "") html += `</div>`;
-                    currentCat = p.cat;
-                    html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
-                }
-
-                const clean = (t) => (t || '').toString().toLowerCase().trim().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-                
-                // Using the specific tool/ folder path
-                const img = `tool/${clean(p.brand)}-${clean(p.name)}.jpg`;
-
-                html += `
-                    <div class="product-card">
-                        <div class="img-holder">
-                            <img src="${img}" onerror="this.src='https://via.placeholder.com/150?text=No+Tool+Photo';">
-                        </div>
-                        <div class="p-brand">${p.brand}</div>
-                        <div class="p-name">${p.name}</div>
-                        <div class="p-specs">${p.specs}</div>
-                        <a href="#" class="btn-request">Request Price</a>
-                    </div>`;
+    async function loadData() {
+        try {
+            const response = await fetch(sheetURL);
+            const data = await response.text();
+            const rows = data.split('\n').filter(r => r.trim() !== '').slice(1);
+            allProducts = rows.map(row => {
+                const cols = parseCSVLine(row); 
+                return { cat: cols[0] || 'Uncategorized', brand: cols[1] || '', name: cols[2] || '', specs: cols[3] || '', key: cols[4] || '' };
             });
-            container.innerHTML = html + "</div>";
-        }
-        loadData();
-    </script>
+            allProducts.sort((a, b) => a.cat.localeCompare(b.cat) || a.name.localeCompare(b.name));
+            renderGrid(allProducts);
+        } catch (e) { document.getElementById('catalog-container').innerHTML = "Error loading data."; }
+    }
+
+    function renderGrid(products) {
+        const container = document.getElementById('catalog-container');
+        let currentCat = "";
+        let html = "";
+        products.forEach(p => {
+            if (p.cat !== currentCat) {
+                if (html !== "") html += `</div>`;
+                currentCat = p.cat;
+                html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
+            }
+            const clean = (t) => (t || '').toString().toLowerCase().trim().replace(/["']/g, '').replace(/[,\s./_]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+            const b = clean(p.brand), n = clean(p.name), s = clean(p.specs), k = clean(p.key);
+            
+            html += `
+                <div class="product-card">
+                    <div class="img-holder">
+                        <img src="wholesale/${b}-${n}-${s}.jpg" onerror="this.src='wholesale/${b}-${n}.jpg'; this.onerror=function(){this.src='wholesale/${n}.jpg'; this.onerror=function(){this.src='wholesale/${k}.jpg'; this.onerror=function(){this.src='https://via.placeholder.com/150?text=Photo+Coming+Soon'};}}">
+                    </div>
+                    <div class="p-brand">${p.brand}</div>
+                    <div class="p-name">${p.name}</div>
+                    <div class="p-specs">${p.specs}</div>
+                    <a href="https://wa.me/919406648766" class="btn-request">Request Price</a>
+                </div>`;
+        });
+        container.innerHTML = html + "</div>";
+    }
+
+    function filterProducts() {
+        const term = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = allProducts.filter(p => p.name.toLowerCase().includes(term) || p.brand.toLowerCase().includes(term));
+        renderGrid(filtered);
+    }
+    loadData();
+</script>
 </body>
 </html>
