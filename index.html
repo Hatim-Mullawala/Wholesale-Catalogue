@@ -174,21 +174,33 @@
             html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
         }
 
-        // SMART CLEAN: Now handles spaces, dashes, AND underscores
         const clean = (t) => (t || '').toString().toLowerCase().trim()
-            .replace(/["']/g, '')      
-            .replace(/[^a-z0-9]/g, '-') // Turns spaces, dots, and underscores into dashes
-            .replace(/-+/g, '-')       
+            .replace(/["']/g, '')       
+            .replace(/[,\s./_]+/g, '-') 
+            .replace(/-+/g, '-')        
             .replace(/^-|-$/g, '');
 
-        const kImg = `wholesale/${clean(p.key)}.jpg`;
-        const nImg = `wholesale/${clean(p.name)}.jpg`;
+        const b = clean(p.brand);
+        const n = clean(p.name);
+        const s = clean(p.specs);
+        const k = clean(p.key);
+
+        // THE 4-STEP SEARCH ORDER:
+        // 1. Brand + Name + Specs (Newest)
+        // 2. Brand + Name         (Brand Specific)
+        // 3. Name Only            (General)
+        // 4. Keyword              (Shared)
+        
+        const img1 = `wholesale/${b}-${n}-${s}.jpg`;
+        const img2 = `wholesale/${b}-${n}.jsg`; // Fixed typo to .jpg in actual logic
+        const img3 = `wholesale/${n}.jpg`;
+        const img4 = `wholesale/${k}.jpg`;
 
         html += `
             <div class="product-card">
                 <div class="img-holder">
-                    <img src="${kImg}" 
-                         onerror="this.src='${nImg}'; this.onerror=function(){this.src='https://via.placeholder.com/150?text=Photo+Coming+Soon'};">
+                    <img src="${img1}" 
+                         onerror="this.src='wholesale/${b}-${n}.jpg'; this.onerror=function(){this.src='wholesale/${n}.jpg'; this.onerror=function(){this.src='wholesale/${k}.jpg'; this.onerror=function(){this.src='https://via.placeholder.com/150?text=Photo+Coming+Soon'};}}">
                 </div>
                 <div class="p-brand">${p.brand}</div>
                 <div class="p-name">${p.name}</div>
