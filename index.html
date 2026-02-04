@@ -109,14 +109,34 @@
         try {
             const response = await fetch(sheetURL);
             const data = await response.text();
+            // Splits rows and removes empty lines
             const rows = data.split('\n').filter(r => r.trim() !== '').slice(1);
             
             allProducts = rows.map(row => {
-                const cols = parseCSVLine(row);
-                return { cat: cols[0], brand: cols[1], name: cols[2], specs: cols[3], key: cols[4] };
+                const cols = parseCSVLine(row); 
+                return { 
+                    cat: cols[0] || 'Uncategorized', // Column A
+                    brand: cols[1] || '',           // Column B
+                    name: cols[2] || '',            // Column C
+                    specs: cols[3] || '',           // Column D
+                    key: cols[4] || ''              // Column E
+                };
             });
+
+            // ASCENDING SORTING LOGIC:
+            // 1. Sort by Category (A-Z)
+            // 2. Sort by Product Name (A-Z) within that category
+            allProducts.sort((a, b) => {
+                if (a.cat !== b.cat) {
+                    return a.cat.localeCompare(b.cat);
+                }
+                return a.name.localeCompare(b.name);
+            });
+
             renderGrid(allProducts);
-        } catch (e) { document.getElementById('catalog-container').innerHTML = "Check CSV Connection."; }
+        } catch (e) { 
+            document.getElementById('catalog-container').innerHTML = "Error loading data."; 
+        }
     }
 
     async function loadData() {
