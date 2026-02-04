@@ -154,14 +154,13 @@
             html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
         }
 
-        // This cleans the text to match filenames (lowercase, no spaces)
+        // SMART CLEAN: Now handles spaces, dashes, AND underscores
         const clean = (t) => (t || '').toString().toLowerCase().trim()
             .replace(/["']/g, '')      
-            .replace(/[^a-z0-9]/g, '-') 
+            .replace(/[^a-z0-9]/g, '-') // Turns spaces, dots, and underscores into dashes
             .replace(/-+/g, '-')       
             .replace(/^-|-$/g, '');
 
-        // Search order: 1. Keyword, 2. Product Name
         const kImg = `wholesale/${clean(p.key)}.jpg`;
         const nImg = `wholesale/${clean(p.name)}.jpg`;
 
