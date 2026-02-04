@@ -5,51 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wholesale Catalogue - Hatimi Hardware</title>
     <style>
-        :root { --primary-gold: #b38728; --dark-bg: #333; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; }
+    /* General Styles */
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: #f4f4f4; }
+    
+    /* Category Headers */
+    .category-header { 
+        background: #333; color: white; padding: 15px; 
+        font-size: 1.2rem; font-weight: bold; position: sticky; top: 0; z-index: 10;
+    }
 
-        .search-container { background: white; padding: 15px 0; display: flex; justify-content: center; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 1000; }
-        .search-box { width: 60%; max-width: 700px; padding: 12px 25px; border: 1.5px solid var(--primary-gold); border-radius: 50px; font-size: 16px; outline: none; }
+    /* The Responsive Grid */
+    .product-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+        gap: 10px; padding: 10px; 
+    }
 
-        .main-wrapper { max-width: 1300px; margin: 20px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 25px rgba(0,0,0,0.06); }
+    /* Product Card */
+    .product-card { 
+        background: white; border-radius: 8px; padding: 12px; 
+        display: flex; flex-direction: column; justify-content: space-between;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+    }
 
-        .catalog-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 25px; border-bottom: 3px solid var(--primary-gold); margin-bottom: 30px; }
-        .logo-section { display: flex; align-items: center; gap: 18px; }
-        .logo-img { height: 75px; width: auto; }
-        .brand-name { margin: 0; font-size: 34px; font-weight: 800; color: #b38728; text-transform: uppercase; }
-        .tagline { margin: 0; font-size: 17px; color: #444; font-weight: 700; }
+    .img-holder { 
+        width: 100%; height: 150px; display: flex; 
+        align-items: center; justify-content: center; margin-bottom: 10px; 
+    }
 
-        .action-buttons { display: flex; gap: 12px; }
-        .icon-btn { background: #fff; border: 1px solid #eee; border-radius: 50%; padding: 12px; cursor: pointer; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .img-holder img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        .category-header { background: #333; color: #fff; padding: 14px 20px; font-size: 15px; font-weight: bold; text-transform: uppercase; margin-top: 40px; border-left: 10px solid var(--primary-gold); border-radius: 5px 5px 0 0; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 25px; padding: 25px; border: 1px solid #eee; border-top: none; margin-bottom: 30px; border-radius: 0 0 10px 10px; }
-        
-        .product-card { background: white; border: 1.5px solid #efefef; border-radius: 12px; padding: 20px; text-align: center; display: flex; flex-direction: column; height: auto; transition: 0.3s; }
-        .img-holder { height: 160px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; }
-        .img-holder img { max-height: 100%; max-width: 100%; object-fit: contain; }
+    .p-brand { font-size: 0.8rem; color: #777; text-transform: uppercase; font-weight: bold; }
+    .p-name { font-size: 1rem; font-weight: bold; margin: 4px 0; color: #222; }
+    .p-specs { font-size: 0.85rem; color: #555; margin-bottom: 10px; }
 
-        .p-brand { color: var(--primary-gold); font-size: 11px; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; }
-        .p-name { font-size: 19px; font-weight: 800; color: #222; margin-bottom: 12px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
-        
-        .p-specs { 
-            font-size: 14px; 
-            color: #555; 
-            font-weight: 600; /* Makes sizes stand out */
-            margin-bottom: 25px; 
-            flex-grow: 1; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            line-height: 1.5;
-            min-height: 40px;
-            word-break: break-word;
-        }
+    /* Mobile-Friendly WhatsApp Button */
+    .btn-request { 
+        display: block; background: #25D366; color: white; 
+        text-align: center; padding: 10px; border-radius: 5px; 
+        text-decoration: none; font-weight: bold; font-size: 0.9rem;
+    }
 
-        .btn-request { border: 1.5px solid #d4af37; color: #8c6d12; background: white; padding: 10px; border-radius: 6px; font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 11px; }
-
-        @media print { .search-container, .action-buttons { display: none; } }
-    </style>
+    /* Mobile Specific Adjustments */
+    @media (max-width: 480px) {
+        .product-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 8px; }
+        .p-name { font-size: 0.9rem; }
+        .category-header { font-size: 1rem; padding: 10px; }
+        .img-holder { height: 120px; }
+    }
+</style>
 </head>
 <body>
 
