@@ -154,17 +154,16 @@
             html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
         }
 
-        // This cleans the name to match your filename exactly
-        const clean = (t) => (t || '').toLowerCase().trim()
+        // This cleans the text to match filenames (lowercase, no spaces)
+        const clean = (t) => (t || '').toString().toLowerCase().trim()
             .replace(/["']/g, '')      
             .replace(/[^a-z0-9]/g, '-') 
             .replace(/-+/g, '-')       
             .replace(/^-|-$/g, '');
 
-        // Use the Keyword (Column E) first for shared images
-        // We force lowercase here to match GitHub's requirements
-        const kImg = `wholesale/${clean(p.key)}.jpg`.toLowerCase();
-        const nImg = `wholesale/${clean(p.name)}.jpg`.toLowerCase();
+        // Search order: 1. Keyword, 2. Product Name
+        const kImg = `wholesale/${clean(p.key)}.jpg`;
+        const nImg = `wholesale/${clean(p.name)}.jpg`;
 
         html += `
             <div class="product-card">
