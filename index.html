@@ -143,42 +143,43 @@
     }
 
     function renderGrid(products) {
-        const container = document.getElementById('catalog-container');
-        let currentCat = "";
-        let html = "";
+    const container = document.getElementById('catalog-container');
+    let currentCat = "";
+    let html = "";
 
-        products.forEach(p => {
-            if (p.cat !== currentCat) {
-                if (html !== "") html += `</div>`;
-                currentCat = p.cat;
-                html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
-            }
+    products.forEach(p => {
+        if (p.cat !== currentCat) {
+            if (html !== "") html += `</div>`;
+            currentCat = p.cat;
+            html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
+        }
 
-            const clean = (t) => (t || '').toLowerCase().trim()
-                .replace(/["']/g, '')      
-                .replace(/[^a-z0-9]/g, '-') 
-                .replace(/-+/g, '-')       
-                .replace(/^-|-$/g, '');
+        // This cleans the name to match your filename exactly
+        const clean = (t) => (t || '').toLowerCase().trim()
+            .replace(/["']/g, '')      
+            .replace(/[^a-z0-9]/g, '-') 
+            .replace(/-+/g, '-')       
+            .replace(/^-|-$/g, '');
 
-            // PRIORITIZE KEYWORD FOR SHARED IMAGES
-            // If you use 'drill-bit' as keyword for 5 products, name image 'drill-bit.jpg'
-            const kImg = `wholesale/${clean(p.key)}.jpg`;
-            const nImg = `wholesale/${clean(p.name)}.jpg`;
+        // Use the Keyword (Column E) first for shared images
+        // We force lowercase here to match GitHub's requirements
+        const kImg = `wholesale/${clean(p.key)}.jpg`.toLowerCase();
+        const nImg = `wholesale/${clean(p.name)}.jpg`.toLowerCase();
 
-            html += `
-                <div class="product-card">
-                    <div class="img-holder">
-                        <img src="${kImg}" 
-                             onerror="this.src='${nImg}'; this.onerror=function(){this.src='https://via.placeholder.com/150?text=Photo+Coming+Soon'};">
-                    </div>
-                    <div class="p-brand">${p.brand}</div>
-                    <div class="p-name">${p.name}</div>
-                    <div class="p-specs">${p.specs}</div>
-                    <a href="https://wa.me/919406648766" class="btn-request">Request Price</a>
-                </div>`;
-        });
-        container.innerHTML = html + "</div>";
-    }
+        html += `
+            <div class="product-card">
+                <div class="img-holder">
+                    <img src="${kImg}" 
+                         onerror="this.src='${nImg}'; this.onerror=function(){this.src='https://via.placeholder.com/150?text=Photo+Coming+Soon'};">
+                </div>
+                <div class="p-brand">${p.brand}</div>
+                <div class="p-name">${p.name}</div>
+                <div class="p-specs">${p.specs}</div>
+                <a href="https://wa.me/919406648766" class="btn-request">Request Price</a>
+            </div>`;
+    });
+    container.innerHTML = html + "</div>";
+}
 
     function filterProducts() {
         const term = document.getElementById('searchInput').value.toLowerCase();
