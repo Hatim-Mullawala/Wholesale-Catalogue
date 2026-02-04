@@ -8,11 +8,13 @@
         :root { --primary-gold: #b38728; --dark-bg: #333; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; }
 
+        /* SEARCH BAR */
         .search-container { background: white; padding: 15px 0; display: flex; justify-content: center; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 1000; }
         .search-box { width: 60%; max-width: 700px; padding: 12px 25px; border: 1.5px solid var(--primary-gold); border-radius: 50px; font-size: 16px; outline: none; }
 
         .main-wrapper { max-width: 1300px; margin: 20px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 25px rgba(0,0,0,0.06); }
 
+        /* LOGO HEADER */
         .catalog-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 25px; border-bottom: 3px solid var(--primary-gold); margin-bottom: 30px; }
         .logo-section { display: flex; align-items: center; gap: 18px; }
         .logo-img { height: 75px; width: auto; }
@@ -39,18 +41,24 @@
         @media (max-width: 768px) {
             .main-wrapper { padding: 15px; margin: 10px; }
             .catalog-header { flex-direction: column; text-align: center; gap: 15px; }
+            .logo-section { flex-direction: column; }
             .brand-name { font-size: 24px; }
-            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; }
+            .product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; padding: 10px; }
             .img-holder { height: 120px; }
             .p-name { font-size: 15px; }
             .search-box { width: 85%; }
         }
 
-        /* PRINT FIX: FORCES 4 PRODUCTS PER LINE */
+        /* PRINT FIXES: FORCES HEADER ON ALL PAGES & 4 PRODUCTS PER LINE */
         @media print {
+            @page { margin: 1cm; }
             .search-container, .action-buttons, .btn-request { display: none !important; }
             body { background: white; }
             .main-wrapper { box-shadow: none; border: none; padding: 0; margin: 0; width: 100%; max-width: 100%; }
+            
+            /* FORCES LOGO TO REPEAT IF BROWSER SUPPORTS IT */
+            header.catalog-header { display: flex !important; position: relative; width: 100%; border-bottom: 2px solid var(--primary-gold); }
+            
             .product-grid { 
                 display: grid !important; 
                 grid-template-columns: repeat(4, 1fr) !important; 
@@ -59,7 +67,8 @@
             }
             .product-card { border: 1px solid #eee !important; break-inside: avoid; padding: 10px; }
             .img-holder { height: 100px; }
-            .p-name { font-size: 14px; min-height: auto; }
+            .p-name { font-size: 13px; min-height: auto; font-weight: 800; }
+            .category-header { break-after: avoid; margin-top: 20px; border-left: 5px solid var(--primary-gold); }
         }
     </style>
 </head>
