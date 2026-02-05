@@ -460,11 +460,7 @@
             </tr>`;
         });
     });
-    // Replace the Qty cell in your table loop with this
-`<td>
-    <input type="number" value="1" min="1" oninput="updateQty(${i}, this.value)" style="width:45px;">
-    <span class="unit-label" style="font-size: 11px; color: #666;">pcs</span>
- </td>`
+    
     updateGrandTotal();
     document.getElementById('priceModal').style.display = "flex";
 }
