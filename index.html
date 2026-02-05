@@ -262,6 +262,17 @@
             <input type="number" id="masterDisc" class="bulk-input" placeholder="0" oninput="applyMasterDiscount()">
             <span><strong>% OFF</strong></span>
         </div>
+        <div class="bulk-discount-box" style="margin-bottom: 10px;">
+    <span><strong>Set Unit for All:</strong></span>
+    <select id="masterUnit" class="bulk-input" onchange="applyMasterUnit()" style="width: 100px;">
+        <option value="pcs">pcs</option>
+        <option value="kg">kg</option>
+        <option value="pkt">pkt</option>
+        <option value="doz">doz</option>
+        <option value="mtr">mtr</option>
+        <option value="set">set</option>
+    </select>
+</div>
 
         <table class="modal-table">
             <thead>
@@ -449,6 +460,11 @@
             </tr>`;
         });
     });
+    // Replace the Qty cell in your table loop with this
+`<td>
+    <input type="number" value="1" min="1" oninput="updateQty(${i}, this.value)" style="width:45px;">
+    <span class="unit-label" style="font-size: 11px; color: #666;">pcs</span>
+ </td>`
     updateGrandTotal();
     document.getElementById('priceModal').style.display = "flex";
 }
@@ -475,15 +491,35 @@
         document.getElementById('grandTotal').innerText = `Total Order: ₹${total}`;
     }
 
-    function sendWhatsAppOrder() {
-        const sel = currentTableData.filter(r => r.selected);
-        if (!sel.length) return alert("Please select items to order!");
-        let msg = `*HATIMI HARDWARE ORDER*\n*Brand:* ${sel[0].brand}\n*Product:* ${sel[0].name}\n\n`;
-        sel.forEach(r => { msg += `• ${r.specs} (${r.qty} pcs): ₹${r.finalPrice}\n`; });
-        const total = document.getElementById('grandTotal').innerText;
-        msg += `\n*${total}*`;
-        window.open(`https://wa.me/919406648766?text=${encodeURIComponent(msg)}`);
-    }
+    // Changes the unit label in the table when the dropdown changes
+function applyMasterUnit() {
+    const unit = document.getElementById('masterUnit').value;
+    document.querySelectorAll('.unit-label').forEach(label => {
+        label.innerText = unit;
+    });
+}
+
+// Updated Order Function to use the selected unit
+function sendWhatsAppOrder() {
+    const sel = currentTableData.filter(r => r.selected);
+    if (!sel.length) return alert("Please select items to order!");
+    
+    // Get the unit selected in the dropdown
+    const selectedUnit = document.getElementById('masterUnit').value;
+    
+    let msg = `*HATIMI HARDWARE ORDER*\n`;
+    msg += `*Brand:* ${sel[0].brand}\n`;
+    msg += `*Product:* ${sel[0].name}\n\n`;
+
+    sel.forEach(r => {
+        msg += `• ${r.specs} (${r.qty} ${selectedUnit}): ₹${r.finalPrice}\n`;
+    });
+
+    const total = document.getElementById('grandTotal').innerText;
+    msg += `\n*${total}*`;
+    
+    window.open(`https://wa.me/919406648766?text=${encodeURIComponent(msg)}`);
+}
 
     function closeModal() { document.getElementById('priceModal').style.display = "none"; }
     
