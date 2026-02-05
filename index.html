@@ -5,246 +5,155 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wholesale Catalogue - Hatimi Hardware</title>
     <style>
-        :root { --primary-gold: #b38728; --dark-bg: #333; }
+        :root { --primary-gold: #b38728; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; }
 
+        /* HEADER & SEARCH */
         .search-container { background: white; padding: 15px 0; display: flex; justify-content: center; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 1000; }
         .search-box { width: 60%; max-width: 700px; padding: 12px 25px; border: 1.5px solid var(--primary-gold); border-radius: 50px; font-size: 16px; outline: none; }
 
         .main-wrapper { max-width: 1300px; margin: 20px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 25px rgba(0,0,0,0.06); }
-
         .catalog-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 25px; border-bottom: 3px solid var(--primary-gold); margin-bottom: 30px; }
         .logo-section { display: flex; align-items: center; gap: 15px; }
         .logo-img { height: 75px; width: auto; }
+        
+        /* BRANDING */
         .brand-name { margin: 0; font-size: 34px; font-weight: 800; color: #b38728; text-transform: uppercase; line-height: 1; }
         .tagline { margin: 0; font-size: 17px; color: #444; font-weight: 700; }
 
         .action-buttons { display: flex; gap: 15px; }
-        .icon-btn { 
-            background: white; border: 1px solid #f0f0f0; border-radius: 50%; 
-            width: 50px; height: 50px; cursor: pointer; 
-            display: flex; align-items: center; justify-content: center; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08); transition: 0.3s;
-        }
+        .icon-btn { background: white; border: 1px solid #f0f0f0; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
 
-        .category-header { background: #333; color: #fff; padding: 14px 20px; font-size: 15px; font-weight: bold; text-transform: uppercase; margin-top: 40px; border-left: 10px solid var(--primary-gold); border-radius: 5px 5px 0 0; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 25px; padding: 25px; border: 1px solid #eee; border-top: none; margin-bottom: 30px; border-radius: 0 0 10px 10px; }
+        /* PRODUCT GRID */
+        .category-header { background: #222; color: #fff; padding: 15px 25px; font-size: 18px; font-weight: 700; text-transform: uppercase; margin-top: 50px; border-left: 10px solid var(--primary-gold); border-radius: 4px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; padding: 25px; border: 1px solid #eee; border-top: none; margin-bottom: 30px; }
         
-        .product-card { background: white; border: 1.5px solid #efefef; border-radius: 12px; padding: 20px; text-align: center; display: flex; flex-direction: column; height: auto; transition: 0.3s; }
-        .img-holder { height: 160px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; }
+        .product-card { background: white; border: 1.5px solid #efefef; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; }
+        .img-holder { height: 180px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .img-holder img { max-height: 100%; max-width: 100%; object-fit: contain; }
+        
+        .p-name { font-size: 20px; font-weight: 800; color: #222; margin-bottom: 5px; }
+        .p-brand { color: var(--primary-gold); font-size: 12px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
+        .btn-view { background: var(--primary-gold); color: white; padding: 10px; border-radius: 6px; font-weight: 700; display: block; text-decoration: none; font-size: 12px; }
 
-        .p-brand { color: var(--primary-gold); font-size: 11px; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; }
-        .p-name { font-size: 19px; font-weight: 800; color: #222; margin-bottom: 12px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
-        .p-specs { font-size: 14px; color: #555; font-weight: 600; margin-bottom: 25px; flex-grow: 1; display: flex; align-items: center; justify-content: center; line-height: 1.5; min-height: 40px; word-break: break-word; }
+        /* MODAL & BULK DISCOUNT */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; }
+        .modal-content { background: white; width: 95%; max-width: 900px; padding: 30px; border-radius: 15px; position: relative; max-height: 90vh; overflow-y: auto; }
+        .close-modal { position: absolute; right: 20px; top: 15px; font-size: 30px; cursor: pointer; color: #888; }
+        .bulk-discount-box { background: #fff8e1; border: 1px dashed #b38728; padding: 15px; border-radius: 8px; margin: 15px 0; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .bulk-input { width: 80px; padding: 8px; border: 1.5px solid #b38728; border-radius: 5px; text-align: center; font-weight: bold; }
 
-        .btn-request { border: 1.5px solid #d4af37; color: #8c6d12; background: white; padding: 10px; border-radius: 6px; font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 11px; }
+        .modal-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .modal-table th { background: #f4f4f4; text-align: left; padding: 12px; border-bottom: 2px solid #ddd; }
+        .modal-table td { padding: 12px; border-bottom: 1px solid #eee; }
 
-        /* BACK TO TOP BUTTON STYLES */
-        #backToTop {
-            display: none; position: fixed; bottom: 30px; right: 30px; z-index: 1001;
-            background-color: white; color: var(--primary-gold); border: 2px solid var(--primary-gold);
-            width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: 0.3s; align-items: center; justify-content: center;
-        }
-        #backToTop:hover { background-color: var(--primary-gold); color: white; }
-
-        /* FOOTER STYLES */
+        /* FOOTER */
         footer { background: white; padding: 60px 20px 30px; border-top: 4px solid var(--primary-gold); margin-top: 80px; }
         .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-        .footer-column h3 { color: var(--primary-gold); font-size: 16px; font-weight: 800; text-transform: uppercase; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .footer-column p, .footer-column div { font-size: 14px; line-height: 1.8; color: #333; margin: 0; }
-        .footer-column strong { font-weight: 700; display: inline-block; width: 65px; }
-        .btn-whatsapp-footer { background-color: #25d366; color: white; text-decoration: none; padding: 12px 25px; border-radius: 50px; display: inline-block; font-weight: bold; font-size: 16px; margin-top: 20px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); }
-        .last-sync { text-align: center; color: var(--primary-gold); font-size: 12px; font-weight: 800; margin-top: 50px; text-transform: uppercase; letter-spacing: 1px; }
-        .copyright-text { text-align: center; font-size: 12px; color: #888; margin-top: 15px; }
+        .footer-column h3 { color: var(--primary-gold); font-size: 16px; font-weight: 800; text-transform: uppercase; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 
-        .print-only-table { display: none; }
-
-        @media (max-width: 768px) {
-            .main-wrapper { padding: 15px; margin: 10px; }
-            .catalog-header { flex-direction: column; text-align: center; gap: 15px; }
-            .logo-section { flex-direction: column; }
-            .brand-name { font-size: 24px; }
-            .product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; padding: 10px; }
-            .footer-container { grid-template-columns: 1fr; gap: 30px; }
-            #backToTop { bottom: 20px; right: 20px; width: 45px; height: 45px; }
-        }
-
-        @media print {
-            /* MINIMIZE TOP AND BOTTOM MARGINS */
-            @page { 
-                margin: 0.4cm 1cm 0.4cm 1cm; /* Top, Right, Bottom, Left */
-            }
-
-            .search-container, .action-buttons, .btn-request, .main-wrapper, #backToTop { display: none !important; }
-            .print-only-table { display: table !important; width: 100%; border-collapse: collapse; }
-            thead { display: table-header-group; }
-            body { background: white; margin: 0; padding: 0; }
-            
-            /* TIGHTER HEADER */
-           header.catalog-header { 
-        display: flex !important;
-        flex-direction: row !important; /* Forces side-by-side */
-        justify-content: flex-start !important; 
-        align-items: center !important;
-        padding: 5px 0 !important;
-        gap: 15px !important;
-    }
-
-    .logo-section { 
-        flex-direction: row !important; 
-        gap: 15px !important;
-    }
-            .logo-img { height: 40px !important; } 
-            .brand-name { 
-        font-size: 22px !important; 
-        white-space: nowrap; /* Prevents name from wrapping to a second line */
-    }
-    .tagline { 
-        font-size: 11px !important; 
-        margin-left: 10px !important;
-        display: inline-block !important; /* Keeps tagline on the same line if space permits */
-    }
-
-            /* COMPACT GRID AND CARDS */
-            .product-grid { 
-                display: grid !important; 
-                grid-template-columns: repeat(4, 1fr) !important; 
-                gap: 4px !important; 
-                padding: 0 !important; 
-            }
-            
-            .product-card { 
-                border: 1px solid #ddd !important; 
-                padding: 5px !important; 
-                height: auto !important; 
-                break-inside: avoid;
-            }
-            
-            .img-holder { height: 75px !important; margin-bottom: 3px !important; }
-            .p-name { font-size: 10px !important; line-height: 1.1; }
-            
-            /* TIGHTER FOOTER FOR LOWER MARGIN */
-            footer { 
-                display: block !important; 
-                border-top: 1px solid var(--primary-gold); 
-                margin-top: 10px !important; 
-                padding: 10px 0 !important; /* Reduced padding to save lower space */
-                page-break-inside: avoid; 
-            }
-            .footer-container { gap: 15px !important; }
-            .footer-column h3 { margin-bottom: 5px !important; font-size: 10px !important; }
-            .last-sync, .copyright-text { margin-top: 5px !important; font-size: 8px !important; }
+        /* PRINT PDF OPTIMIZATION */
+        @media print { 
+            @page { margin: 0.5cm !important; size: A4 portrait; }
+            * { box-sizing: border-box !important; }
+            .search-container, .btn-view, .modal, #backToTop, .action-buttons { display: none !important; }
+            .main-wrapper { width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; }
+            .product-grid { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 5px !important; width: 100% !important; margin: 0 auto !important; }
+            .product-card { border: 1px solid #eee !important; padding: 5px !important; page-break-inside: avoid; overflow: hidden !important; }
+            .p-specs-print { display: block !important; font-size: 10px !important; color: #b38728 !important; font-weight: 700 !important; word-wrap: break-word !important; margin-top: 4px; line-height: 1.1; }
+            .img-holder { height: 100px !important; margin-bottom: 5px !important; }
+            .p-name { font-size: 12px !important; line-height: 1.1; }
+            .p-brand { font-size: 8px !important; margin-bottom: 2px !important; }
+            footer { display: block !important; margin-top: 20px !important; border-top: 2px solid #b38728 !important; padding-top: 10px !important; }
         }
     </style>
 </head>
 <body>
 
 <div class="search-container">
-    <input type="text" id="searchInput" class="search-box" placeholder="Search product or brand..." onkeyup="filterProducts()">
+    <input type="text" id="searchInput" class="search-box" placeholder="Search product..." onkeyup="filterProducts()">
 </div>
 
 <div class="main-wrapper">
     <header class="catalog-header">
         <div class="logo-section">
-            <img src="logo.png" class="logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/80'">
+            <img src="logo.png" class="logo-img" alt="Hatimi Logo" onerror="this.src='https://via.placeholder.com/80'">
             <div>
                 <h1 class="brand-name">Hatimi Hardware</h1>
                 <p class="tagline">Quality Fittings • Trusted Tools</p>
             </div>
         </div>
         <div class="action-buttons">
-            <button class="icon-btn" onclick="location.reload()" title="Refresh">
+            <button class="icon-btn" onclick="location.reload()" title="Refresh Catalog">
                 <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#b38728" d="M12,18A6,6 0 0,1 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12A8,8 0 0,0 12,20V23L16,19L12,15V18M12,4V1L8,5L12,9V6A6,6 0 0,1 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12A8,8 0 0,0 12,4Z"/></svg>
             </button>
-            <button class="icon-btn" onclick="window.print()" title="Print">
+            <button class="icon-btn" onclick="window.print()" title="Download PDF">
                 <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#b38728" d="M18,3H6V7H18M19,12A1,1 0 0,1 18,11A1,1 0 0,1 19,10A1,1 0 0,1 20,11A1,1 0 0,1 19,12M16,19H8V14H16M19,8H5A3,3 0 0,0 2,11V17H6V21H18V17H22V11A3,3 0 0,0 19,8Z"/></svg>
             </button>
         </div>
     </header>
-
-    <div id="catalog-container">
-        <p style="text-align:center; padding: 50px;">Syncing Wholesale Catalogue...</p>
-    </div>
+    <div id="catalog-container"></div>
 </div>
 
-<button id="backToTop" onclick="scrollToTop()" title="Go to top">↑</button>
+<div id="priceModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle" style="color: var(--primary-gold); margin-bottom: 5px;"></h2>
+        <p id="modalBrand" style="font-weight: bold; text-transform: uppercase; color: #666; font-size: 14px;"></p>
+        
+        <div class="bulk-discount-box">
+            <span><strong>Bulk Discount:</strong></span>
+            <input type="number" id="masterDisc" class="bulk-input" placeholder="0" oninput="applyMasterDiscount()">
+            <span><strong>% OFF</strong></span>
+        </div>
 
-<table class="print-only-table">
-   <thead>
-    <tr>
-        <td>
-            <header class="catalog-header" style="display: flex; align-items: center; border-bottom: 2px solid #b38728; padding: 10px 0; gap: 15px;">
-                <img src="logo.png" class="logo-img" style="height: 50px; width: auto;" alt="Logo">
-                <div style="display: flex; flex-direction: column; justify-content: center;">
-                    <h1 style="margin:0; font-size: 22px; color: #b38728; text-transform: uppercase;">Hatimi Hardware</h1>
-                    <p style="margin:0; font-size: 11px; color: #444;">Quality Fittings • Trusted Tools</p>
-                </div>
-            </header>
-        </td>
-    </tr>
-</thead>
-    <tbody>
-        <tr><td><div id="print-catalog-container"></div></td></tr>
-    </tbody>
-</table>
+        <table class="modal-table">
+            <thead>
+                <tr><th>Select</th><th>Size / Specs</th><th>MRP (₹)</th><th>Disc %</th><th>Qty</th><th>Final Price</th></tr>
+            </thead>
+            <tbody id="modalTableBody"></tbody>
+        </table>
+        
+        <div style="text-align:right; margin-top: 20px;">
+            <div id="grandTotal" style="font-size: 20px; font-weight: 800; color: #222;">Total Order: ₹0</div>
+            <button style="background:#25d366; color:white; padding:12px 35px; border-radius:50px; border:none; font-weight:bold; cursor:pointer; margin-top:10px; font-size:16px;" onclick="sendWhatsAppOrder()">Send Order on WhatsApp</button>
+        </div>
+    </div>
+</div>
 
 <footer>
     <div class="footer-container">
         <div class="footer-column">
             <h3>📍 VISIT OUR SHOP</h3>
-            <p><strong>Hatimi Hardware</strong><br>
-            101, Subhash Path, Opp. Madhur Courier<br>
-            Barnagar, MP - 456771</p>
+            <p><strong>Hatimi Hardware</strong><br>101, Subhash Path, Barnagar, MP - 456771</p>
         </div>
         <div class="footer-column">
-            <h3>📞 CONTACT DETAILS</h3>
-            <div><strong>Juzer:</strong> 94066 48766</div>
-            <div><strong>Shabbir:</strong> 94254 94845</div>
-            <div><strong>Murtaza:</strong> 81090 15951</div>
+            <h3>📞 CONTACT</h3>
+            <div>Juzer: 94066 48766</div>
+            <div>Shabbir: 94254 94845</div>
         </div>
         <div class="footer-column">
-            <h3>📩 SUPPORT & ORDERS</h3>
-            <p><strong>Email:</strong> hussain22juzer@gmail.com</p>
-            <a href="https://wa.me/919406648766" class="btn-whatsapp-footer">Order on WhatsApp</a>
+            <h3>📩 EMAIL</h3>
+            <p>hussain22juzer@gmail.com</p>
         </div>
     </div>
-    <div class="last-sync">LAST SYNC: <span id="sync-time"></span></div>
-    <div class="copyright-text">© 2026 Hatimi Hardware. All Rights Reserved.</div>
 </footer>
 
 <script>
     const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqfLPTM9QCajpUToFw0B2UTKUIv-0d3P5ldQxLWKYfD98PPVf5ZEDXITZuTrdNPh8D8dDKcJxO1D4O/pub?gid=897547923&single=true&output=csv';
-    let allProducts = [];
+    let allProducts = [], currentTableData = [];
 
-    // BACK TO TOP LOGIC
-    window.onscroll = function() {
-        const btn = document.getElementById("backToTop");
-        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-            btn.style.display = "flex";
-        } else {
-            btn.style.display = "none";
-        }
-    };
-
-    function scrollToTop() {
-        window.scrollTo({top: 0, behavior: 'smooth'});
-    }
-
+    // ROBUST CSV PARSER
     function parseCSVLine(line) {
-        const result = [];
-        let cell = '';
-        let inQuotes = false;
+        const result = []; let cell = '', inQuotes = false;
         for (let i = 0; i < line.length; i++) {
             const char = line[i];
             if (char === '"' && line[i+1] === '"') { cell += '"'; i++; }
-            else if (char === '"') { inQuotes = !inQuotes; }
+            else if (char === '"') inQuotes = !inQuotes;
             else if (char === ',' && !inQuotes) { result.push(cell.trim()); cell = ''; }
-            else { cell += char; }
+            else cell += char;
         }
-        result.push(cell.trim());
-        return result;
+        result.push(cell.trim()); return result;
     }
 
     async function loadData() {
@@ -254,58 +163,176 @@
             const rows = data.split('\n').filter(r => r.trim() !== '').slice(1);
             allProducts = rows.map(row => {
                 const cols = parseCSVLine(row); 
-                return { cat: cols[0] || 'Uncategorized', brand: cols[1] || '', name: cols[2] || '', specs: cols[3] || '', key: cols[4] || '' };
+                return { cat: cols[0], brand: cols[1], name: cols[2], specs: cols[3], mrp: cols[5] };
             });
-            allProducts.sort((a, b) => a.cat.localeCompare(b.cat) || a.name.localeCompare(b.name));
-            renderGrid(allProducts);
-            document.getElementById('sync-time').innerText = new Date().toLocaleString();
-        } catch (e) { document.getElementById('catalog-container').innerHTML = "Error loading data."; }
+            allProducts.sort((a, b) => a.cat.localeCompare(b.cat));
+            renderFrontPage(allProducts);
+        } catch (e) { console.error("Error loading CSV:", e); }
     }
 
-    function renderGrid(products) {
-    const screen = document.getElementById('catalog-container');
-    const print = document.getElementById('print-catalog-container');
+    // EXPANDED MEASUREMENT LOGIC
+    function isMeasurement(spec) {
+        if (!spec) return false;
+        const s = spec.toLowerCase().trim();
+        if (/^[ft]\d+/.test(s)) return true; // Matches f12, t15, etc.
+        const test = s.replace(/g|mm|kg|inch|cm|mtr|ft|sut|ltr|"/g, '').replace(/[\d.\s/x,-]/g, '');
+        return test.length === 0;
+    }
+
+    // STABILIZED IMAGE LOADER
+    function getStableImage(img, name, spec, brand) {
+        const clean = (t) => (t || '').toString().toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
+        const n = clean(name), s = clean(spec), b = clean(brand);
+
+        const paths = [
+            `wholesale/${n}.jpg`,               // 1. product.jpg
+            `wholesale/${n}-${s}.jpg`,          // 2. product-spec.jpg
+            `wholesale/${b}-${n}.jpg`,          // 3. brand-product.jpg
+            `wholesale/${b}-${n}-${s}.jpg`      // 4. brand-product-spec.jpg
+        ];
+
+        let step = 0;
+        const tryLoad = () => {
+            if (step < paths.length) {
+                const tempImg = new Image();
+                tempImg.src = paths[step];
+                tempImg.onload = () => { img.src = paths[step]; };
+                tempImg.onerror = () => { step++; tryLoad(); };
+            } else {
+                img.src = 'https://via.placeholder.com/150?text=No+Image';
+            }
+        };
+        tryLoad();
+    }
+
+    function renderFrontPage(products) {
+    const container = document.getElementById('catalog-container');
     let currentCat = "", html = "";
+    const seenCards = new Set();
 
     products.forEach(p => {
-        if (p.cat !== currentCat) {
-            if (html !== "") html += `</div>`;
-            currentCat = p.cat;
-            html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
-        }
-
-        // The exact cleaning logic from your working 222-line file
-        const clean = (t) => (t || '').toString().toLowerCase().trim()
-            .replace(/["']/g, '')       
-            .replace(/[,\s./_]+/g, '-') 
-            .replace(/-+/g, '-')        
-            .replace(/^-|-$/g, '');
-
-        const b = clean(p.brand);
-        const n = clean(p.name);
-        const s = clean(p.specs);
-        const k = clean(p.key);
+        const grouped = isMeasurement(p.specs);
+        // Clean the ID so symbols like " don't break the HTML ID attribute
+        const rawId = grouped ? `${p.brand.trim()}|${p.name.trim()}` : `${p.brand.trim()}|${p.name.trim()}|${p.specs.trim()}`;
+        const cleanId = rawId.replace(/[^a-z0-9]/gi, '-');
         
-        // Step-by-step fallback logic
-        html += `
-            <div class="product-card">
-                <div class="img-holder">
-                    <img src="wholesale/${b}-${n}-${s}.jpg" 
-                         onerror="this.src='wholesale/${b}-${n}.jpg'; this.onerror=function(){this.src='wholesale/${n}.jpg'; this.onerror=function(){this.src='wholesale/${k}.jpg'; this.onerror=function(){this.src='https://via.placeholder.com/150?text=Photo+Coming+Soon'};}}">
-                </div>
-                <div class="p-brand">${p.brand}</div>
-                <div class="p-name">${p.name}</div>
-                <div class="p-specs">${p.specs}</div>
-                <a href="https://wa.me/919406648766" class="btn-request">Request Price</a>
-            </div>`;
+        if (!seenCards.has(rawId)) {
+            if (p.cat !== currentCat) {
+                if (html !== "") html += `</div>`;
+                currentCat = p.cat;
+                html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
+            }
+
+            let specsToDisplay = grouped ? 
+                allProducts.filter(v => v.name.trim() === p.name.trim() && v.brand.trim() === p.brand.trim() && isMeasurement(v.specs)).map(v => v.specs).join(", ") : 
+                p.specs;
+
+            // SAFE ESCAPING: Replaces ' and " so they don't break the onclick function
+            const safeN = p.name.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeB = p.brand.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeS = p.specs.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+
+            html += `<div class="product-card">
+                    <div class="img-holder">
+                        <img src="https://via.placeholder.com/150?text=Loading..." 
+                             id="img-${cleanId}"
+                             data-n="${safeN}" data-s="${safeS}" data-b="${safeB}">
+                    </div>
+                    <div onclick="openModal('${safeN}', '${safeB}', ${grouped}, '${safeS}')">
+                        <div class="p-brand">${p.brand}</div>
+                        <div class="p-name">${p.name}</div>
+                        <div class="p-specs-print" style="display:none;">${specsToDisplay}</div>
+                        <div class="btn-view">Check Sizes</div>
+                    </div>
+                </div>`;
+            seenCards.add(rawId);
+        }
     });
-    screen.innerHTML = html + "</div>";
-    print.innerHTML = html + "</div>";
+    container.innerHTML = html + "</div>";
+    
+    document.querySelectorAll('.img-holder img').forEach(img => {
+        getStableImage(img, img.getAttribute('data-n'), img.getAttribute('data-s'), img.getAttribute('data-b'));
+    });
 }
+
+    function openModal(name, brand, grouped, specific) {
+    document.getElementById('modalTitle').innerText = name;
+    document.getElementById('modalBrand').innerText = brand;
+    document.getElementById('masterDisc').value = ""; 
+    
+    const tableBody = document.getElementById('modalTableBody');
+    tableBody.innerHTML = "";
+    currentTableData = [];
+    
+    // Filter variants based on name and brand
+    const variants = grouped ? 
+        allProducts.filter(p => p.name.trim() === name.trim() && p.brand.trim() === brand.trim() && isMeasurement(p.specs)) :
+        allProducts.filter(p => p.name.trim() === name.trim() && p.brand.trim() === brand.trim() && p.specs.trim() === specific.trim());
+
+    variants.forEach((v) => {
+        const mrpVal = v.mrp ? v.mrp.toString().replace(/[^0-9.]/g, '') : "0";
+        const mrp = parseFloat(mrpVal) || 0;
+        
+        // SPLIT SPECS LOGIC: Breaks "1 inch, 2 inch" into separate table rows
+        const individualSpecs = v.specs.split(',').filter(s => s.trim() !== "");
+        
+        individualSpecs.forEach(s => {
+            const spec = s.trim();
+            const i = currentTableData.length;
+            
+            currentTableData.push({ ...v, specs: spec, mrp, finalPrice: mrp, qty: 1, selected: false });
+            
+            tableBody.innerHTML += `<tr>
+                <td><input type="checkbox" onchange="toggleSelect(${i}, this)"></td>
+                <td>${spec}</td>
+                <td>₹${mrp}</td>
+                <td><input type="number" class="pop-disc-input" placeholder="0" oninput="updatePrice(${i}, this.value)" style="width:50px;"></td>
+                <td><input type="number" value="1" min="1" oninput="updateQty(${i}, this.value)" style="width:50px;"></td>
+                <td id="price-${i}" style="font-weight:800; color:#b38728;">₹${mrp}</td>
+            </tr>`;
+        });
+    });
+    updateGrandTotal();
+    document.getElementById('priceModal').style.display = "flex";
+}
+
+    function applyMasterDiscount() {
+        const val = document.getElementById('masterDisc').value;
+        document.querySelectorAll('.pop-disc-input').forEach((input, i) => {
+            input.value = val;
+            updatePrice(i, val);
+        });
+    }
+
+    function toggleSelect(i, chk) { currentTableData[i].selected = chk.checked; updateGrandTotal(); }
+    function updatePrice(i, disc) {
+        const base = Math.round(currentTableData[i].mrp - (currentTableData[i].mrp * (parseFloat(disc) || 0) / 100));
+        currentTableData[i].finalPrice = base * currentTableData[i].qty;
+        document.getElementById(`price-${i}`).innerText = "₹" + currentTableData[i].finalPrice;
+        updateGrandTotal();
+    }
+    function updateQty(i, qty) { currentTableData[i].qty = parseInt(qty) || 1; updatePrice(i, 0); }
+    
+    function updateGrandTotal() {
+        const total = currentTableData.reduce((acc, row) => row.selected ? acc + row.finalPrice : acc, 0);
+        document.getElementById('grandTotal').innerText = `Total Order: ₹${total}`;
+    }
+
+    function sendWhatsAppOrder() {
+        const sel = currentTableData.filter(r => r.selected);
+        if (!sel.length) return alert("Please select items to order!");
+        let msg = `*HATIMI HARDWARE ORDER*\n*Brand:* ${sel[0].brand}\n*Product:* ${sel[0].name}\n\n`;
+        sel.forEach(r => { msg += `• ${r.specs} (${r.qty} pcs): ₹${r.finalPrice}\n`; });
+        const total = document.getElementById('grandTotal').innerText;
+        msg += `\n*${total}*`;
+        window.open(`https://wa.me/919406648766?text=${encodeURIComponent(msg)}`);
+    }
+
+    function closeModal() { document.getElementById('priceModal').style.display = "none"; }
+    
     function filterProducts() {
         const term = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = allProducts.filter(p => p.name.toLowerCase().includes(term) || p.brand.toLowerCase().includes(term));
-        renderGrid(filtered);
+        renderFrontPage(allProducts.filter(p => p.name.toLowerCase().includes(term) || p.cat.toLowerCase().includes(term) || p.brand.toLowerCase().includes(term)));
     }
     loadData();
 </script>
