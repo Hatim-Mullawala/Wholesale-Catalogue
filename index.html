@@ -13,83 +13,437 @@
         .search-box { width: 60%; max-width: 700px; padding: 12px 25px; border: 1.5px solid var(--primary-gold); border-radius: 50px; font-size: 16px; outline: none; }
 
         .main-wrapper { max-width: 1300px; margin: 20px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 25px rgba(0,0,0,0.06); }
-        
-        /* BRANDING */
-        .main-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 25px; border-bottom: 3px solid var(--primary-gold); margin-bottom: 30px; background: white; }
+        .catalog-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 25px; border-bottom: 3px solid var(--primary-gold); margin-bottom: 30px; }
         .logo-section { display: flex; align-items: center; gap: 15px; }
         .logo-img { height: 75px; width: auto; }
+        
+        /* BRANDING */
         .brand-name { margin: 0; font-size: 34px; font-weight: 800; color: #b38728; text-transform: uppercase; line-height: 1; }
         .tagline { margin: 0; font-size: 17px; color: #444; font-weight: 700; }
 
         .action-buttons { display: flex; gap: 15px; }
         .icon-btn { background: white; border: 1px solid #f0f0f0; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
 
-        /* PROMO SLIDER */
-        .promo-slider-container { position: relative; max-width: 100%; height: 350px; margin: 10px 0 30px 0; overflow: hidden; background: transparent; border-radius: 12px; }
-        .slider-wrapper { display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; width: 100%; }
-        .slide { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
-        .slide img, .slide video { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
-        .slide-label { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(179, 135, 40, 0.9); color: white; padding: 8px 20px; border-radius: 25px; font-weight: 700; font-size: 14px; z-index: 20; }
-        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; padding: 15px; cursor: pointer; border-radius: 50%; z-index: 10; transition: 0.3s; }
-        .slider-btn:hover { background: var(--primary-gold); }
-        .prev { left: 15px; } .next { right: 15px; }
-        .slider-dots { position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 15; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; border: 1px solid white; }
-        .dot.active { background: var(--primary-gold); transform: scale(1.2); }
-
         /* PRODUCT GRID */
         .category-header { background: #222; color: #fff; padding: 15px 25px; font-size: 18px; font-weight: 700; text-transform: uppercase; margin-top: 50px; border-left: 10px solid var(--primary-gold); border-radius: 4px; }
-        .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; padding: 25px; border: 1px solid #eee; border-top: none; margin-bottom: 30px; }
-        .product-card { background: white; border: 1.5px solid #efefef; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; height: 100%; }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; padding: 25px; border: 1px solid #eee; border-top: none; margin-bottom: 30px; }
+        
+        .product-card { background: white; border: 1.5px solid #efefef; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; }
         .img-holder { height: 180px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .img-holder img { max-height: 100%; max-width: 100%; object-fit: contain; }
-        .p-name { font-size: 18px; font-weight: 800; color: #222; margin-bottom: 5px; }
+        
+        .p-name { font-size: 20px; font-weight: 800; color: #222; margin-bottom: 5px; }
         .p-brand { color: var(--primary-gold); font-size: 12px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
-        .btn-view { background: var(--primary-gold); color: white; padding: 10px; border-radius: 6px; font-weight: 700; display: block; text-decoration: none; font-size: 12px; margin-top: auto; }
+        .btn-view { background: var(--primary-gold); color: white; padding: 10px; border-radius: 6px; font-weight: 700; display: block; text-decoration: none; font-size: 12px; }
 
-        /* MODAL */
+        /* MODAL & BULK DISCOUNT */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; }
         .modal-content { background: white; width: 95%; max-width: 900px; padding: 30px; border-radius: 15px; position: relative; max-height: 90vh; overflow-y: auto; }
         .close-modal { position: absolute; right: 20px; top: 15px; font-size: 30px; cursor: pointer; color: #888; }
-        .bulk-discount-box { background: #fff8e1; border: 1px dashed #b38728; padding: 15px; border-radius: 8px; margin: 10px 0; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .bulk-discount-box { background: #fff8e1; border: 1px dashed #b38728; padding: 15px; border-radius: 8px; margin: 15px 0; display: flex; align-items: center; justify-content: center; gap: 15px; }
         .bulk-input { width: 80px; padding: 8px; border: 1.5px solid #b38728; border-radius: 5px; text-align: center; font-weight: bold; }
-        .modal-table { width: 100%; border-collapse: collapse; }
+
+        .modal-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .modal-table th { background: #f4f4f4; text-align: left; padding: 12px; border-bottom: 2px solid #ddd; }
         .modal-table td { padding: 12px; border-bottom: 1px solid #eee; }
 
-        /* MOBILE OVERRIDES */
-        @media screen and (max-width: 768px) {
-            .main-wrapper { padding: 15px; margin: 10px; }
-            .main-header { flex-direction: column; text-align: center; gap: 15px; }
-            .brand-name { font-size: 26px; }
-            .product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; padding: 10px; }
-            .promo-slider-container { height: 220px !important; }
-            .img-holder { height: 130px; }
-            .modal-table { display: block; overflow-x: auto; }
-        }
+        /* FOOTER */
+        footer { background: white; padding: 60px 20px 30px; border-top: 4px solid var(--primary-gold); margin-top: 80px; }
+        .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+        .footer-column h3 { color: var(--primary-gold); font-size: 16px; font-weight: 800; text-transform: uppercase; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 
-        /* PRINT LOGIC */
-        @media print {
-            @page { margin: 0; }
-            body { background: white; }
-            .search-container, .promo-slider-container, .slider-dots, .slider-btn, .mobile-call-btn, #backToTop, .btn-view, .action-buttons { display: none !important; }
-            .main-header { position: fixed !important; top: 0; left: 0; width: 100%; height: 100px; border-bottom: 2px solid #b38728 !important; display: flex !important; align-items: center; justify-content: center; z-index: 10000; background: white !important; -webkit-print-color-adjust: exact; }
-            .print-spacer { display: block !important; height: 110px; }
-            .product-grid { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 10px !important; }
-            .product-card { break-inside: avoid !important; border: 1px solid #eee !important; height: 165px !important; padding: 10px !important; }
-            .img-holder { height: 80px !important; }
-            .p-name { font-size: 12px !important; }
-        }
+        /* PRINT PDF OPTIMIZATION */
+  @media print {
+    /* 1. RESET PAGE */
+    @page {
+        margin: 0.5cm; /* Small margin for printer safety */
+    }
 
-        #backToTop { display: none; position: fixed; bottom: 30px; right: 30px; z-index: 2000; background: #b38728; color: white; border: none; padding: 15px; border-radius: 50%; cursor: pointer; width: 50px; height: 50px; }
-        .mobile-call-btn { display: none; position: fixed; bottom: 30px; left: 30px; background: #25d366; color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 2000; box-shadow: 0 4px 15px rgba(0,0,0,0.2); align-items: center; gap: 10px; }
-        @media screen and (max-width: 768px) { .mobile-call-btn { display: flex; } }
-        .mute-toggle { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; z-index: 30; font-size: 11px; }
-        footer { background: white; padding: 40px 20px; border-top: 4px solid var(--primary-gold); margin-top: 50px; }
-        .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+    }
+
+    /* 2. HIDE WEB UI */
+    #search-bar, .search-container, .mute-toggle, #backToTop, 
+    .btn-view, .filters, .promo-slider-container, .slider-dots, 
+    button, .printer-icons-container {
+        display: none !important;
+    }
+
+    /* 3. THE REPEATING HEADER TRICK */
+    /* We use position: fixed. For it to repeat on EVERY page, it must be declared like this: */
+    .main-header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0;
+        right: 0;
+        height: 100px;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: white !important;
+        border-bottom: 2px solid #b38728 !important;
+        z-index: 10000;
+        -webkit-print-color-adjust: exact;
+    }
+
+    /* 4. CONTENT PADDING */
+    /* This creates space on EVERY page so the fixed header doesn't cover products */
+    #catalog-container {
+        display: block !important;
+        margin-top: 110px !important; /* This creates the gap for the header on Page 1 */
+    }
+
+    /* This CSS hack forces the browser to respect the margin on Page 2, 3, etc. */
+    .category-header {
+        break-before: auto;
+        margin-top: 20px !important;
+        background: #333 !important;
+        color: white !important;
+        padding: 8px !important;
+        -webkit-print-color-adjust: exact;
+    }
+
+    /* 5. COMPACT 4-COLUMN GRID */
+    .product-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    .product-card {
+        border: 1px solid #eee !important;
+        padding: 5px !important;
+        break-inside: avoid !important; /* Prevents card from cutting between pages */
+        height: 160px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .img-holder { height: 70px !important; margin-bottom: 5px !important; }
+    .img-holder img { max-height: 100% !important; }
+    .p-name { font-size: 11px !important; line-height: 1 !important; }
+}
+
+        /* Back to Top Button Styling */
+#backToTop { 
+    display: none; 
+    position: fixed; 
+    bottom: 30px; 
+    right: 30px; 
+    z-index: 2000; 
+    border: none; 
+    outline: none; 
+    background: #b38728; 
+    color: white; 
+    cursor: pointer; 
+    padding: 15px; 
+    border-radius: 50%; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+    font-size: 20px;
+    width: 50px;
+    height: 50px;
+}
+
+/* Footer Sync Text */
+.last-sync { 
+    text-align: center; 
+    font-size: 12px; 
+    color: #888; 
+    margin-top: 40px; 
+    padding-top: 20px; 
+    border-top: 1px solid #eee; 
+}
+/* MOBILE OPTIMIZATION */
+@media screen and (max-width: 768px) {
+    /* Adjust Main Wrapper */
+    .main-wrapper { 
+        padding: 15px; 
+        margin: 10px; 
+        border-radius: 8px; 
+    }
+
+    /* Stack Header elements */
+    .catalog-header { 
+        flex-direction: column; 
+        text-align: center; 
+        gap: 15px; 
+    }
+
+    .brand-name { font-size: 26px; }
+    .tagline { font-size: 14px; }
+
+    /* Expand Search Box for thumbs */
+    .search-box { 
+        width: 90%; 
+        font-size: 14px; 
+        padding: 10px 15px; 
+    }
+
+    /* Change Grid to 2 columns on mobile */
+    .product-grid { 
+        grid-template-columns: repeat(2, 1fr) !important; 
+        gap: 10px; 
+        padding: 10px; 
+    }
+
+    /* Adjust Card Spacing */
+    .product-card { padding: 10px; }
+    .img-holder { height: 140px; }
+    .p-name { font-size: 16px; }
+    .p-brand { font-size: 10px; }
+
+    /* Make Modal table scrollable horizontally */
+    .modal-content { 
+        width: 98%; 
+        padding: 15px; 
+    }
+    
+    .modal-table { 
+        display: block; 
+        overflow-x: auto; 
+        white-space: nowrap; 
+    }
+
+    /* Footer adjustments */
+    .footer-container { 
+        grid-template-columns: 1fr; 
+        gap: 20px; 
+    }
+
+    /* Back to Top for mobile */
+    #backToTop { 
+        bottom: 20px; 
+        right: 20px; 
+        width: 45px; 
+        height: 45px; 
+        font-size: 18px; 
+    }
+    @media screen and (max-width: 768px) {
+    /* Two cards side-by-side on mobile */
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+        padding: 8px !important;
+    }
+
+    /* Adjusting card height for small screens */
+    .img-holder { height: 130px !important; }
+    .p-name { font-size: 15px !important; line-height: 1.2; }
+    .p-brand { font-size: 9px !important; }
+
+    /* Modal Table: Make it swipeable so it doesn't break layout */
+    .modal-content {
+        width: 98% !important;
+        padding: 10px !important;
+        margin-top: 5vh;
+    }
+    
+    .modal-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Adjust Back to Top position to not overlap Call button */
+    #backToTop {
+        bottom: 30px;
+        right: 20px;
+    }
+    /* 1. Ensure all cards have the same height */
+}
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    align-items: stretch; /* Makes all cards in a row equal height */
+}
+
+/* 2. Turn the card into a flex container */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pushes content apart */
+    height: 100%;
+    padding: 15px;
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    text-align: center;
+}
+
+/* 3. Push the button to the absolute bottom */
+.btn-view {
+    margin-top: auto; /* This is the "magic" line that aligns the boxes */
+    background: #b38728;
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+}
     </style>
 </head>
+<button id="backToTop" onclick="scrollToTop()">↑</button>
+<a href="tel:+919406648766" class="mobile-call-btn">
+    <svg width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+    <span>Call Shop</span>
+</a>
+
+<style>
+/* Call Button Styling */
+.mobile-call-btn {
+    display: none; /* Hidden on Desktop */
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    background: #25d366;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    z-index: 2000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    align-items: center;
+    gap: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .mobile-call-btn { display: flex; } /* Shown on Mobile */
+}
+.promo-slider-container {
+    position: relative;
+    max-width: 100%;
+    height: 350px; 
+    margin: 10px 0;
+    overflow: hidden;
+    background: transparent; /* THE FIX: Removes the black background */
+    border-radius: 0; /* Optional: Remove rounding if you want it to align with the header */
+}
+
+.slider-wrapper {
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    width: 100%;
+}
+
+.slide {
+    min-width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.slide img, .slide video {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain; /* Keeps the whole image visible without background showing */
+    background: transparent;
+}
+
+.slide-label {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%); /* Centers the label */
+    background: rgba(179, 135, 40, 0.85); /* Hatimi Gold with transparency */
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 14px;
+}
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+}
+.prev { left: 10px; }
+.next { right: 10px; }
+.slider-dots {
+    position: absolute;
+    bottom: 45px; /* Positioned above the label */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 15;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(179, 135, 40, 0.4); /* Faded Hatimi Gold */
+    cursor: pointer;
+    transition: 0.3s;
+    border: 1px solid white;
+}
+
+.dot.active {
+    background: #b38728; /* Solid Hatimi Gold */
+    transform: scale(1.2);
+}
+.mute-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 20;
+    font-size: 12px;
+}
+.multi-img-holder::-webkit-scrollbar {
+    height: 4px;
+}
+.multi-img-holder::-webkit-scrollbar-thumb {
+    background: #b38728;
+    border-radius: 10px;
+}
+.thumb-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+}
+
+.thumb-img:hover {
+    transform: scale(1.05);
+    border-color: #b38728; /* Your gold brand color */
+}
+
+.multi-img-holder {
+    scrollbar-width: thin;
+    scrollbar-color: #b38728 #f0f0f0;
+}
+</style>
 <body>
 
 <div class="search-container">
@@ -97,81 +451,114 @@
 </div>
 
 <div class="main-wrapper">
-    <header class="main-header">
+    <header class="catalog-header">
         <div class="logo-section">
-            <img src="logo.png" class="logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/80'">
+            <img src="logo.png" class="logo-img" alt="Hatimi Logo" onerror="this.src='https://via.placeholder.com/80'">
             <div>
                 <h1 class="brand-name">Hatimi Hardware</h1>
                 <p class="tagline">Quality Fittings • Trusted Tools</p>
             </div>
         </div>
         <div class="action-buttons">
-            <button class="icon-btn" onclick="location.reload()"><svg width="20" height="20" viewBox="0 0 24 24"><path fill="#b38728" d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H21V3L17.65,6.35Z"/></svg></button>
-            <button class="icon-btn" onclick="window.print()"><svg width="20" height="20" viewBox="0 0 24 24"><path fill="#b38728" d="M18,3H6V7H18M19,12A1,1 0 0,1 18,11A1,1 0 0,1 19,10A1,1 0 0,1 20,11A1,1 0 0,1 19,12M16,19H8V14H16M19,8H5A3,3 0 0,0 2,11V17H6V21H18V17H22V11A3,3 0 0,0 19,8Z"/></svg></button>
+            <button class="icon-btn" onclick="location.reload()" title="Refresh Catalog">
+                <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#b38728" d="M12,18A6,6 0 0,1 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12A8,8 0 0,0 12,20V23L16,19L12,15V18M12,4V1L8,5L12,9V6A6,6 0 0,1 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12A8,8 0 0,0 12,4Z"/></svg>
+            </button>
+            <button class="icon-btn" onclick="window.print()" title="Download PDF">
+                <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#b38728" d="M18,3H6V7H18M19,12A1,1 0 0,1 18,11A1,1 0 0,1 19,10A1,1 0 0,1 20,11A1,1 0 0,1 19,12M16,19H8V14H16M19,8H5A3,3 0 0,0 2,11V17H6V21H18V17H22V11A3,3 0 0,0 19,8Z"/></svg>
+            </button>
         </div>
     </header>
-
     <div class="promo-slider-container">
-        <div class="slider-wrapper" id="promoSlider"></div>
-        <button class="slider-btn prev" onclick="changeSlide(-1)">❮</button>
-        <button class="slider-btn next" onclick="changeSlide(1)">❯</button>
-    </div>
-
-    <table class="print-table" style="width: 100%; border-collapse: collapse; border: none;">
-        <thead><tr><td><div class="print-spacer" style="display: none;"></div></td></tr></thead>
-        <tbody><tr><td><div id="catalog-container"></div></td></tr></tbody>
-    </table>
+    <div class="slider-wrapper" id="promoSlider"></div>
+    <button class="slider-btn prev" onclick="changeSlide(-1)">❮</button>
+    <button class="slider-btn next" onclick="changeSlide(1)">❯</button>
+</div>
+    <div id="catalog-container"></div>
 </div>
 
 <div id="priceModal" class="modal">
     <div class="modal-content">
         <span class="close-modal" onclick="closeModal()">&times;</span>
-        <h2 id="modalTitle" style="color: var(--primary-gold);"></h2>
-        <p id="modalBrand" style="font-weight: bold; color: #666;"></p>
+        <h2 id="modalTitle" style="color: var(--primary-gold); margin-bottom: 5px;"></h2>
+        <p id="modalBrand" style="font-weight: bold; text-transform: uppercase; color: #666; font-size: 14px;"></p>
+        
         <div class="bulk-discount-box">
-            <span><strong>Bulk % OFF:</strong></span>
+            <span><strong>Bulk Discount:</strong></span>
             <input type="number" id="masterDisc" class="bulk-input" placeholder="0" oninput="applyMasterDiscount()">
-            <span><strong>Unit:</strong></span>
-            <select id="masterUnit" class="bulk-input" onchange="applyMasterUnit()">
-                <option value="pcs">pcs</option><option value="kg">kg</option><option value="pkt">pkt</option><option value="doz">doz</option><option value="mtr">mtr</option><option value="set">set</option>
-            </select>
+            <span><strong>% OFF</strong></span>
         </div>
+        <div class="bulk-discount-box" style="margin-bottom: 10px;">
+    <span><strong>Set Unit for All:</strong></span>
+    <select id="masterUnit" class="bulk-input" onchange="applyMasterUnit()" style="width: 100px;">
+        <option value="pcs">pcs</option>
+        <option value="kg">kg</option>
+        <option value="pkt">pkt</option>
+        <option value="doz">doz</option>
+        <option value="mtr">mtr</option>
+        <option value="set">set</option>
+    </select>
+</div>
+
         <table class="modal-table">
-            <thead><tr><th>Select</th><th>Specs</th><th>MRP</th><th>Disc%</th><th>Qty</th><th>Price</th></tr></thead>
+            <thead>
+                <tr><th>Select</th><th>Size / Specs</th><th>MRP (₹)</th><th>Disc %</th><th>Qty</th><th>Final Price</th></tr>
+            </thead>
             <tbody id="modalTableBody"></tbody>
         </table>
+        
         <div style="text-align:right; margin-top: 20px;">
-            <div id="grandTotal" style="font-size: 20px; font-weight: 800;">Total: ₹0</div>
-            <button style="background:#25d366; color:white; padding:12px 30px; border-radius:50px; border:none; font-weight:bold; cursor:pointer; margin-top:10px;" onclick="sendWhatsAppOrder()">Order on WhatsApp</button>
+            <div id="grandTotal" style="font-size: 20px; font-weight: 800; color: #222;">Total Order: ₹0</div>
+            <button style="background:#25d366; color:white; padding:12px 35px; border-radius:50px; border:none; font-weight:bold; cursor:pointer; margin-top:10px; font-size:16px;" onclick="sendWhatsAppOrder()">Send Order on WhatsApp</button>
         </div>
+        <button id="backToTop" onclick="scrollToTop()">↑</button>
     </div>
 </div>
 
-<button id="backToTop" onclick="scrollToTop()">↑</button>
-<a href="tel:+919406648766" class="mobile-call-btn"><span>Call Shop</span></a>
-
 <footer>
     <div class="footer-container">
-        <div class="footer-column"><h3>📍 LOCATION</h3><p>Hatimi Hardware, Barnagar, MP</p></div>
-        <div class="footer-column"><h3>📞 CONTACT</h3><p>94066 48766 | 94254 94845</p></div>
-        <div class="footer-column"><h3>📩 EMAIL</h3><p>hussain22juzer@gmail.com</p></div>
+        <div class="footer-column">
+            <h3>📍 VISIT OUR SHOP</h3>
+            <p><strong>Hatimi Hardware</strong><br>101, Subhash Path, Barnagar, MP - 456771</p>
+        </div>
+        <div class="footer-column">
+            <h3>📞 CONTACT</h3>
+            <div>Juzer: 94066 48766</div>
+            <div>Shabbir: 94254 94845</div>
+        </div>
+        <div class="footer-column">
+            <h3>📩 EMAIL</h3>
+            <p>hussain22juzer@gmail.com</p>
+        </div>
     </div>
-    <div class="last-sync" id="syncStatus" style="text-align:center; color:#888; font-size:12px; margin-top:20px;">Fetching data...</div>
+    <div class="last-sync" id="syncStatus">Fetching latest data...</div>
 </footer>
 
 <script>
-const productSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqfLPTM9QCajpUToFw0B2UTKUIv-0d3P5ldQxLWKYfD98PPVf5ZEDXITZuTrdNPh8D8dDKcJxO1D4O/pub?gid=897547923&single=true&output=csv';
+ const productSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqfLPTM9QCajpUToFw0B2UTKUIv-0d3P5ldQxLWKYfD98PPVf5ZEDXITZuTrdNPh8D8dDKcJxO1D4O/pub?gid=897547923&single=true&output=csv';
 const sliderSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqfLPTM9QCajpUToFw0B2UTKUIv-0d3P5ldQxLWKYfD98PPVf5ZEDXITZuTrdNPh8D8dDKcJxO1D4O/pub?gid=1818562887&single=true&output=csv';
 
 let allProducts = [], currentTableData = [], slideIndex = 0, sliderTimer, promoData = [];
 
-window.onscroll = () => {
+// 1. SCROLL CONTROLS (AUTO-PLAY/PAUSE & BACK-TO-TOP)
+window.onscroll = function() {
     const btn = document.getElementById("backToTop");
-    btn.style.display = (window.scrollY > 300) ? "block" : "none";
+    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        btn.style.display = "block";
+    } else { btn.style.display = "none"; }
+    
+    // Auto Play/Pause based on visibility
+    const container = document.querySelector('.promo-slider-container');
+    const vid = document.getElementById(`vid-${slideIndex}`);
+    if (container && vid) {
+        const rect = container.getBoundingClientRect();
+        const visible = rect.top >= 0 && rect.bottom <= window.innerHeight;
+        visible ? vid.play().catch(() => {}) : vid.pause();
+    }
 };
 
 function scrollToTop() { window.scrollTo({top: 0, behavior: 'smooth'}); }
 
+// 2. DATA PROCESSING
 function parseCSVLine(line) {
     const result = []; let cell = '', inQuotes = false;
     for (let i = 0; i < line.length; i++) {
@@ -192,81 +579,70 @@ function isMeasurement(spec) {
 
 async function loadAllData() {
     try {
-        const [pResp, sResp] = await Promise.all([
-            fetch(productSheetURL, { cache: "no-store" }),
-            fetch(sliderSheetURL, { cache: "no-store" })
-        ]);
-        
+        const [pResp, sResp] = await Promise.all([fetch(productSheetURL), fetch(sliderSheetURL)]);
         const pText = await pResp.text();
-        allProducts = []; 
-        
         const pRows = pText.split('\n').filter(r => r.trim() !== '').slice(1);
         
         allProducts = pRows.map(row => {
             const cols = parseCSVLine(row); 
             let rawSpecs = (cols[3] || '').trim().replace(/^["']|["']$/g, '').replace(/""/g, '"');
-            
-            return { 
-                cat: cols[0], 
-                brand: cols[1], 
-                name: cols[2], 
-                specs: rawSpecs, 
-                // FIX: Changed from cols[5] to cols[4] to get correct MRP
-                mrp: cols[4] 
-            };
+            return { cat: cols[0], brand: cols[1], name: cols[2], specs: rawSpecs, mrp: cols[5] };
         });
-
         allProducts.sort((a, b) => a.cat.localeCompare(b.cat));
 
         const sText = await sResp.text();
         const sRows = sText.split('\n').filter(r => r.trim() !== '').slice(1);
         promoData = sRows.map(row => {
             const cols = parseCSVLine(row);
-            return { 
-                status: cols[0].trim().toLowerCase(), 
-                type: cols[1].trim().toLowerCase(), 
-                url: cols[2].trim(), 
-                label: cols[3] 
-            };
+            return { status: cols[0].trim().toLowerCase(), type: cols[1].trim().toLowerCase(), url: `wholesale/${cols[2].trim()}`, label: cols[3] };
         }).filter(i => i.status === 'active');
 
         renderSlider();
-        renderFrontPage(allProducts);
+        await renderFrontPage(allProducts);
         updateSyncTime();
-    } catch (e) { 
-        console.error("Load Error:", e);
-    }
+    } catch (e) { console.error("Load failed", e); }
 }
+
+// 3. SLIDER LOGIC
 function renderSlider() {
     const slider = document.getElementById('promoSlider');
     const container = document.querySelector('.promo-slider-container');
     if (!promoData.length) { container.style.display = 'none'; return; }
 
-    slider.innerHTML = promoData.map((item, idx) => {
-        let finalUrl = item.url.trim();
-        if (!finalUrl.startsWith('http')) finalUrl = `wholesale/${finalUrl}`;
-        return `
+    slider.innerHTML = promoData.map((item, idx) => `
         <div class="slide">
-            ${item.type === 'video' ? `<video id="vid-${idx}" src="${finalUrl}" autoplay muted loop playsinline class="promo-video"></video><button class="mute-toggle" onclick="toggleMute(this)">🔊 Unmute</button>` : `<img src="${finalUrl}">`}
+            ${item.type === 'video' ? 
+                `<video id="vid-${idx}" src="${item.url}" playsinline muted class="promo-video"></video>
+                 <button class="mute-toggle" onclick="toggleMute(this)">🔊 Unmute</button>` : 
+                `<img src="${item.url}" style="width:100%; height:100%; object-fit:contain; background:transparent;">`}
             <div class="slide-label">${item.label}</div>
-        </div>`;
-    }).join('');
+        </div>`).join('');
 
     let dotsHtml = '<div class="slider-dots">';
-    promoData.forEach((_, idx) => dotsHtml += `<div class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide(${idx})"></div>`);
+    promoData.forEach((_, idx) => { dotsHtml += `<div class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide(${idx})"></div>`; });
     container.insertAdjacentHTML('beforeend', dotsHtml + '</div>');
+
     setupAutoSlide();
 }
 
 function setupAutoSlide() {
     clearTimeout(sliderTimer);
     const vid = document.getElementById(`vid-${slideIndex}`);
-    if (vid) { vid.play().catch(() => {}); vid.onended = () => changeSlide(1); } 
-    else { sliderTimer = setTimeout(() => changeSlide(1), 5000); }
+    if (vid) {
+        vid.play().catch(() => {});
+        vid.onended = () => changeSlide(1);
+    } else {
+        sliderTimer = setTimeout(() => changeSlide(1), 5000);
+    }
 }
 
-function changeSlide(dir) { slideIndex = (slideIndex + dir + promoData.length) % promoData.length; updateSliderView(); }
+function changeSlide(dir) {
+    slideIndex = (slideIndex + dir + promoData.length) % promoData.length;
+    updateSliderView();
+}
+
 function goToSlide(idx) { slideIndex = idx; updateSliderView(); }
+
 function updateSliderView() {
     document.getElementById('promoSlider').style.transform = `translateX(-${slideIndex * 100}%)`;
     document.querySelectorAll('.dot').forEach((dot, idx) => dot.classList.toggle('active', idx === slideIndex));
@@ -274,71 +650,288 @@ function updateSliderView() {
     setupAutoSlide();
 }
 
-function toggleMute(btn) { const v = btn.previousElementSibling; v.muted = !v.muted; btn.innerText = v.muted ? "🔊 Unmute" : "🔇 Mute"; }
+function toggleMute(btn) {
+    const vid = btn.previousElementSibling;
+    vid.muted = !vid.muted;
+    btn.innerText = vid.muted ? "🔊 Unmute" : "🔇 Mute";
+}
 
+function imageExists(url) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = url;
+    });
+}
+// 2. UPDATED SEPARATION: Cards split if ANY unique image is found
+// 1. OFFLINE-COMPATIBLE IMAGE CHECK
+function imageExistsOffline(url) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = url;
+    });
+}
+
+function getStableImage(img, name, spec, brand) {
+    // 1. Clean the text for offline file matching
+    const clean = (t) => (t || '').toString().toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
+    
+    const n = clean(name);
+    const s = clean(spec);
+    const b = clean(brand);
+    
+    // 2. Priority Search List
+    // First: specific (bib-cocks-short-body.jpg)
+    // Second: spec only (short-body.jpg)
+    // Third: general (bib-cocks.jpg)
+    const paths = [
+        `wholesale/${n}-${s}.jpg`,
+        `wholesale/${s}.jpg`,
+        `wholesale/${n}.jpg`,
+        `wholesale/${b}-${n}.jpg`
+    ];
+    
+    let step = 0;
+    const tryLoad = () => {
+        if (step < paths.length) {
+            const temp = new Image();
+            temp.src = paths[step];
+            temp.onload = () => { 
+                img.src = paths[step]; 
+                img.style.opacity = "1"; // Show image
+            };
+            temp.onerror = () => { 
+                step++; 
+                tryLoad(); 
+            };
+        } else { 
+            // Final fallback: Show a generic icon instead of a broken link
+            img.src = 'https://via.placeholder.com/150?text=' + encodeURIComponent(name);
+            img.style.opacity = "0.5";
+        }
+    };
+    tryLoad();
+}
 async function renderFrontPage(products) {
     const container = document.getElementById('catalog-container');
-    let currentCat = "", html = ""; const seen = new Set();
+    let currentCat = "", html = "";
+    const seenCards = new Set();
 
     for (const p of products) {
+        // 1. CLEAN NAMES FOR MATCHING
         const cleanN = p.name.toLowerCase().trim().replace(/[,\s./_]+/g, '-');
         const cleanS = p.specs.toLowerCase().trim().replace(/[,\s./_]+/g, '-');
+        
+        // 2. CHECK FOR UNIQUE VARIANT IMAGE
         const specificPath = `wholesale/${cleanN}-${cleanS}.jpg`;
-        const hasUnique = await new Promise(r => { const i = new Image(); i.onload = () => r(true); i.onerror = () => r(false); i.src = specificPath; });
+        const hasUniqueImage = await imageExists(specificPath);
 
-        const key = hasUnique ? `${p.brand}|${p.name}|${p.specs}` : `${p.brand}|${p.name}`;
-        if (!seen.has(key)) {
+        // 3. DECISION LOGIC
+        // If unique image exists, use a unique key (Separates the card)
+        // If not, use the general name (Keeps it grouped like before)
+        const groupKey = hasUniqueImage ? 
+            `${p.brand}|${p.name}|${p.specs}` : 
+            `${p.brand}|${p.name}`;
+        
+        if (!seenCards.has(groupKey)) {
             if (p.cat !== currentCat) {
                 if (html !== "") html += `</div>`;
                 currentCat = p.cat;
                 html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
             }
-            const displayName = hasUnique ? `${p.name} (${p.specs})` : p.name;
-            const safeN = p.name.replace(/'/g, "\\'"), safeB = p.brand.replace(/'/g, "\\'"), safeS = hasUnique ? p.specs.replace(/'/g, "\\'") : '';
-            html += `<div class="product-card" onclick="openModal('${safeN}', '${safeB}', '${safeS}')"><div class="img-holder"><img src="${hasUnique ? specificPath : 'wholesale/'+cleanN+'.jpg'}" onerror="this.src='https://via.placeholder.com/150?text='+encodeURIComponent(p.name)"></div><div class="p-brand">${p.brand}</div><div class="p-name">${displayName}</div><div class="btn-view">Check Sizes</div></div>`;
-            seen.add(key);
+
+            // Display "Name (Spec)" for separated items, just "Name" for grouped ones
+            const displayName = hasUniqueImage ? `${p.name} (${p.specs})` : p.name;
+            const safeN = p.name.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            const safeB = p.brand.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            
+            // If separated, tell the modal to filter to that specific spec
+            const safeS = hasUniqueImage ? p.specs.replace(/'/g, "\\'").replace(/"/g, "&quot;") : '';
+
+            html += `
+            <div class="product-card clickable-card" onclick="openModal('${safeN}', '${safeB}', '${safeS}')">
+                <div class="img-holder">
+                    <img src="https://via.placeholder.com/150" 
+                         data-n="${safeN}" 
+                         data-s="${safeS}" 
+                         data-b="${safeB}">
+                </div>
+                <div class="p-brand">${p.brand}</div>
+                <div class="p-name">${displayName}</div>
+                <div class="btn-view">Check Sizes</div>
+            </div>`;
+            
+            seenCards.add(groupKey);
         }
     }
     container.innerHTML = html + "</div>";
+    
+    // Load the images
+    document.querySelectorAll('.img-holder img').forEach(img => {
+        getStableImage(img, img.getAttribute('data-n'), img.getAttribute('data-s'), img.getAttribute('data-b'));
+    });
 }
+async function loadCardImages(variants, containerId, safeN, safeB) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const loadedPaths = new Set();
 
+    for (const v of variants) {
+        const cleanN = v.name.toLowerCase().trim().replace(/[,\s./_]+/g, '-');
+        const cleanS = v.specs.toLowerCase().trim().replace(/[,\s./_]+/g, '-');
+        
+        // Try multiple path styles for offline reliability
+        const paths = [`wholesale/${cleanN}-${cleanS}.jpg`, `wholesale/${cleanS}.jpg`, `wholesale/${cleanN}.jpg` ];
+
+        let foundPath = "";
+        for (let path of paths) {
+            if (await imageExists(path)) { 
+                foundPath = path; 
+                break; 
+            }
+        }
+
+        if (foundPath && !loadedPaths.has(foundPath)) {
+            const img = document.createElement('img');
+            img.src = foundPath;
+            img.style = "width: 80px; height: 80px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 2px solid #ddd; flex-shrink: 0;";
+            img.title = v.specs;
+            
+            const safeS = v.specs.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            img.onclick = (e) => {
+                e.stopPropagation();
+                openModal(safeN, safeB, safeS);
+            };
+            
+            container.appendChild(img);
+            loadedPaths.add(foundPath);
+        }
+    }
+    
+    // Fallback if no images found locally
+    if (container.children.length === 0) {
+        container.style.justifyContent = "center";
+        container.style.alignItems = "center";
+        container.innerHTML = `<div style="color: #999; font-size: 12px;">No images in /wholesale</div>`;
+    }
+}
 function openModal(name, brand, filter) {
     document.getElementById('modalTitle').innerText = name + (filter ? ` (${filter})` : "");
-    const body = document.getElementById('modalTableBody'); body.innerHTML = ""; currentTableData = [];
+    const tableBody = document.getElementById('modalTableBody');
+    tableBody.innerHTML = ""; currentTableData = [];
     const variants = allProducts.filter(p => p.name === name && p.brand === brand && (filter ? p.specs === filter : true));
-    
-    variants.forEach((v, idx) => {
-        const mrp = parseFloat(v.mrp) || 0;
-        v.specs.split(',').forEach(s => {
+    const currentUnit = document.getElementById('masterUnit').value;
+
+    variants.forEach((v) => {
+        const mrp = parseFloat(v.mrp.toString().replace(/[^0-9.]/g, '')) || 0;
+        let itemsToRender = v.specs.split(',').map(s => s.trim()).filter(s => s !== "");
+        itemsToRender.forEach(specText => {
             const i = currentTableData.length;
-            currentTableData.push({...v, specs: s.trim(), mrp, finalPrice: mrp, qty: 1, selected: false});
-            body.innerHTML += `<tr><td><input type="checkbox" onchange="currentTableData[${i}].selected=this.checked; updateGrandTotal()"></td><td>${s.trim()}</td><td>₹${mrp}</td><td><input type="number" class="pop-disc-input" placeholder="0" oninput="updatePrice(${i}, this.value)" style="width:50px;"></td><td><input type="number" value="1" min="1" oninput="updateQty(${i}, this.value)" style="width:50px;"></td><td id="price-${i}">₹${mrp}</td></tr>`;
+            currentTableData.push({ ...v, specs: specText, mrp, finalPrice: mrp, qty: 1, selected: false });
+            tableBody.innerHTML += `<tr>
+                <td><input type="checkbox" onchange="currentTableData[${i}].selected=this.checked; updateGrandTotal()"></td>
+                <td style="font-weight:700;">${specText}</td>
+                <td>₹${mrp}</td>
+                <td><input type="number" class="pop-disc-input" placeholder="0" oninput="updatePrice(${i}, this.value)" style="width:50px;"></td>
+                <td><input type="number" value="1" min="1" oninput="updateQty(${i}, this.value)" style="width:50px;"> <span class="unit-label">${currentUnit}</span></td>
+                <td id="price-${i}" style="font-weight:bold; color:#b38728;">₹${mrp}</td>
+            </tr>`;
         });
     });
     document.getElementById('priceModal').style.display = "flex";
 }
 
-function applyMasterDiscount() { const v = document.getElementById('masterDisc').value; document.querySelectorAll('.pop-disc-input').forEach((inp, i) => { inp.value = v; updatePrice(i, v); }); }
-function applyMasterUnit() { /* logical placeholder */ }
-function updatePrice(i, d) { currentTableData[i].finalPrice = Math.round((currentTableData[i].mrp * (1 - (parseFloat(d) || 0) / 100)) * currentTableData[i].qty); document.getElementById(`price-${i}`).innerText = "₹" + currentTableData[i].finalPrice; updateGrandTotal(); }
+// 5. PRICE & IMAGE HELPERS
+function applyMasterDiscount() {
+    const val = document.getElementById('masterDisc').value;
+    document.querySelectorAll('.pop-disc-input').forEach((input, i) => { input.value = val; updatePrice(i, val); });
+}
+function applyMasterUnit() {
+    const unit = document.getElementById('masterUnit').value;
+    document.querySelectorAll('.unit-label').forEach(label => label.innerText = unit);
+}
+function updatePrice(i, disc) {
+    currentTableData[i].finalPrice = Math.round((currentTableData[i].mrp * (1 - (parseFloat(disc) || 0) / 100)) * currentTableData[i].qty);
+    document.getElementById(`price-${i}`).innerText = "₹" + currentTableData[i].finalPrice;
+    updateGrandTotal();
+}
 function updateQty(i, q) { currentTableData[i].qty = parseInt(q) || 1; updatePrice(i, document.querySelectorAll('.pop-disc-input')[i].value); }
 function updateGrandTotal() {
-    const t = currentTableData.reduce((acc, r) => r.selected ? acc + r.finalPrice : acc, 0);
-    document.getElementById('grandTotal').innerText = `Total: ₹${t}`;
+    // 1. Calculate both Raw MRP and Final Discounted Total
+    const totals = currentTableData.reduce((acc, row) => {
+        if (row.selected) {
+            acc.mrpTotal += (row.mrp * row.qty);
+            acc.finalTotal += row.finalPrice;
+        }
+        return acc;
+    }, { mrpTotal: 0, finalTotal: 0 });
+
+    const totalDisplay = document.getElementById('grandTotal');
+    
+    if (totals.mrpTotal > totals.finalTotal) {
+        // 2. Display with Strikethrough if a discount is applied
+        totalDisplay.innerHTML = `
+            <span style="color: #888; text-decoration: line-through; font-size: 0.9em; margin-right: 10px;">
+                MRP: ₹${totals.mrpTotal}
+            </span>
+            <span style="color: #b38728; font-weight: bold;">
+                Total Order: ₹${totals.finalTotal}
+            </span>
+            <div style="color: green; font-size: 0.8em; font-weight: bold; margin-top: 5px;">
+                You Save: ₹${totals.mrpTotal - totals.finalTotal}
+            </div>
+        `;
+    } else {
+        // 3. Simple display if no discount
+        totalDisplay.innerHTML = `Total Order: ₹${totals.finalTotal}`;
+    }
 }
-function closeModal() { document.getElementById('priceModal').style.display = "none"; }
-function filterProducts() {
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    document.querySelectorAll('.product-card').forEach(c => {
-        const txt = c.innerText.toLowerCase();
-        c.style.display = txt.includes(q) ? "" : "none";
-    });
+function updateSyncTime() { document.getElementById('syncStatus').innerText = "Last Sync: " + new Date().toLocaleString('en-IN'); }
+// 1. THE CLOSE BUTTON FIX
+function closeModal() { 
+    document.getElementById('priceModal').style.display = "none"; 
 }
+
 function sendWhatsAppOrder() {
-    const items = currentTableData.filter(i => i.selected); if (!items.length) return alert("Select items!");
-    let msg = `*HATIMI HARDWARE ORDER*\n*Product:* ${items[0].name}\n\n`;
-    items.forEach(i => msg += `• ${i.specs} | Qty: ${i.qty} | Price: ₹${i.finalPrice}\n`);
-    window.open(`https://wa.me/919406648766?text=${encodeURIComponent(msg)}`);
+    const selectedItems = currentTableData.filter(item => item.selected);
+    
+    if (selectedItems.length === 0) {
+        alert("Please select at least one item to order!");
+        return;
+    }
+
+    const unit = document.getElementById('masterUnit').value;
+    let message = `*HATIMI HARDWARE ORDER*\n`;
+    message += `*Product:* ${selectedItems[0].name}\n`;
+    message += `*Brand:* ${selectedItems[0].brand}\n\n`;
+
+    let totalMRP = 0;
+    let totalFinal = 0;
+
+    selectedItems.forEach(item => {
+        const itemRawMRP = item.mrp * item.qty;
+        totalMRP += itemRawMRP;
+        totalFinal += item.finalPrice;
+
+        // Uses ~ for strikethrough in WhatsApp
+        message += `• ${item.specs}\n`;
+        message += `  Qty: ${item.qty} ${unit}\n`;
+        message += `  Price: ~₹${itemRawMRP}~ ₹${item.finalPrice}\n\n`;
+    });
+
+    message += `*--------------------------*\n`;
+    message += `*Total MRP:* ~₹${totalMRP}~\n`;
+    message += `*Order Total: ₹${totalFinal}*\n`;
+    
+    if (totalMRP > totalFinal) {
+        message += `*Total Savings: ₹${totalMRP - totalFinal}* 💸`;
+    }
+
+    const encodedMsg = encodeURIComponent(message);
+    window.open(`https://wa.me/919406648766?text=${encodedMsg}`);
 }
 loadAllData();
 </script>
