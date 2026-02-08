@@ -53,19 +53,82 @@
         .footer-column h3 { color: var(--primary-gold); font-size: 16px; font-weight: 800; text-transform: uppercase; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 
         /* PRINT PDF OPTIMIZATION */
-        @media print { 
-            @page { margin: 0.5cm !important; size: A4 portrait; }
-            * { box-sizing: border-box !important; }
-            .search-container, .btn-view, .modal, #backToTop, .action-buttons { display: none !important; }
-            .main-wrapper { width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; }
-            .product-grid { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 5px !important; width: 100% !important; margin: 0 auto !important; }
-            .product-card { border: 1px solid #eee !important; padding: 5px !important; page-break-inside: avoid; overflow: hidden !important; }
-            .p-specs-print { display: block !important; font-size: 10px !important; color: #b38728 !important; font-weight: 700 !important; word-wrap: break-word !important; margin-top: 4px; line-height: 1.1; }
-            .img-holder { height: 100px !important; margin-bottom: 5px !important; }
-            .p-name { font-size: 12px !important; line-height: 1.1; }
-            .p-brand { font-size: 8px !important; margin-bottom: 2px !important; }
-            footer { display: block !important; margin-top: 20px !important; border-top: 2px solid #b38728 !important; padding-top: 10px !important; }
-        }
+  @media print {
+    /* 1. RESET PAGE */
+    @page {
+        margin: 0.5cm; /* Small margin for printer safety */
+    }
+
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+    }
+
+    /* 2. HIDE WEB UI */
+    #search-bar, .search-container, .mute-toggle, #backToTop, 
+    .btn-view, .filters, .promo-slider-container, .slider-dots, 
+    button, .printer-icons-container {
+        display: none !important;
+    }
+
+    /* 3. THE REPEATING HEADER TRICK */
+    /* We use position: fixed. For it to repeat on EVERY page, it must be declared like this: */
+    .main-header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0;
+        right: 0;
+        height: 100px;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: white !important;
+        border-bottom: 2px solid #b38728 !important;
+        z-index: 10000;
+        -webkit-print-color-adjust: exact;
+    }
+
+    /* 4. CONTENT PADDING */
+    /* This creates space on EVERY page so the fixed header doesn't cover products */
+    #catalog-container {
+        display: block !important;
+        margin-top: 110px !important; /* This creates the gap for the header on Page 1 */
+    }
+
+    /* This CSS hack forces the browser to respect the margin on Page 2, 3, etc. */
+    .category-header {
+        break-before: auto;
+        margin-top: 20px !important;
+        background: #333 !important;
+        color: white !important;
+        padding: 8px !important;
+        -webkit-print-color-adjust: exact;
+    }
+
+    /* 5. COMPACT 4-COLUMN GRID */
+    .product-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    .product-card {
+        border: 1px solid #eee !important;
+        padding: 5px !important;
+        break-inside: avoid !important; /* Prevents card from cutting between pages */
+        height: 160px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .img-holder { height: 70px !important; margin-bottom: 5px !important; }
+    .img-holder img { max-height: 100% !important; }
+    .p-name { font-size: 11px !important; line-height: 1 !important; }
+}
+
         /* Back to Top Button Styling */
 #backToTop { 
     display: none; 
@@ -95,9 +158,292 @@
     padding-top: 20px; 
     border-top: 1px solid #eee; 
 }
+/* MOBILE OPTIMIZATION */
+@media screen and (max-width: 768px) {
+    /* Adjust Main Wrapper */
+    .main-wrapper { 
+        padding: 15px; 
+        margin: 10px; 
+        border-radius: 8px; 
+    }
+
+    /* Stack Header elements */
+    .catalog-header { 
+        flex-direction: column; 
+        text-align: center; 
+        gap: 15px; 
+    }
+
+    .brand-name { font-size: 26px; }
+    .tagline { font-size: 14px; }
+
+    /* Expand Search Box for thumbs */
+    .search-box { 
+        width: 90%; 
+        font-size: 14px; 
+        padding: 10px 15px; 
+    }
+
+    /* Change Grid to 2 columns on mobile */
+    .product-grid { 
+        grid-template-columns: repeat(2, 1fr) !important; 
+        gap: 10px; 
+        padding: 10px; 
+    }
+
+    /* Adjust Card Spacing */
+    .product-card { padding: 10px; }
+    .img-holder { height: 140px; }
+    .p-name { font-size: 16px; }
+    .p-brand { font-size: 10px; }
+
+    /* Make Modal table scrollable horizontally */
+    .modal-content { 
+        width: 98%; 
+        padding: 15px; 
+    }
+    
+    .modal-table { 
+        display: block; 
+        overflow-x: auto; 
+        white-space: nowrap; 
+    }
+
+    /* Footer adjustments */
+    .footer-container { 
+        grid-template-columns: 1fr; 
+        gap: 20px; 
+    }
+
+    /* Back to Top for mobile */
+    #backToTop { 
+        bottom: 20px; 
+        right: 20px; 
+        width: 45px; 
+        height: 45px; 
+        font-size: 18px; 
+    }
+    @media screen and (max-width: 768px) {
+    /* Two cards side-by-side on mobile */
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+        padding: 8px !important;
+    }
+
+    /* Adjusting card height for small screens */
+    .img-holder { height: 130px !important; }
+    .p-name { font-size: 15px !important; line-height: 1.2; }
+    .p-brand { font-size: 9px !important; }
+
+    /* Modal Table: Make it swipeable so it doesn't break layout */
+    .modal-content {
+        width: 98% !important;
+        padding: 10px !important;
+        margin-top: 5vh;
+    }
+    
+    .modal-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Adjust Back to Top position to not overlap Call button */
+    #backToTop {
+        bottom: 30px;
+        right: 20px;
+    }
+    /* 1. Ensure all cards have the same height */
+}
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    align-items: stretch; /* Makes all cards in a row equal height */
+}
+
+/* 2. Turn the card into a flex container */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pushes content apart */
+    height: 100%;
+    padding: 15px;
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    text-align: center;
+}
+
+/* 3. Push the button to the absolute bottom */
+.btn-view {
+    margin-top: auto; /* This is the "magic" line that aligns the boxes */
+    background: #b38728;
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+}
     </style>
 </head>
 <button id="backToTop" onclick="scrollToTop()">↑</button>
+<a href="tel:+919406648766" class="mobile-call-btn">
+    <svg width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+    <span>Call Shop</span>
+</a>
+
+<style>
+/* Call Button Styling */
+.mobile-call-btn {
+    display: none; /* Hidden on Desktop */
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    background: #25d366;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    z-index: 2000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    align-items: center;
+    gap: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .mobile-call-btn { display: flex; } /* Shown on Mobile */
+}
+.promo-slider-container {
+    position: relative;
+    max-width: 100%;
+    height: 350px; 
+    margin: 10px 0;
+    overflow: hidden;
+    background: transparent; /* THE FIX: Removes the black background */
+    border-radius: 0; /* Optional: Remove rounding if you want it to align with the header */
+}
+
+.slider-wrapper {
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    width: 100%;
+}
+
+.slide {
+    min-width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.slide img, .slide video {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain; /* Keeps the whole image visible without background showing */
+    background: transparent;
+}
+
+.slide-label {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%); /* Centers the label */
+    background: rgba(179, 135, 40, 0.85); /* Hatimi Gold with transparency */
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 14px;
+}
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+}
+.prev { left: 10px; }
+.next { right: 10px; }
+.slider-dots {
+    position: absolute;
+    bottom: 45px; /* Positioned above the label */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 15;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(179, 135, 40, 0.4); /* Faded Hatimi Gold */
+    cursor: pointer;
+    transition: 0.3s;
+    border: 1px solid white;
+}
+
+.dot.active {
+    background: #b38728; /* Solid Hatimi Gold */
+    transform: scale(1.2);
+}
+.mute-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 20;
+    font-size: 12px;
+}
+.multi-img-holder::-webkit-scrollbar {
+    height: 4px;
+}
+.multi-img-holder::-webkit-scrollbar-thumb {
+    background: #b38728;
+    border-radius: 10px;
+}
+.thumb-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+}
+
+.thumb-img:hover {
+    transform: scale(1.05);
+    border-color: #b38728; /* Your gold brand color */
+}
+
+.multi-img-holder {
+    scrollbar-width: thin;
+    scrollbar-color: #b38728 #f0f0f0;
+}
+</style>
 <body>
 
 <div class="search-container">
@@ -122,6 +468,11 @@
             </button>
         </div>
     </header>
+    <div class="promo-slider-container">
+    <div class="slider-wrapper" id="promoSlider"></div>
+    <button class="slider-btn prev" onclick="changeSlide(-1)">❮</button>
+    <button class="slider-btn next" onclick="changeSlide(1)">❯</button>
+</div>
     <div id="catalog-container"></div>
 </div>
 
@@ -136,6 +487,17 @@
             <input type="number" id="masterDisc" class="bulk-input" placeholder="0" oninput="applyMasterDiscount()">
             <span><strong>% OFF</strong></span>
         </div>
+        <div class="bulk-discount-box" style="margin-bottom: 10px;">
+    <span><strong>Set Unit for All:</strong></span>
+    <select id="masterUnit" class="bulk-input" onchange="applyMasterUnit()" style="width: 100px;">
+        <option value="pcs">pcs</option>
+        <option value="kg">kg</option>
+        <option value="pkt">pkt</option>
+        <option value="doz">doz</option>
+        <option value="mtr">mtr</option>
+        <option value="set">set</option>
+    </select>
+</div>
 
         <table class="modal-table">
             <thead>
@@ -148,6 +510,7 @@
             <div id="grandTotal" style="font-size: 20px; font-weight: 800; color: #222;">Total Order: ₹0</div>
             <button style="background:#25d366; color:white; padding:12px 35px; border-radius:50px; border:none; font-weight:bold; cursor:pointer; margin-top:10px; font-size:16px;" onclick="sendWhatsAppOrder()">Send Order on WhatsApp</button>
         </div>
+        <button id="backToTop" onclick="scrollToTop()">↑</button>
     </div>
 </div>
 
@@ -171,222 +534,406 @@
 </footer>
 
 <script>
-    const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqfLPTM9QCajpUToFw0B2UTKUIv-0d3P5ldQxLWKYfD98PPVf5ZEDXITZuTrdNPh8D8dDKcJxO1D4O/pub?gid=897547923&single=true&output=csv';
-    let allProducts = [], currentTableData = [];
+ const productSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqfLPTM9QCajpUToFw0B2UTKUIv-0d3P5ldQxLWKYfD98PPVf5ZEDXITZuTrdNPh8D8dDKcJxO1D4O/pub?gid=897547923&single=true&output=csv';
+const sliderSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqfLPTM9QCajpUToFw0B2UTKUIv-0d3P5ldQxLWKYfD98PPVf5ZEDXITZuTrdNPh8D8dDKcJxO1D4O/pub?gid=1818562887&single=true&output=csv';
 
-    // ROBUST CSV PARSER
-    function parseCSVLine(line) {
-        const result = []; let cell = '', inQuotes = false;
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            if (char === '"' && line[i+1] === '"') { cell += '"'; i++; }
-            else if (char === '"') inQuotes = !inQuotes;
-            else if (char === ',' && !inQuotes) { result.push(cell.trim()); cell = ''; }
-            else cell += char;
+let allProducts = [], currentTableData = [], slideIndex = 0, sliderTimer, promoData = [];
+
+// 1. SCROLL CONTROLS (AUTO-PLAY/PAUSE & BACK-TO-TOP)
+window.onscroll = function() {
+    const btn = document.getElementById("backToTop");
+    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        btn.style.display = "block";
+    } else { btn.style.display = "none"; }
+    
+    // Auto Play/Pause based on visibility
+    const container = document.querySelector('.promo-slider-container');
+    const vid = document.getElementById(`vid-${slideIndex}`);
+    if (container && vid) {
+        const rect = container.getBoundingClientRect();
+        const visible = rect.top >= 0 && rect.bottom <= window.innerHeight;
+        visible ? vid.play().catch(() => {}) : vid.pause();
+    }
+};
+
+function scrollToTop() { window.scrollTo({top: 0, behavior: 'smooth'}); }
+
+// 2. DATA PROCESSING
+function parseCSVLine(line) {
+    const result = []; let cell = '', inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"' && line[i+1] === '"') { cell += '"'; i++; }
+        else if (char === '"') inQuotes = !inQuotes;
+        else if (char === ',' && !inQuotes) { result.push(cell.trim()); cell = ''; }
+        else cell += char;
+    }
+    result.push(cell.trim()); return result;
+}
+
+function isMeasurement(spec) {
+    if (!spec) return false;
+    const s = spec.toLowerCase().trim();
+    return /\d/.test(s) || /mm|inch|kg|mtr|sut|ft|gm|nos|set|pkt|doz|["'xX*]/.test(s);
+}
+
+async function loadAllData() {
+    try {
+        const [pResp, sResp] = await Promise.all([fetch(productSheetURL), fetch(sliderSheetURL)]);
+        const pText = await pResp.text();
+        const pRows = pText.split('\n').filter(r => r.trim() !== '').slice(1);
+        
+        allProducts = pRows.map(row => {
+            const cols = parseCSVLine(row); 
+            let rawSpecs = (cols[3] || '').trim().replace(/^["']|["']$/g, '').replace(/""/g, '"');
+            return { cat: cols[0], brand: cols[1], name: cols[2], specs: rawSpecs, mrp: cols[5] };
+        });
+        allProducts.sort((a, b) => a.cat.localeCompare(b.cat));
+
+        const sText = await sResp.text();
+        const sRows = sText.split('\n').filter(r => r.trim() !== '').slice(1);
+        promoData = sRows.map(row => {
+            const cols = parseCSVLine(row);
+            return { status: cols[0].trim().toLowerCase(), type: cols[1].trim().toLowerCase(), url: `wholesale/${cols[2].trim()}`, label: cols[3] };
+        }).filter(i => i.status === 'active');
+
+        renderSlider();
+        await renderFrontPage(allProducts);
+        updateSyncTime();
+    } catch (e) { console.error("Load failed", e); }
+}
+
+// 3. SLIDER LOGIC
+function renderSlider() {
+    const slider = document.getElementById('promoSlider');
+    const container = document.querySelector('.promo-slider-container');
+    if (!promoData.length) { container.style.display = 'none'; return; }
+
+    slider.innerHTML = promoData.map((item, idx) => `
+        <div class="slide">
+            ${item.type === 'video' ? 
+                `<video id="vid-${idx}" src="${item.url}" playsinline muted class="promo-video"></video>
+                 <button class="mute-toggle" onclick="toggleMute(this)">🔊 Unmute</button>` : 
+                `<img src="${item.url}" style="width:100%; height:100%; object-fit:contain; background:transparent;">`}
+            <div class="slide-label">${item.label}</div>
+        </div>`).join('');
+
+    let dotsHtml = '<div class="slider-dots">';
+    promoData.forEach((_, idx) => { dotsHtml += `<div class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide(${idx})"></div>`; });
+    container.insertAdjacentHTML('beforeend', dotsHtml + '</div>');
+
+    setupAutoSlide();
+}
+
+function setupAutoSlide() {
+    clearTimeout(sliderTimer);
+    const vid = document.getElementById(`vid-${slideIndex}`);
+    if (vid) {
+        vid.play().catch(() => {});
+        vid.onended = () => changeSlide(1);
+    } else {
+        sliderTimer = setTimeout(() => changeSlide(1), 5000);
+    }
+}
+
+function changeSlide(dir) {
+    slideIndex = (slideIndex + dir + promoData.length) % promoData.length;
+    updateSliderView();
+}
+
+function goToSlide(idx) { slideIndex = idx; updateSliderView(); }
+
+function updateSliderView() {
+    document.getElementById('promoSlider').style.transform = `translateX(-${slideIndex * 100}%)`;
+    document.querySelectorAll('.dot').forEach((dot, idx) => dot.classList.toggle('active', idx === slideIndex));
+    document.querySelectorAll('.promo-video').forEach(v => { v.pause(); v.currentTime = 0; });
+    setupAutoSlide();
+}
+
+function toggleMute(btn) {
+    const vid = btn.previousElementSibling;
+    vid.muted = !vid.muted;
+    btn.innerText = vid.muted ? "🔊 Unmute" : "🔇 Mute";
+}
+
+function imageExists(url) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = url;
+    });
+}
+// 2. UPDATED SEPARATION: Cards split if ANY unique image is found
+// 1. OFFLINE-COMPATIBLE IMAGE CHECK
+function imageExistsOffline(url) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = url;
+    });
+}
+
+function getStableImage(img, name, spec, brand) {
+    // 1. Clean the text for offline file matching
+    const clean = (t) => (t || '').toString().toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
+    
+    const n = clean(name);
+    const s = clean(spec);
+    const b = clean(brand);
+    
+    // 2. Priority Search List
+    // First: specific (bib-cocks-short-body.jpg)
+    // Second: spec only (short-body.jpg)
+    // Third: general (bib-cocks.jpg)
+    const paths = [
+        `wholesale/${n}-${s}.jpg`,
+        `wholesale/${s}.jpg`,
+        `wholesale/${n}.jpg`,
+        `wholesale/${b}-${n}.jpg`
+    ];
+    
+    let step = 0;
+    const tryLoad = () => {
+        if (step < paths.length) {
+            const temp = new Image();
+            temp.src = paths[step];
+            temp.onload = () => { 
+                img.src = paths[step]; 
+                img.style.opacity = "1"; // Show image
+            };
+            temp.onerror = () => { 
+                step++; 
+                tryLoad(); 
+            };
+        } else { 
+            // Final fallback: Show a generic icon instead of a broken link
+            img.src = 'https://via.placeholder.com/150?text=' + encodeURIComponent(name);
+            img.style.opacity = "0.5";
         }
-        result.push(cell.trim()); return result;
-    }
-
-    async function loadData() {
-        try {
-            const response = await fetch(sheetURL);
-            const data = await response.text();
-            const rows = data.split('\n').filter(r => r.trim() !== '').slice(1);
-            allProducts = rows.map(row => {
-                const cols = parseCSVLine(row); 
-                return { cat: cols[0], brand: cols[1], name: cols[2], specs: cols[3], mrp: cols[5] };
-            });
-            allProducts.sort((a, b) => a.cat.localeCompare(b.cat));
-            renderFrontPage(allProducts);
-        } catch (e) { console.error("Error loading CSV:", e); }
-    }
-
-    // EXPANDED MEASUREMENT LOGIC
-    function isMeasurement(spec) {
-        if (!spec) return false;
-        const s = spec.toLowerCase().trim();
-        if (/^[ft]\d+/.test(s)) return true; // Matches f12, t15, etc.
-        const test = s.replace(/g|mm|kg|inch|cm|mtr|ft|sut|ltr|"/g, '').replace(/[\d.\s/x,-]/g, '');
-        return test.length === 0;
-    }
-
-    // STABILIZED IMAGE LOADER
-    function getStableImage(img, name, spec, brand) {
-        const clean = (t) => (t || '').toString().toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
-        const n = clean(name), s = clean(spec), b = clean(brand);
-
-        const paths = [
-            `wholesale/${n}.jpg`,               // 1. product.jpg
-            `wholesale/${n}-${s}.jpg`,          // 2. product-spec.jpg
-            `wholesale/${b}-${n}.jpg`,          // 3. brand-product.jpg
-            `wholesale/${b}-${n}-${s}.jpg`      // 4. brand-product-spec.jpg
-        ];
-
-        let step = 0;
-        const tryLoad = () => {
-            if (step < paths.length) {
-                const tempImg = new Image();
-                tempImg.src = paths[step];
-                tempImg.onload = () => { img.src = paths[step]; };
-                tempImg.onerror = () => { step++; tryLoad(); };
-            } else {
-                img.src = 'https://via.placeholder.com/150?text=No+Image';
-            }
-        };
-        tryLoad();
-    }
-
-    function renderFrontPage(products) {
+    };
+    tryLoad();
+}
+async function renderFrontPage(products) {
     const container = document.getElementById('catalog-container');
     let currentCat = "", html = "";
     const seenCards = new Set();
 
-    products.forEach(p => {
-        const grouped = isMeasurement(p.specs);
-        // Clean the ID so symbols like " don't break the HTML ID attribute
-        const rawId = grouped ? `${p.brand.trim()}|${p.name.trim()}` : `${p.brand.trim()}|${p.name.trim()}|${p.specs.trim()}`;
-        const cleanId = rawId.replace(/[^a-z0-9]/gi, '-');
+    for (const p of products) {
+        // 1. CLEAN NAMES FOR MATCHING
+        const cleanN = p.name.toLowerCase().trim().replace(/[,\s./_]+/g, '-');
+        const cleanS = p.specs.toLowerCase().trim().replace(/[,\s./_]+/g, '-');
         
-        if (!seenCards.has(rawId)) {
+        // 2. CHECK FOR UNIQUE VARIANT IMAGE
+        const specificPath = `wholesale/${cleanN}-${cleanS}.jpg`;
+        const hasUniqueImage = await imageExists(specificPath);
+
+        // 3. DECISION LOGIC
+        // If unique image exists, use a unique key (Separates the card)
+        // If not, use the general name (Keeps it grouped like before)
+        const groupKey = hasUniqueImage ? 
+            `${p.brand}|${p.name}|${p.specs}` : 
+            `${p.brand}|${p.name}`;
+        
+        if (!seenCards.has(groupKey)) {
             if (p.cat !== currentCat) {
                 if (html !== "") html += `</div>`;
                 currentCat = p.cat;
                 html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
             }
 
-            let specsToDisplay = grouped ? 
-                allProducts.filter(v => v.name.trim() === p.name.trim() && v.brand.trim() === p.brand.trim() && isMeasurement(v.specs)).map(v => v.specs).join(", ") : 
-                p.specs;
-
-            // SAFE ESCAPING: Replaces ' and " so they don't break the onclick function
+            // Display "Name (Spec)" for separated items, just "Name" for grouped ones
+            const displayName = hasUniqueImage ? `${p.name} (${p.specs})` : p.name;
             const safeN = p.name.replace(/'/g, "\\'").replace(/"/g, "&quot;");
             const safeB = p.brand.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-            const safeS = p.specs.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            
+            // If separated, tell the modal to filter to that specific spec
+            const safeS = hasUniqueImage ? p.specs.replace(/'/g, "\\'").replace(/"/g, "&quot;") : '';
 
-            html += `<div class="product-card">
-                    <div class="img-holder">
-                        <img src="https://via.placeholder.com/150?text=Loading..." 
-                             id="img-${cleanId}"
-                             data-n="${safeN}" data-s="${safeS}" data-b="${safeB}">
-                    </div>
-                    <div onclick="openModal('${safeN}', '${safeB}', ${grouped}, '${safeS}')">
-                        <div class="p-brand">${p.brand}</div>
-                        <div class="p-name">${p.name}</div>
-                        <div class="p-specs-print" style="display:none;">${specsToDisplay}</div>
-                        <div class="btn-view">Check Sizes</div>
-                    </div>
-                </div>`;
-            seenCards.add(rawId);
+            html += `
+            <div class="product-card clickable-card" onclick="openModal('${safeN}', '${safeB}', '${safeS}')">
+                <div class="img-holder">
+                    <img src="https://via.placeholder.com/150" 
+                         data-n="${safeN}" 
+                         data-s="${safeS}" 
+                         data-b="${safeB}">
+                </div>
+                <div class="p-brand">${p.brand}</div>
+                <div class="p-name">${displayName}</div>
+                <div class="btn-view">Check Sizes</div>
+            </div>`;
+            
+            seenCards.add(groupKey);
         }
-    });
+    }
     container.innerHTML = html + "</div>";
     
+    // Load the images
     document.querySelectorAll('.img-holder img').forEach(img => {
         getStableImage(img, img.getAttribute('data-n'), img.getAttribute('data-s'), img.getAttribute('data-b'));
     });
 }
+async function loadCardImages(variants, containerId, safeN, safeB) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const loadedPaths = new Set();
 
-    function openModal(name, brand, grouped, specific) {
-    document.getElementById('modalTitle').innerText = name;
-    document.getElementById('modalBrand').innerText = brand;
-    document.getElementById('masterDisc').value = ""; 
+    for (const v of variants) {
+        const cleanN = v.name.toLowerCase().trim().replace(/[,\s./_]+/g, '-');
+        const cleanS = v.specs.toLowerCase().trim().replace(/[,\s./_]+/g, '-');
+        
+        // Try multiple path styles for offline reliability
+        const paths = [`wholesale/${cleanN}-${cleanS}.jpg`, `wholesale/${cleanS}.jpg`, `wholesale/${cleanN}.jpg` ];
+
+        let foundPath = "";
+        for (let path of paths) {
+            if (await imageExists(path)) { 
+                foundPath = path; 
+                break; 
+            }
+        }
+
+        if (foundPath && !loadedPaths.has(foundPath)) {
+            const img = document.createElement('img');
+            img.src = foundPath;
+            img.style = "width: 80px; height: 80px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 2px solid #ddd; flex-shrink: 0;";
+            img.title = v.specs;
+            
+            const safeS = v.specs.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            img.onclick = (e) => {
+                e.stopPropagation();
+                openModal(safeN, safeB, safeS);
+            };
+            
+            container.appendChild(img);
+            loadedPaths.add(foundPath);
+        }
+    }
     
+    // Fallback if no images found locally
+    if (container.children.length === 0) {
+        container.style.justifyContent = "center";
+        container.style.alignItems = "center";
+        container.innerHTML = `<div style="color: #999; font-size: 12px;">No images in /wholesale</div>`;
+    }
+}
+function openModal(name, brand, filter) {
+    document.getElementById('modalTitle').innerText = name + (filter ? ` (${filter})` : "");
     const tableBody = document.getElementById('modalTableBody');
-    tableBody.innerHTML = "";
-    currentTableData = [];
-    
-    // Filter variants based on name and brand
-    const variants = grouped ? 
-        allProducts.filter(p => p.name.trim() === name.trim() && p.brand.trim() === brand.trim() && isMeasurement(p.specs)) :
-        allProducts.filter(p => p.name.trim() === name.trim() && p.brand.trim() === brand.trim() && p.specs.trim() === specific.trim());
+    tableBody.innerHTML = ""; currentTableData = [];
+    const variants = allProducts.filter(p => p.name === name && p.brand === brand && (filter ? p.specs === filter : true));
+    const currentUnit = document.getElementById('masterUnit').value;
 
     variants.forEach((v) => {
-        const mrpVal = v.mrp ? v.mrp.toString().replace(/[^0-9.]/g, '') : "0";
-        const mrp = parseFloat(mrpVal) || 0;
-        
-        // SPLIT SPECS LOGIC: Breaks "1 inch, 2 inch" into separate table rows
-        const individualSpecs = v.specs.split(',').filter(s => s.trim() !== "");
-        
-        individualSpecs.forEach(s => {
-            const spec = s.trim();
+        const mrp = parseFloat(v.mrp.toString().replace(/[^0-9.]/g, '')) || 0;
+        let itemsToRender = v.specs.split(',').map(s => s.trim()).filter(s => s !== "");
+        itemsToRender.forEach(specText => {
             const i = currentTableData.length;
-            
-            currentTableData.push({ ...v, specs: spec, mrp, finalPrice: mrp, qty: 1, selected: false });
-            
+            currentTableData.push({ ...v, specs: specText, mrp, finalPrice: mrp, qty: 1, selected: false });
             tableBody.innerHTML += `<tr>
-                <td><input type="checkbox" onchange="toggleSelect(${i}, this)"></td>
-                <td>${spec}</td>
+                <td><input type="checkbox" onchange="currentTableData[${i}].selected=this.checked; updateGrandTotal()"></td>
+                <td style="font-weight:700;">${specText}</td>
                 <td>₹${mrp}</td>
                 <td><input type="number" class="pop-disc-input" placeholder="0" oninput="updatePrice(${i}, this.value)" style="width:50px;"></td>
-                <td><input type="number" value="1" min="1" oninput="updateQty(${i}, this.value)" style="width:50px;"></td>
-                <td id="price-${i}" style="font-weight:800; color:#b38728;">₹${mrp}</td>
+                <td><input type="number" value="1" min="1" oninput="updateQty(${i}, this.value)" style="width:50px;"> <span class="unit-label">${currentUnit}</span></td>
+                <td id="price-${i}" style="font-weight:bold; color:#b38728;">₹${mrp}</td>
             </tr>`;
         });
     });
-    updateGrandTotal();
     document.getElementById('priceModal').style.display = "flex";
 }
 
-    function applyMasterDiscount() {
-        const val = document.getElementById('masterDisc').value;
-        document.querySelectorAll('.pop-disc-input').forEach((input, i) => {
-            input.value = val;
-            updatePrice(i, val);
-        });
-    }
+// 5. PRICE & IMAGE HELPERS
+function applyMasterDiscount() {
+    const val = document.getElementById('masterDisc').value;
+    document.querySelectorAll('.pop-disc-input').forEach((input, i) => { input.value = val; updatePrice(i, val); });
+}
+function applyMasterUnit() {
+    const unit = document.getElementById('masterUnit').value;
+    document.querySelectorAll('.unit-label').forEach(label => label.innerText = unit);
+}
+function updatePrice(i, disc) {
+    currentTableData[i].finalPrice = Math.round((currentTableData[i].mrp * (1 - (parseFloat(disc) || 0) / 100)) * currentTableData[i].qty);
+    document.getElementById(`price-${i}`).innerText = "₹" + currentTableData[i].finalPrice;
+    updateGrandTotal();
+}
+function updateQty(i, q) { currentTableData[i].qty = parseInt(q) || 1; updatePrice(i, document.querySelectorAll('.pop-disc-input')[i].value); }
+function updateGrandTotal() {
+    // 1. Calculate both Raw MRP and Final Discounted Total
+    const totals = currentTableData.reduce((acc, row) => {
+        if (row.selected) {
+            acc.mrpTotal += (row.mrp * row.qty);
+            acc.finalTotal += row.finalPrice;
+        }
+        return acc;
+    }, { mrpTotal: 0, finalTotal: 0 });
 
-    function toggleSelect(i, chk) { currentTableData[i].selected = chk.checked; updateGrandTotal(); }
-    function updatePrice(i, disc) {
-        const base = Math.round(currentTableData[i].mrp - (currentTableData[i].mrp * (parseFloat(disc) || 0) / 100));
-        currentTableData[i].finalPrice = base * currentTableData[i].qty;
-        document.getElementById(`price-${i}`).innerText = "₹" + currentTableData[i].finalPrice;
-        updateGrandTotal();
-    }
-    function updateQty(i, qty) { currentTableData[i].qty = parseInt(qty) || 1; updatePrice(i, 0); }
+    const totalDisplay = document.getElementById('grandTotal');
     
-    function updateGrandTotal() {
-        const total = currentTableData.reduce((acc, row) => row.selected ? acc + row.finalPrice : acc, 0);
-        document.getElementById('grandTotal').innerText = `Total Order: ₹${total}`;
-    }
-
-    function sendWhatsAppOrder() {
-        const sel = currentTableData.filter(r => r.selected);
-        if (!sel.length) return alert("Please select items to order!");
-        let msg = `*HATIMI HARDWARE ORDER*\n*Brand:* ${sel[0].brand}\n*Product:* ${sel[0].name}\n\n`;
-        sel.forEach(r => { msg += `• ${r.specs} (${r.qty} pcs): ₹${r.finalPrice}\n`; });
-        const total = document.getElementById('grandTotal').innerText;
-        msg += `\n*${total}*`;
-        window.open(`https://wa.me/919406648766?text=${encodeURIComponent(msg)}`);
-    }
-
-    function closeModal() { document.getElementById('priceModal').style.display = "none"; }
-    
-    function filterProducts() {
-        const term = document.getElementById('searchInput').value.toLowerCase();
-        renderFrontPage(allProducts.filter(p => p.name.toLowerCase().includes(term) || p.cat.toLowerCase().includes(term) || p.brand.toLowerCase().includes(term)));
-    }
-    loadData();
-    // 1. Scroll Detection for Back to Top
-window.onscroll = function() {
-    const btn = document.getElementById("backToTop");
-    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-        btn.style.display = "block";
+    if (totals.mrpTotal > totals.finalTotal) {
+        // 2. Display with Strikethrough if a discount is applied
+        totalDisplay.innerHTML = `
+            <span style="color: #888; text-decoration: line-through; font-size: 0.9em; margin-right: 10px;">
+                MRP: ₹${totals.mrpTotal}
+            </span>
+            <span style="color: #b38728; font-weight: bold;">
+                Total Order: ₹${totals.finalTotal}
+            </span>
+            <div style="color: green; font-size: 0.8em; font-weight: bold; margin-top: 5px;">
+                You Save: ₹${totals.mrpTotal - totals.finalTotal}
+            </div>
+        `;
     } else {
-        btn.style.display = "none";
+        // 3. Simple display if no discount
+        totalDisplay.innerHTML = `Total Order: ₹${totals.finalTotal}`;
     }
-};
-
-// 2. Smooth Scroll Function
-function scrollToTop() { 
-    window.scrollTo({top: 0, behavior: 'smooth'}); 
+}
+function updateSyncTime() { document.getElementById('syncStatus').innerText = "Last Sync: " + new Date().toLocaleString('en-IN'); }
+// 1. THE CLOSE BUTTON FIX
+function closeModal() { 
+    document.getElementById('priceModal').style.display = "none"; 
 }
 
-// 3. Update this inside your loadData() function after renderFrontPage
-function updateSyncTime() {
-    const now = new Date();
-    const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', day: '2-digit', month: 'short' };
-    document.getElementById('syncStatus').innerText = "Last Sync: " + now.toLocaleString('en-IN', options);
+function sendWhatsAppOrder() {
+    const selectedItems = currentTableData.filter(item => item.selected);
+    
+    if (selectedItems.length === 0) {
+        alert("Please select at least one item to order!");
+        return;
+    }
+
+    const unit = document.getElementById('masterUnit').value;
+    let message = `*HATIMI HARDWARE ORDER*\n`;
+    message += `*Product:* ${selectedItems[0].name}\n`;
+    message += `*Brand:* ${selectedItems[0].brand}\n\n`;
+
+    let totalMRP = 0;
+    let totalFinal = 0;
+
+    selectedItems.forEach(item => {
+        const itemRawMRP = item.mrp * item.qty;
+        totalMRP += itemRawMRP;
+        totalFinal += item.finalPrice;
+
+        // Uses ~ for strikethrough in WhatsApp
+        message += `• ${item.specs}\n`;
+        message += `  Qty: ${item.qty} ${unit}\n`;
+        message += `  Price: ~₹${itemRawMRP}~ ₹${item.finalPrice}\n\n`;
+    });
+
+    message += `*--------------------------*\n`;
+    message += `*Total MRP:* ~₹${totalMRP}~\n`;
+    message += `*Order Total: ₹${totalFinal}*\n`;
+    
+    if (totalMRP > totalFinal) {
+        message += `*Total Savings: ₹${totalMRP - totalFinal}* 💸`;
+    }
+
+    const encodedMsg = encodeURIComponent(message);
+    window.open(`https://wa.me/919406648766?text=${encodedMsg}`);
 }
+loadAllData();
 </script>
 </body>
 </html>
