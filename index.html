@@ -13,88 +13,81 @@
         .search-box { width: 60%; max-width: 700px; padding: 12px 25px; border: 1.5px solid var(--primary-gold); border-radius: 50px; font-size: 16px; outline: none; }
 
         .main-wrapper { max-width: 1300px; margin: 20px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 25px rgba(0,0,0,0.06); }
-        .catalog-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 25px; border-bottom: 3px solid var(--primary-gold); margin-bottom: 30px; }
+        
+        /* BRANDING */
+        .main-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 25px; border-bottom: 3px solid var(--primary-gold); margin-bottom: 30px; background: white; }
         .logo-section { display: flex; align-items: center; gap: 15px; }
         .logo-img { height: 75px; width: auto; }
-        
         .brand-name { margin: 0; font-size: 34px; font-weight: 800; color: #b38728; text-transform: uppercase; line-height: 1; }
         .tagline { margin: 0; font-size: 17px; color: #444; font-weight: 700; }
 
         .action-buttons { display: flex; gap: 15px; }
         .icon-btn { background: white; border: 1px solid #f0f0f0; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
 
-        /* PRODUCT GRID */
-        .category-header { background: #222; color: #fff; padding: 15px 25px; font-size: 18px; font-weight: 700; text-transform: uppercase; margin-top: 50px; border-left: 10px solid var(--primary-gold); border-radius: 4px; }
-        .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; padding: 25px; border: 1px solid #eee; border-top: none; margin-bottom: 30px; }
-        
-        .product-card { background: white; border: 1.5px solid #efefef; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
-        .img-holder { height: 180px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .img-holder img { max-height: 100%; max-width: 100%; object-fit: contain; }
-        
-        .p-name { font-size: 20px; font-weight: 800; color: #222; margin-bottom: 5px; }
-        .p-brand { color: var(--primary-gold); font-size: 12px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
-        .btn-view { background: var(--primary-gold); color: white; padding: 10px; border-radius: 6px; font-weight: 700; display: block; text-decoration: none; font-size: 12px; margin-top: auto; }
-
-        /* MODAL & BULK DISCOUNT */
-        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; }
-        .modal-content { background: white; width: 95%; max-width: 900px; padding: 30px; border-radius: 15px; position: relative; max-height: 90vh; overflow-y: auto; }
-        .close-modal { position: absolute; right: 20px; top: 15px; font-size: 30px; cursor: pointer; color: #888; }
-        .bulk-discount-box { background: #fff8e1; border: 1px dashed #b38728; padding: 15px; border-radius: 8px; margin: 15px 0; display: flex; align-items: center; justify-content: center; gap: 15px; }
-        .bulk-input { width: 80px; padding: 8px; border: 1.5px solid #b38728; border-radius: 5px; text-align: center; font-weight: bold; }
-
-        .modal-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .modal-table th { background: #f4f4f4; text-align: left; padding: 12px; border-bottom: 2px solid #ddd; }
-        .modal-table td { padding: 12px; border-bottom: 1px solid #eee; }
-
-        /* FOOTER */
-        footer { background: white; padding: 60px 20px 30px; border-top: 4px solid var(--primary-gold); margin-top: 80px; }
-        .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-        .footer-column h3 { color: var(--primary-gold); font-size: 16px; font-weight: 800; text-transform: uppercase; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-
-        /* MOBILE OPTIMIZATION */
-        @media screen and (max-width: 768px) {
-            .main-wrapper { padding: 15px; margin: 10px; border-radius: 8px; }
-            .catalog-header { flex-direction: column; text-align: center; gap: 15px; }
-            .brand-name { font-size: 26px; }
-            .tagline { font-size: 14px; }
-            .search-box { width: 90%; font-size: 14px; padding: 10px 15px; }
-            .product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; padding: 10px; }
-            .img-holder { height: 140px; }
-            .p-name { font-size: 16px; }
-            .promo-slider-container { height: 220px !important; }
-            .modal-table { display: block; overflow-x: auto; white-space: nowrap; }
-            .footer-container { grid-template-columns: 1fr; gap: 20px; }
-        }
-
-        /* PRINT PDF OPTIMIZATION */
-        @media print {
-            @page { margin: 0.5cm; }
-            body { margin: 0 !important; padding: 0 !important; background: white !important; }
-            .search-container, .promo-slider-container, .slider-dots, button, .mobile-call-btn, #backToTop, .btn-view { display: none !important; }
-            .main-header { position: fixed !important; top: 0 !important; left: 0; right: 0; height: 100px; display: flex !important; flex-direction: column; align-items: center; justify-content: center; background-color: white !important; border-bottom: 2px solid #b38728 !important; z-index: 10000; -webkit-print-color-adjust: exact; }
-            .print-spacer { display: block !important; }
-            .product-grid { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 8px !important; }
-            .product-card { border: 1px solid #eee !important; padding: 5px !important; break-inside: avoid !important; height: 160px !important; display: flex !important; flex-direction: column !important; align-items: center !important; }
-            .img-holder { height: 70px !important; margin-bottom: 5px !important; }
-            .img-holder img { max-height: 100% !important; }
-            .p-name { font-size: 11px !important; line-height: 1 !important; }
-        }
-
-        #backToTop { display: none; position: fixed; bottom: 30px; right: 30px; z-index: 2000; border: none; outline: none; background: #b38728; color: white; cursor: pointer; padding: 15px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 20px; width: 50px; height: 50px; }
-        .last-sync { text-align: center; font-size: 12px; color: #888; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; }
-        .mobile-call-btn { display: none; position: fixed; bottom: 30px; left: 30px; background: #25d366; color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 2000; box-shadow: 0 4px 15px rgba(0,0,0,0.2); align-items: center; gap: 10px; }
-        @media screen and (max-width: 768px) { .mobile-call-btn { display: flex; } }
-        .promo-slider-container { position: relative; max-width: 100%; height: 350px; margin: 10px 0; overflow: hidden; background: transparent; }
+        /* PROMO SLIDER */
+        .promo-slider-container { position: relative; max-width: 100%; height: 350px; margin: 10px 0 30px 0; overflow: hidden; background: transparent; border-radius: 12px; }
         .slider-wrapper { display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; width: 100%; }
         .slide { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
         .slide img, .slide video { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
-        .slide-label { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: rgba(179, 135, 40, 0.85); color: white; padding: 8px 15px; border-radius: 20px; font-weight: 700; font-size: 14px; }
-        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; padding: 15px; cursor: pointer; border-radius: 50%; z-index: 10; }
-        .prev { left: 10px; } .next { right: 10px; }
-        .slider-dots { position: absolute; bottom: 45px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 15; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(179, 135, 40, 0.4); cursor: pointer; transition: 0.3s; border: 1px solid white; }
-        .dot.active { background: #b38728; transform: scale(1.2); }
-        .mute-toggle { position: absolute; top: 10px; right: 10px; background: rgba(0, 0, 0, 0.5); color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; z-index: 20; font-size: 12px; }
+        .slide-label { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(179, 135, 40, 0.9); color: white; padding: 8px 20px; border-radius: 25px; font-weight: 700; font-size: 14px; z-index: 20; }
+        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; padding: 15px; cursor: pointer; border-radius: 50%; z-index: 10; transition: 0.3s; }
+        .slider-btn:hover { background: var(--primary-gold); }
+        .prev { left: 15px; } .next { right: 15px; }
+        .slider-dots { position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 15; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; border: 1px solid white; }
+        .dot.active { background: var(--primary-gold); transform: scale(1.2); }
+
+        /* PRODUCT GRID */
+        .category-header { background: #222; color: #fff; padding: 15px 25px; font-size: 18px; font-weight: 700; text-transform: uppercase; margin-top: 50px; border-left: 10px solid var(--primary-gold); border-radius: 4px; }
+        .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; padding: 25px; border: 1px solid #eee; border-top: none; margin-bottom: 30px; }
+        .product-card { background: white; border: 1.5px solid #efefef; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; height: 100%; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .img-holder { height: 180px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .img-holder img { max-height: 100%; max-width: 100%; object-fit: contain; }
+        .p-name { font-size: 18px; font-weight: 800; color: #222; margin-bottom: 5px; }
+        .p-brand { color: var(--primary-gold); font-size: 12px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
+        .btn-view { background: var(--primary-gold); color: white; padding: 10px; border-radius: 6px; font-weight: 700; display: block; text-decoration: none; font-size: 12px; margin-top: auto; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; }
+        .modal-content { background: white; width: 95%; max-width: 900px; padding: 30px; border-radius: 15px; position: relative; max-height: 90vh; overflow-y: auto; }
+        .close-modal { position: absolute; right: 20px; top: 15px; font-size: 30px; cursor: pointer; color: #888; }
+        .bulk-discount-box { background: #fff8e1; border: 1px dashed #b38728; padding: 15px; border-radius: 8px; margin: 10px 0; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .bulk-input { width: 80px; padding: 8px; border: 1.5px solid #b38728; border-radius: 5px; text-align: center; font-weight: bold; }
+        .modal-table { width: 100%; border-collapse: collapse; }
+        .modal-table th { background: #f4f4f4; text-align: left; padding: 12px; border-bottom: 2px solid #ddd; }
+        .modal-table td { padding: 12px; border-bottom: 1px solid #eee; }
+
+        /* MOBILE OVERRIDES */
+        @media screen and (max-width: 768px) {
+            .main-wrapper { padding: 15px; margin: 10px; }
+            .main-header { flex-direction: column; text-align: center; gap: 15px; }
+            .brand-name { font-size: 26px; }
+            .product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; padding: 10px; }
+            .promo-slider-container { height: 220px !important; }
+            .img-holder { height: 130px; }
+            .modal-table { display: block; overflow-x: auto; }
+        }
+
+        /* PRINT LOGIC */
+        @media print {
+            @page { margin: 0; }
+            body { background: white; }
+            .search-container, .promo-slider-container, .slider-dots, .slider-btn, .mobile-call-btn, #backToTop, .btn-view, .action-buttons { display: none !important; }
+            .main-header { position: fixed !important; top: 0; left: 0; width: 100%; height: 100px; border-bottom: 2px solid #b38728 !important; display: flex !important; align-items: center; justify-content: center; z-index: 10000; background: white !important; -webkit-print-color-adjust: exact; }
+            .print-spacer { display: block !important; height: 110px; }
+            .product-grid { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 10px !important; }
+            .product-card { break-inside: avoid !important; border: 1px solid #eee !important; height: 165px !important; padding: 10px !important; }
+            .img-holder { height: 80px !important; }
+            .p-name { font-size: 12px !important; }
+        }
+
+        #backToTop { display: none; position: fixed; bottom: 30px; right: 30px; z-index: 2000; background: #b38728; color: white; border: none; padding: 15px; border-radius: 50%; cursor: pointer; width: 50px; height: 50px; }
+        .mobile-call-btn { display: none; position: fixed; bottom: 30px; left: 30px; background: #25d366; color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 2000; box-shadow: 0 4px 15px rgba(0,0,0,0.2); align-items: center; gap: 10px; }
+        @media screen and (max-width: 768px) { .mobile-call-btn { display: flex; } }
+        .mute-toggle { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; z-index: 30; font-size: 11px; }
+        footer { background: white; padding: 40px 20px; border-top: 4px solid var(--primary-gold); margin-top: 50px; }
+        .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
     </style>
 </head>
 <body>
@@ -104,21 +97,17 @@
 </div>
 
 <div class="main-wrapper">
-    <header class="catalog-header main-header">
+    <header class="main-header">
         <div class="logo-section">
-            <img src="logo.png" class="logo-img" alt="Hatimi Logo" onerror="this.src='https://via.placeholder.com/80'">
+            <img src="logo.png" class="logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/80'">
             <div>
                 <h1 class="brand-name">Hatimi Hardware</h1>
                 <p class="tagline">Quality Fittings • Trusted Tools</p>
             </div>
         </div>
         <div class="action-buttons">
-            <button class="icon-btn" onclick="location.reload()" title="Refresh Catalog">
-                <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#b38728" d="M12,18A6,6 0 0,1 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12A8,8 0 0,0 12,20V23L16,19L12,15V18M12,4V1L8,5L12,9V6A6,6 0 0,1 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12A8,8 0 0,0 12,4Z"/></svg>
-            </button>
-            <button class="icon-btn" onclick="window.print()" title="Download PDF">
-                <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#b38728" d="M18,3H6V7H18M19,12A1,1 0 0,1 18,11A1,1 0 0,1 19,10A1,1 0 0,1 20,11A1,1 0 0,1 19,12M16,19H8V14H16M19,8H5A3,3 0 0,0 2,11V17H6V21H18V17H22V11A3,3 0 0,0 19,8Z"/></svg>
-            </button>
+            <button class="icon-btn" onclick="location.reload()"><svg width="20" height="20" viewBox="0 0 24 24"><path fill="#b38728" d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H21V3L17.65,6.35Z"/></svg></button>
+            <button class="icon-btn" onclick="window.print()"><svg width="20" height="20" viewBox="0 0 24 24"><path fill="#b38728" d="M18,3H6V7H18M19,12A1,1 0 0,1 18,11A1,1 0 0,1 19,10A1,1 0 0,1 20,11A1,1 0 0,1 19,12M16,19H8V14H16M19,8H5A3,3 0 0,0 2,11V17H6V21H18V17H22V11A3,3 0 0,0 19,8Z"/></svg></button>
         </div>
     </header>
 
@@ -129,7 +118,7 @@
     </div>
 
     <table class="print-table" style="width: 100%; border-collapse: collapse; border: none;">
-        <thead><tr><td><div style="height: 110px; display: none;" class="print-spacer"></div></td></tr></thead>
+        <thead><tr><td><div class="print-spacer" style="display: none;"></div></td></tr></thead>
         <tbody><tr><td><div id="catalog-container"></div></td></tr></tbody>
     </table>
 </div>
@@ -137,43 +126,37 @@
 <div id="priceModal" class="modal">
     <div class="modal-content">
         <span class="close-modal" onclick="closeModal()">&times;</span>
-        <h2 id="modalTitle" style="color: var(--primary-gold); margin-bottom: 5px;"></h2>
-        <p id="modalBrand" style="font-weight: bold; text-transform: uppercase; color: #666; font-size: 14px;"></p>
+        <h2 id="modalTitle" style="color: var(--primary-gold);"></h2>
+        <p id="modalBrand" style="font-weight: bold; color: #666;"></p>
         <div class="bulk-discount-box">
-            <span><strong>Bulk Discount:</strong></span>
+            <span><strong>Bulk % OFF:</strong></span>
             <input type="number" id="masterDisc" class="bulk-input" placeholder="0" oninput="applyMasterDiscount()">
-            <span><strong>% OFF</strong></span>
-        </div>
-        <div class="bulk-discount-box">
-            <span><strong>Set Unit for All:</strong></span>
-            <select id="masterUnit" class="bulk-input" onchange="applyMasterUnit()" style="width: 100px;">
+            <span><strong>Unit:</strong></span>
+            <select id="masterUnit" class="bulk-input" onchange="applyMasterUnit()">
                 <option value="pcs">pcs</option><option value="kg">kg</option><option value="pkt">pkt</option><option value="doz">doz</option><option value="mtr">mtr</option><option value="set">set</option>
             </select>
         </div>
         <table class="modal-table">
-            <thead><tr><th>Select</th><th>Size / Specs</th><th>MRP (₹)</th><th>Disc %</th><th>Qty</th><th>Final Price</th></tr></thead>
+            <thead><tr><th>Select</th><th>Specs</th><th>MRP</th><th>Disc%</th><th>Qty</th><th>Price</th></tr></thead>
             <tbody id="modalTableBody"></tbody>
         </table>
         <div style="text-align:right; margin-top: 20px;">
-            <div id="grandTotal" style="font-size: 20px; font-weight: 800; color: #222;">Total Order: ₹0</div>
-            <button style="background:#25d366; color:white; padding:12px 35px; border-radius:50px; border:none; font-weight:bold; cursor:pointer; margin-top:10px; font-size:16px;" onclick="sendWhatsAppOrder()">Send Order on WhatsApp</button>
+            <div id="grandTotal" style="font-size: 20px; font-weight: 800;">Total: ₹0</div>
+            <button style="background:#25d366; color:white; padding:12px 30px; border-radius:50px; border:none; font-weight:bold; cursor:pointer; margin-top:10px;" onclick="sendWhatsAppOrder()">Order on WhatsApp</button>
         </div>
     </div>
 </div>
 
 <button id="backToTop" onclick="scrollToTop()">↑</button>
-<a href="tel:+919406648766" class="mobile-call-btn">
-    <svg width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
-    <span>Call Shop</span>
-</a>
+<a href="tel:+919406648766" class="mobile-call-btn"><span>Call Shop</span></a>
 
 <footer>
     <div class="footer-container">
-        <div class="footer-column"><h3>📍 VISIT OUR SHOP</h3><p><strong>Hatimi Hardware</strong><br>101, Subhash Path, Barnagar, MP - 456771</p></div>
-        <div class="footer-column"><h3>📞 CONTACT</h3><div>Juzer: 94066 48766</div><div>Shabbir: 94254 94845</div></div>
+        <div class="footer-column"><h3>📍 LOCATION</h3><p>Hatimi Hardware, Barnagar, MP</p></div>
+        <div class="footer-column"><h3>📞 CONTACT</h3><p>94066 48766 | 94254 94845</p></div>
         <div class="footer-column"><h3>📩 EMAIL</h3><p>hussain22juzer@gmail.com</p></div>
     </div>
-    <div class="last-sync" id="syncStatus">Fetching latest data...</div>
+    <div class="last-sync" id="syncStatus" style="text-align:center; color:#888; font-size:12px; margin-top:20px;">Fetching data...</div>
 </footer>
 
 <script>
@@ -182,9 +165,9 @@ const sliderSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqfLPTM
 
 let allProducts = [], currentTableData = [], slideIndex = 0, sliderTimer, promoData = [];
 
-window.onscroll = function() {
+window.onscroll = () => {
     const btn = document.getElementById("backToTop");
-    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) { btn.style.display = "block"; } else { btn.style.display = "none"; }
+    btn.style.display = (window.scrollY > 300) ? "block" : "none";
 };
 
 function scrollToTop() { window.scrollTo({top: 0, behavior: 'smooth'}); }
@@ -201,7 +184,6 @@ function parseCSVLine(line) {
     result.push(cell.trim()); return result;
 }
 
-/* ADDED isMeasurement */
 function isMeasurement(spec) {
     if (!spec) return false;
     const s = spec.toLowerCase().trim();
@@ -210,43 +192,25 @@ function isMeasurement(spec) {
 
 async function loadAllData() {
     try {
-        // Log the start for debugging
-        console.log("Fetching from:", productSheetURL);
-
-        const [pResp, sResp] = await Promise.all([
-            fetch(productSheetURL, { cache: "no-store" }),
-            fetch(sliderSheetURL, { cache: "no-store" })
-        ]);
-
-        if (!pResp.ok) throw new Error(`HTTP error! status: ${pResp.status}`);
-        
+        const [pResp, sResp] = await Promise.all([fetch(productSheetURL, {cache: "no-store"}), fetch(sliderSheetURL, {cache: "no-store"})]);
         const pText = await pResp.text();
-        if (pText.includes("<!DOCTYPE html>")) {
-            throw new Error("Received HTML instead of CSV. Check if the sheet is published as CSV.");
-        }
-
         const pRows = pText.split('\n').filter(r => r.trim() !== '').slice(1);
         allProducts = pRows.map(row => {
-            const cols = parseCSVLine(row); 
-            let rawSpecs = (cols[3] || '').trim().replace(/^["']|["']$/g, '').replace(/""/g, '"');
-            return { cat: cols[0], brand: cols[1], name: cols[2], specs: rawSpecs, mrp: cols[4] };
+            const cols = parseCSVLine(row);
+            return { cat: cols[0], brand: cols[1], name: cols[2], specs: cols[3].trim(), mrp: cols[4] };
         });
-
         allProducts.sort((a, b) => a.cat.localeCompare(b.cat));
-        
-        // Render the UI
-        renderSlider();
-        renderFrontPage(allProducts);
-        updateSyncTime();
-    } catch (e) { 
-        console.error("CRITICAL LOAD ERROR:", e);
-        document.getElementById('catalog-container').innerHTML = 
-            `<div style="color:red; padding:20px; text-align:center;">
-                <h3>Data Load Failed</h3>
-                <p>${e.message}</p>
-                <small>Please ensure your Google Sheet is published as CSV.</small>
-            </div>`;
-    }
+
+        const sText = await sResp.text();
+        const sRows = sText.split('\n').filter(r => r.trim() !== '').slice(1);
+        promoData = sRows.map(row => {
+            const cols = parseCSVLine(row);
+            return { status: cols[0].trim().toLowerCase(), type: cols[1].trim().toLowerCase(), url: cols[2].trim(), label: cols[3] };
+        }).filter(i => i.status === 'active');
+
+        renderSlider(); renderFrontPage(allProducts);
+        document.getElementById('syncStatus').innerText = "Last Sync: " + new Date().toLocaleString('en-IN');
+    } catch (e) { console.error("Load failed", e); }
 }
 
 function renderSlider() {
@@ -255,34 +219,26 @@ function renderSlider() {
     if (!promoData.length) { container.style.display = 'none'; return; }
 
     slider.innerHTML = promoData.map((item, idx) => {
-        // FIX: Ensure the URL points inside the wholesale folder
         let finalUrl = item.url.trim();
-        if (!finalUrl.startsWith('http') && !finalUrl.startsWith('wholesale/')) {
-            finalUrl = `wholesale/${finalUrl}`;
-        }
-
+        if (!finalUrl.startsWith('http')) finalUrl = `wholesale/${finalUrl}`;
         return `
         <div class="slide">
-            ${item.type === 'video' ? 
-                /* Added loop and playsinline for mobile */
-                `<video id="vid-${idx}" src="${finalUrl}" autoplay muted loop playsinline class="promo-video" style="width:100%; height:100%; object-fit:contain;"></video>
-                 <button class="mute-toggle" onclick="toggleMute(this)">🔊 Unmute</button>` : 
-                `<img src="${finalUrl}" style="width:100%; height:100%; object-fit:contain; background:transparent;" onerror="this.src='https://via.placeholder.com/800x400?text=Image+Not+Found'">`}
+            ${item.type === 'video' ? `<video id="vid-${idx}" src="${finalUrl}" autoplay muted loop playsinline class="promo-video"></video><button class="mute-toggle" onclick="toggleMute(this)">🔊 Unmute</button>` : `<img src="${finalUrl}">`}
             <div class="slide-label">${item.label}</div>
         </div>`;
     }).join('');
 
     let dotsHtml = '<div class="slider-dots">';
-    promoData.forEach((_, idx) => { dotsHtml += `<div class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide(${idx})"></div>`; });
+    promoData.forEach((_, idx) => dotsHtml += `<div class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide(${idx})"></div>`);
     container.insertAdjacentHTML('beforeend', dotsHtml + '</div>');
-
     setupAutoSlide();
 }
 
 function setupAutoSlide() {
     clearTimeout(sliderTimer);
     const vid = document.getElementById(`vid-${slideIndex}`);
-    if (vid) { vid.play().catch(() => {}); vid.onended = () => changeSlide(1); } else { sliderTimer = setTimeout(() => changeSlide(1), 5000); }
+    if (vid) { vid.play().catch(() => {}); vid.onended = () => changeSlide(1); } 
+    else { sliderTimer = setTimeout(() => changeSlide(1), 5000); }
 }
 
 function changeSlide(dir) { slideIndex = (slideIndex + dir + promoData.length) % promoData.length; updateSliderView(); }
@@ -294,102 +250,71 @@ function updateSliderView() {
     setupAutoSlide();
 }
 
-function toggleMute(btn) { const vid = btn.previousElementSibling; vid.muted = !vid.muted; btn.innerText = vid.muted ? "🔊 Unmute" : "🔇 Mute"; }
-
-function imageExists(url) { return new Promise((resolve) => { const img = new Image(); img.onload = () => resolve(true); img.onerror = () => resolve(false); img.src = url; }); }
-
-function getStableImage(img, name, spec, brand) {
-    const clean = (t) => (t || '').toString().toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
-    const n = clean(name), s = clean(spec), b = clean(brand);
-    
-    // Try multiple variations
-    const paths = [
-        `wholesale/${n}-${s}.jpg`, 
-        `wholesale/${s}.jpg`, 
-        `wholesale/${n}.jpg`, 
-        `wholesale/${b}-${n}.jpg`
-    ];
-
-    let step = 0;
-    const tryLoad = () => {
-        if (step < paths.length) {
-            const temp = new Image();
-            // Force the path to be used relative to your site root
-            temp.src = paths[step]; 
-            temp.onload = () => { 
-                img.src = paths[step]; 
-                img.style.opacity = "1"; 
-            };
-            temp.onerror = () => { 
-                step++; 
-                tryLoad(); 
-            };
-        } else { 
-            // If all local paths fail, use a placeholder
-            img.src = 'https://via.placeholder.com/150?text=' + encodeURIComponent(name);
-            img.style.opacity = "0.5"; 
-        }
-    };
-    tryLoad();
-}
+function toggleMute(btn) { const v = btn.previousElementSibling; v.muted = !v.muted; btn.innerText = v.muted ? "🔊 Unmute" : "🔇 Mute"; }
 
 async function renderFrontPage(products) {
-    const container = document.getElementById('catalog-container'); if (!container) return;
-    container.innerHTML = ""; let currentCat = "", html = ""; const seenCards = new Set();
+    const container = document.getElementById('catalog-container');
+    let currentCat = "", html = ""; const seen = new Set();
+
     for (const p of products) {
         const cleanN = p.name.toLowerCase().trim().replace(/[,\s./_]+/g, '-');
         const cleanS = p.specs.toLowerCase().trim().replace(/[,\s./_]+/g, '-');
         const specificPath = `wholesale/${cleanN}-${cleanS}.jpg`;
-        const hasUniqueImage = await imageExists(specificPath);
-        const groupKey = hasUniqueImage ? `${p.brand}|${p.name}|${p.specs}` : `${p.brand}|${p.name}`;
-        if (!seenCards.has(groupKey)) {
-            if (p.cat !== currentCat) { if (html !== "") html += `</div>`; currentCat = p.cat; html += `<div class="category-header">${currentCat}</div><div class="product-grid">`; }
-            const displayName = hasUniqueImage ? `${p.name} (${p.specs})` : p.name;
-            const safeN = p.name.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-            const safeB = p.brand.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-            const safeS = hasUniqueImage ? p.specs.replace(/'/g, "\\'").replace(/"/g, "&quot;") : '';
-            html += `<div class="product-card clickable-card" onclick="openModal('${safeN}', '${safeB}', '${safeS}')"><div class="img-holder"><img src="https://via.placeholder.com/150" data-n="${safeN}" data-s="${safeS}" data-b="${safeB}"></div><div class="p-brand">${p.brand}</div><div class="p-name">${displayName}</div><div class="btn-view">Check Sizes</div></div>`;
-            seenCards.add(groupKey);
+        const hasUnique = await new Promise(r => { const i = new Image(); i.onload = () => r(true); i.onerror = () => r(false); i.src = specificPath; });
+
+        const key = hasUnique ? `${p.brand}|${p.name}|${p.specs}` : `${p.brand}|${p.name}`;
+        if (!seen.has(key)) {
+            if (p.cat !== currentCat) {
+                if (html !== "") html += `</div>`;
+                currentCat = p.cat;
+                html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
+            }
+            const displayName = hasUnique ? `${p.name} (${p.specs})` : p.name;
+            const safeN = p.name.replace(/'/g, "\\'"), safeB = p.brand.replace(/'/g, "\\'"), safeS = hasUnique ? p.specs.replace(/'/g, "\\'") : '';
+            html += `<div class="product-card" onclick="openModal('${safeN}', '${safeB}', '${safeS}')"><div class="img-holder"><img src="${hasUnique ? specificPath : 'wholesale/'+cleanN+'.jpg'}" onerror="this.src='https://via.placeholder.com/150?text='+encodeURIComponent(p.name)"></div><div class="p-brand">${p.brand}</div><div class="p-name">${displayName}</div><div class="btn-view">Check Sizes</div></div>`;
+            seen.add(key);
         }
     }
     container.innerHTML = html + "</div>";
-    document.querySelectorAll('.img-holder img').forEach(img => { getStableImage(img, img.getAttribute('data-n'), img.getAttribute('data-s'), img.getAttribute('data-b')); });
 }
 
 function openModal(name, brand, filter) {
     document.getElementById('modalTitle').innerText = name + (filter ? ` (${filter})` : "");
-    const tableBody = document.getElementById('modalTableBody'); tableBody.innerHTML = ""; currentTableData = [];
+    const body = document.getElementById('modalTableBody'); body.innerHTML = ""; currentTableData = [];
     const variants = allProducts.filter(p => p.name === name && p.brand === brand && (filter ? p.specs === filter : true));
-    const currentUnit = document.getElementById('masterUnit').value;
-    variants.forEach((v) => {
-        const mrp = parseFloat(v.mrp.toString().replace(/[^0-9.]/g, '')) || 0;
-        let itemsToRender = v.specs.split(',').map(s => s.trim()).filter(s => s !== "");
-        itemsToRender.forEach(specText => {
-            const i = currentTableData.length; currentTableData.push({ ...v, specs: specText, mrp, finalPrice: mrp, qty: 1, selected: false });
-            tableBody.innerHTML += `<tr><td><input type="checkbox" onchange="currentTableData[${i}].selected=this.checked; updateGrandTotal()"></td><td style="font-weight:700;">${specText}</td><td>₹${mrp}</td><td><input type="number" class="pop-disc-input" placeholder="0" oninput="updatePrice(${i}, this.value)" style="width:50px;"></td><td><input type="number" value="1" min="1" oninput="updateQty(${i}, this.value)" style="width:50px;"> <span class="unit-label">${currentUnit}</span></td><td id="price-${i}" style="font-weight:bold; color:#b38728;">₹${mrp}</td></tr>`;
+    
+    variants.forEach((v, idx) => {
+        const mrp = parseFloat(v.mrp) || 0;
+        v.specs.split(',').forEach(s => {
+            const i = currentTableData.length;
+            currentTableData.push({...v, specs: s.trim(), mrp, finalPrice: mrp, qty: 1, selected: false});
+            body.innerHTML += `<tr><td><input type="checkbox" onchange="currentTableData[${i}].selected=this.checked; updateGrandTotal()"></td><td>${s.trim()}</td><td>₹${mrp}</td><td><input type="number" class="pop-disc-input" placeholder="0" oninput="updatePrice(${i}, this.value)" style="width:50px;"></td><td><input type="number" value="1" min="1" oninput="updateQty(${i}, this.value)" style="width:50px;"></td><td id="price-${i}">₹${mrp}</td></tr>`;
         });
     });
     document.getElementById('priceModal').style.display = "flex";
 }
 
-function applyMasterDiscount() { const val = document.getElementById('masterDisc').value; document.querySelectorAll('.pop-disc-input').forEach((input, i) => { input.value = val; updatePrice(i, val); }); }
-function applyMasterUnit() { const unit = document.getElementById('masterUnit').value; document.querySelectorAll('.unit-label').forEach(label => label.innerText = unit); }
-function updatePrice(i, disc) { currentTableData[i].finalPrice = Math.round((currentTableData[i].mrp * (1 - (parseFloat(disc) || 0) / 100)) * currentTableData[i].qty); document.getElementById(`price-${i}`).innerText = "₹" + currentTableData[i].finalPrice; updateGrandTotal(); }
+function applyMasterDiscount() { const v = document.getElementById('masterDisc').value; document.querySelectorAll('.pop-disc-input').forEach((inp, i) => { inp.value = v; updatePrice(i, v); }); }
+function applyMasterUnit() { /* logical placeholder */ }
+function updatePrice(i, d) { currentTableData[i].finalPrice = Math.round((currentTableData[i].mrp * (1 - (parseFloat(d) || 0) / 100)) * currentTableData[i].qty); document.getElementById(`price-${i}`).innerText = "₹" + currentTableData[i].finalPrice; updateGrandTotal(); }
 function updateQty(i, q) { currentTableData[i].qty = parseInt(q) || 1; updatePrice(i, document.querySelectorAll('.pop-disc-input')[i].value); }
 function updateGrandTotal() {
-    const totals = currentTableData.reduce((acc, row) => { if (row.selected) { acc.mrpTotal += (row.mrp * row.qty); acc.finalTotal += row.finalPrice; } return acc; }, { mrpTotal: 0, finalTotal: 0 });
-    const totalDisplay = document.getElementById('grandTotal');
-    if (totals.mrpTotal > totals.finalTotal) { totalDisplay.innerHTML = `<span style="color: #888; text-decoration: line-through; font-size: 0.9em; margin-right: 10px;">MRP: ₹${totals.mrpTotal}</span><span style="color: #b38728; font-weight: bold;">Total Order: ₹${totals.finalTotal}</span><div style="color: green; font-size: 0.8em; font-weight: bold; margin-top: 5px;">You Save: ₹${totals.mrpTotal - totals.finalTotal}</div>`; } else { totalDisplay.innerHTML = `Total Order: ₹${totals.finalTotal}`; }
+    const t = currentTableData.reduce((acc, r) => r.selected ? acc + r.finalPrice : acc, 0);
+    document.getElementById('grandTotal').innerText = `Total: ₹${t}`;
 }
-function updateSyncTime() { document.getElementById('syncStatus').innerText = "Last Sync: " + new Date().toLocaleString('en-IN'); }
 function closeModal() { document.getElementById('priceModal').style.display = "none"; }
+function filterProducts() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    document.querySelectorAll('.product-card').forEach(c => {
+        const txt = c.innerText.toLowerCase();
+        c.style.display = txt.includes(q) ? "" : "none";
+    });
+}
 function sendWhatsAppOrder() {
-    const selectedItems = currentTableData.filter(item => item.selected); if (selectedItems.length === 0) { alert("Please select items!"); return; }
-    const unit = document.getElementById('masterUnit').value; let message = `*HATIMI HARDWARE ORDER*\n*Product:* ${selectedItems[0].name}\n*Brand:* ${selectedItems[0].brand}\n\n`;
-    let totalMRP = 0, totalFinal = 0;
-    selectedItems.forEach(item => { const itemRawMRP = item.mrp * item.qty; totalMRP += itemRawMRP; totalFinal += item.finalPrice; message += `• ${item.specs}\n  Qty: ${item.qty} ${unit}\n  Price: ~₹${itemRawMRP}~ ₹${item.finalPrice}\n\n`; });
-    message += `*Total MRP:* ~₹${totalMRP}~\n*Order Total: ₹${totalFinal}*\n`; if (totalMRP > totalFinal) { message += `*Total Savings: ₹${totalMRP - totalFinal}* 💸`; }
-    window.open(`https://wa.me/919406648766?text=${encodeURIComponent(message)}`);
+    const items = currentTableData.filter(i => i.selected); if (!items.length) return alert("Select items!");
+    let msg = `*HATIMI HARDWARE ORDER*\n*Product:* ${items[0].name}\n\n`;
+    items.forEach(i => msg += `• ${i.specs} | Qty: ${i.qty} | Price: ₹${i.finalPrice}\n`);
+    window.open(`https://wa.me/919406648766?text=${encodeURIComponent(msg)}`);
 }
 loadAllData();
 </script>
