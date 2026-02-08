@@ -729,17 +729,17 @@ async function renderFrontPage(products) {
                 html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
             }
 
-            // CLEAN NAMES FOR FILE MATCHING
+            // CLEANING NAMES FOR GITHUB PATHS
             const n = p.name.toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
-            const s = p.specs.toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
-            const b = p.brand.toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
+            const s = (p.specs || "").toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
+            const b = (p.brand || "").toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
 
-            // THE 4-STEP SEARCH LIST
+            // THE 4 CRITERIA PATHS
             const paths = [
-                `wholesale/${b}-${n}-${s}.jpg`, 
-                `wholesale/${n}-${s}.jpg`,      
-                `wholesale/${b}-${n}.jpg`,      
-                `wholesale/${n}.jpg`           
+                `wholesale/${b}-${n}-${s}.jpg`, // Criteria 1: Brand-Name-Spec
+                `wholesale/${n}-${s}.jpg`,      // Criteria 2: Name-Spec
+                `wholesale/${b}-${n}.jpg`,      // Criteria 3: Brand-Name
+                `wholesale/${n}.jpg`           // Criteria 4: Only Product Name
             ];
 
             const imgId = `img-${b}-${n}`.replace(/[^-a-z0-9]/g, '');
@@ -748,19 +748,38 @@ async function renderFrontPage(products) {
             <div class="product-card" onclick="openModal('${p.name.replace(/'/g, "\\'")}', '${p.brand.replace(/'/g, "\\'")}')">
                 <div class="img-holder">
                     <img id="${imgId}" loading="lazy" src="https://via.placeholder.com/150?text=..." 
-                         style="transition:0.2s; opacity:1;">
+                         style="width:100%; height:100%; object-fit:contain;">
                 </div>
                 <div class="p-brand">${p.brand}</div>
                 <div class="p-name">${p.name}</div>
                 <div class="btn-view">Check Sizes</div>
             </div>`;
 
-            // Start the search only after the HTML is rendered
+            // ASYNC LOADING TO PREVENT SITE HANGING
             setTimeout(() => tryLoadImage(imgId, paths, p.name), 10);
             seen.add(key);
         }
     }
     container.innerHTML = html + "</div>";
+}
+
+function tryLoadImage(imgId, paths, fallbackName) {
+    let step = 0;
+    const imgElement = document.getElementById(imgId);
+    if (!imgElement) return;
+
+    const attempt = () => {
+        if (step < paths.length) {
+            const temp = new Image();
+            temp.src = paths[step];
+            temp.onload = () => { imgElement.src = paths[step]; }; // Found it!
+            temp.onerror = () => { step++; attempt(); }; // Try next path
+        } else {
+            // Placeholder if ALL 4 CRITERIA fail
+            imgElement.src = `https://via.placeholder.com/150?text=${encodeURIComponent(fallbackName)}`;
+        }
+    };
+    attempt();
 }
 async function loadCardImages(variants, containerId, safeN, safeB) {
     const container = document.getElementById(containerId);
