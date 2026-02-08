@@ -579,28 +579,51 @@ function isMeasurement(spec) {
 
 async function loadAllData() {
     try {
-        const [pResp, sResp] = await Promise.all([fetch(productSheetURL), fetch(sliderSheetURL)]);
+        const [pResp, sResp] = await Promise.all([
+            fetch(productSheetURL, { cache: "no-store" }), // Prevents GitHub from showing old data
+            fetch(sliderSheetURL, { cache: "no-store" })
+        ]);
+        
         const pText = await pResp.text();
+        // Clear allProducts before reloading to prevent duplicates
+        allProducts = []; 
+        
         const pRows = pText.split('\n').filter(r => r.trim() !== '').slice(1);
         
         allProducts = pRows.map(row => {
             const cols = parseCSVLine(row); 
             let rawSpecs = (cols[3] || '').trim().replace(/^["']|["']$/g, '').replace(/""/g, '"');
-            return { cat: cols[0], brand: cols[1], name: cols[2], specs: rawSpecs, mrp: cols[5] };
+            return { 
+                cat: cols[0], 
+                brand: cols[1], 
+                name: cols[2], 
+                specs: rawSpecs, 
+                mrp: cols[4] // Ensure this is cols[4] for MRP
+            };
         });
+
+        // Re-sort to ensure categories stay grouped
         allProducts.sort((a, b) => a.cat.localeCompare(b.cat));
 
         const sText = await sResp.text();
         const sRows = sText.split('\n').filter(r => r.trim() !== '').slice(1);
         promoData = sRows.map(row => {
             const cols = parseCSVLine(row);
-            return { status: cols[0].trim().toLowerCase(), type: cols[1].trim().toLowerCase(), url: `wholesale/${cols[2].trim()}`, label: cols[3] };
+            return { 
+                status: cols[0].trim().toLowerCase(), 
+                type: cols[1].trim().toLowerCase(), 
+                url: cols[2].trim(), // Remove 'wholesale/' if your sheet has the full path
+                label: cols[3] 
+            };
         }).filter(i => i.status === 'active');
 
         renderSlider();
-        await renderFrontPage(allProducts);
+        renderFrontPage(allProducts); // Render the products to the grid
         updateSyncTime();
-    } catch (e) { console.error("Load failed", e); }
+    } catch (e) { 
+        console.error("GitHub Load Error:", e);
+        document.getElementById('catalog-container').innerHTML = "Failed to load products. Check internet connection.";
+    }
 }
 
 // 3. SLIDER LOGIC
@@ -717,8 +740,12 @@ function getStableImage(img, name, spec, brand) {
 }
 async function renderFrontPage(products) {
     const container = document.getElementById('catalog-container');
+    if (!container) return;
+    container.innerHTML = ""; // Clear "Fetching latest data" text
+    
     let currentCat = "", html = "";
-    const seenCards = new Set();
+    // ... rest of your existing render logic ...
+}
 
     for (const p of products) {
         // 1. CLEAN NAMES FOR MATCHING
