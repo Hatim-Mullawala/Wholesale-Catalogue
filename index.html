@@ -717,62 +717,50 @@ function getStableImage(img, name, spec, brand) {
 }
 async function renderFrontPage(products) {
     const container = document.getElementById('catalog-container');
+    const seen = new Set();
     let currentCat = "", html = "";
-    const seenCards = new Set();
 
     for (const p of products) {
-        // 1. CLEAN NAMES FOR MATCHING
-        const cleanN = p.name.toLowerCase().trim().replace(/[,\s./_]+/g, '-');
-        const cleanS = p.specs.toLowerCase().trim().replace(/[,\s./_]+/g, '-');
-        
-        // 2. CHECK FOR UNIQUE VARIANT IMAGE
-        const specificPath = `wholesale/${cleanN}-${cleanS}.jpg`;
-        const hasUniqueImage = await imageExists(specificPath);
-
-        // 3. DECISION LOGIC
-        // If unique image exists, use a unique key (Separates the card)
-        // If not, use the general name (Keeps it grouped like before)
-        const groupKey = hasUniqueImage ? 
-            `${p.brand}|${p.name}|${p.specs}` : 
-            `${p.brand}|${p.name}`;
-        
-        if (!seenCards.has(groupKey)) {
+        const key = `${p.brand}|${p.name}`;
+        if (!seen.has(key)) {
             if (p.cat !== currentCat) {
                 if (html !== "") html += `</div>`;
                 currentCat = p.cat;
                 html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
             }
 
-            // Display "Name (Spec)" for separated items, just "Name" for grouped ones
-            const displayName = hasUniqueImage ? `${p.name} (${p.specs})` : p.name;
-            const safeN = p.name.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-            const safeB = p.brand.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-            
-            // If separated, tell the modal to filter to that specific spec
-            const safeS = hasUniqueImage ? p.specs.replace(/'/g, "\\'").replace(/"/g, "&quot;") : '';
+            // CLEAN NAMES FOR FILE MATCHING
+            const n = p.name.toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
+            const s = p.specs.toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
+            const b = p.brand.toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
+
+            // THE 4-STEP SEARCH LIST
+            const paths = [
+                `wholesale/${b}-${n}-${s}.jpg`, 
+                `wholesale/${n}-${s}.jpg`,      
+                `wholesale/${b}-${n}.jpg`,      
+                `wholesale/${n}.jpg`           
+            ];
+
+            const imgId = `img-${b}-${n}`.replace(/[^-a-z0-9]/g, '');
 
             html += `
-            <div class="product-card clickable-card" onclick="openModal('${safeN}', '${safeB}', '${safeS}')">
+            <div class="product-card" onclick="openModal('${p.name.replace(/'/g, "\\'")}', '${p.brand.replace(/'/g, "\\'")}')">
                 <div class="img-holder">
-                    <img src="https://via.placeholder.com/150" 
-                         data-n="${safeN}" 
-                         data-s="${safeS}" 
-                         data-b="${safeB}">
+                    <img id="${imgId}" loading="lazy" src="https://via.placeholder.com/150?text=..." 
+                         style="transition:0.2s; opacity:1;">
                 </div>
                 <div class="p-brand">${p.brand}</div>
-                <div class="p-name">${displayName}</div>
+                <div class="p-name">${p.name}</div>
                 <div class="btn-view">Check Sizes</div>
             </div>`;
-            
-            seenCards.add(groupKey);
+
+            // Start the search only after the HTML is rendered
+            setTimeout(() => tryLoadImage(imgId, paths, p.name), 10);
+            seen.add(key);
         }
     }
     container.innerHTML = html + "</div>";
-    
-    // Load the images
-    document.querySelectorAll('.img-holder img').forEach(img => {
-        getStableImage(img, img.getAttribute('data-n'), img.getAttribute('data-s'), img.getAttribute('data-b'));
-    });
 }
 async function loadCardImages(variants, containerId, safeN, safeB) {
     const container = document.getElementById(containerId);
