@@ -185,14 +185,27 @@
     }
 
     /* Change Grid to 2 columns on mobile */
-    .product-grid { 
-        grid-template-columns: repeat(2, 1fr) !important; 
-        gap: 10px; 
-        padding: 10px; 
-    }
+    product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Desktop */
+    gap: 20px;
+    padding: 20px;
+    align-items: stretch; /* Ensures all cards in a row have the same height */
+}
 
     /* Adjust Card Spacing */
-    .product-card { padding: 10px; }
+    /* 2. AUTO-HEIGHT CARDS */
+.product-card {
+    background: white;
+    border: 1.5px solid #efefef;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: auto; /* CRITICAL: Allows card to grow with text */
+    min-height: 320px; /* Provides a consistent base size */
+}
     .img-holder { height: 140px; }
     .p-name { font-size: 16px; }
     .p-brand { font-size: 10px; }
@@ -256,26 +269,22 @@
     }
     /* 1. Ensure all cards have the same height */
 }
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    align-items: stretch; /* Makes all cards in a row equal height */
-}
+@media screen and (max-width: 768px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr) !important; 
+        gap: 10px !important;
+        padding: 10px !important;
+    }
 
-/* 2. Turn the card into a flex container */
-.product-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Pushes content apart */
-    height: 100%;
-    padding: 15px;
-    background: white;
-    border: 1px solid #eee;
-    border-radius: 12px;
-    text-align: center;
-}
+    .product-card {
+        min-height: 250px; 
+        padding: 10px;
+    }
 
+    .img-holder {
+        height: 110px !important; /* Smaller images for mobile */
+    }
+}
 /* 3. Push the button to the absolute bottom */
 .btn-view {
     margin-top: auto; /* This is the "magic" line that aligns the boxes */
