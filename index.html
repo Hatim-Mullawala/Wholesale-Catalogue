@@ -252,16 +252,10 @@ async function loadAllData() {
 function renderSlider() {
     const slider = document.getElementById('promoSlider');
     const container = document.querySelector('.promo-slider-container');
-    
-    // Check if promoData actually exists
-    if (!promoData || promoData.length === 0) { 
-        console.warn("No active promo data found in Google Sheets.");
-        container.style.display = 'none'; 
-        return; 
-    }
+    if (!promoData.length) { container.style.display = 'none'; return; }
 
     slider.innerHTML = promoData.map((item, idx) => {
-        // CLEAN THE URL: Ensure it points to the 'wholesale/' folder if not already
+        // FIX: Ensure the URL points inside the wholesale folder
         let finalUrl = item.url.trim();
         if (!finalUrl.startsWith('http') && !finalUrl.startsWith('wholesale/')) {
             finalUrl = `wholesale/${finalUrl}`;
@@ -270,19 +264,13 @@ function renderSlider() {
         return `
         <div class="slide">
             ${item.type === 'video' ? 
-                /* Fixed attributes for GitHub/Mobile autoplay */
-                `<video id="vid-${idx}" src="${finalUrl}" autoplay muted loop playsinline class="promo-video" 
-                    style="width:100%; height:100%; object-fit:contain;"></video>
+                /* Added loop and playsinline for mobile */
+                `<video id="vid-${idx}" src="${finalUrl}" autoplay muted loop playsinline class="promo-video" style="width:100%; height:100%; object-fit:contain;"></video>
                  <button class="mute-toggle" onclick="toggleMute(this)">🔊 Unmute</button>` : 
-                `<img src="${finalUrl}" style="width:100%; height:100%; object-fit:contain; background:transparent;" 
-                    onerror="this.src='https://via.placeholder.com/800x400?text=Promo+Image+Missing'">`}
+                `<img src="${finalUrl}" style="width:100%; height:100%; object-fit:contain; background:transparent;" onerror="this.src='https://via.placeholder.com/800x400?text=Image+Not+Found'">`}
             <div class="slide-label">${item.label}</div>
         </div>`;
     }).join('');
-
-    // Re-initialize dots
-    const existingDots = container.querySelector('.slider-dots');
-    if (existingDots) existingDots.remove();
 
     let dotsHtml = '<div class="slider-dots">';
     promoData.forEach((_, idx) => { dotsHtml += `<div class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide(${idx})"></div>`; });
