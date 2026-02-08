@@ -192,27 +192,51 @@ function isMeasurement(spec) {
 
 async function loadAllData() {
     try {
-        const [pResp, sResp] = await Promise.all([fetch(productSheetURL, {cache: "no-store"}), fetch(sliderSheetURL, {cache: "no-store"})]);
+        const [pResp, sResp] = await Promise.all([
+            fetch(productSheetURL, { cache: "no-store" }),
+            fetch(sliderSheetURL, { cache: "no-store" })
+        ]);
+        
         const pText = await pResp.text();
+        allProducts = []; 
+        
         const pRows = pText.split('\n').filter(r => r.trim() !== '').slice(1);
+        
         allProducts = pRows.map(row => {
-            const cols = parseCSVLine(row);
-            return { cat: cols[0], brand: cols[1], name: cols[2], specs: cols[3].trim(), mrp: cols[4] };
+            const cols = parseCSVLine(row); 
+            let rawSpecs = (cols[3] || '').trim().replace(/^["']|["']$/g, '').replace(/""/g, '"');
+            
+            return { 
+                cat: cols[0], 
+                brand: cols[1], 
+                name: cols[2], 
+                specs: rawSpecs, 
+                // FIX: Changed from cols[5] to cols[4] to get correct MRP
+                mrp: cols[4] 
+            };
         });
+
         allProducts.sort((a, b) => a.cat.localeCompare(b.cat));
 
         const sText = await sResp.text();
         const sRows = sText.split('\n').filter(r => r.trim() !== '').slice(1);
         promoData = sRows.map(row => {
             const cols = parseCSVLine(row);
-            return { status: cols[0].trim().toLowerCase(), type: cols[1].trim().toLowerCase(), url: cols[2].trim(), label: cols[3] };
+            return { 
+                status: cols[0].trim().toLowerCase(), 
+                type: cols[1].trim().toLowerCase(), 
+                url: cols[2].trim(), 
+                label: cols[3] 
+            };
         }).filter(i => i.status === 'active');
 
-        renderSlider(); renderFrontPage(allProducts);
-        document.getElementById('syncStatus').innerText = "Last Sync: " + new Date().toLocaleString('en-IN');
-    } catch (e) { console.error("Load failed", e); }
+        renderSlider();
+        renderFrontPage(allProducts);
+        updateSyncTime();
+    } catch (e) { 
+        console.error("Load Error:", e);
+    }
 }
-
 function renderSlider() {
     const slider = document.getElementById('promoSlider');
     const container = document.querySelector('.promo-slider-container');
