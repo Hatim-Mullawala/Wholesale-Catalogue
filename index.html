@@ -729,17 +729,17 @@ async function renderFrontPage(products) {
                 html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
             }
 
-            // CLEANING NAMES FOR GITHUB PATHS
+            // CLEANING NAMES FOR GITHUB FILENAMES
             const n = p.name.toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
             const s = (p.specs || "").toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
             const b = (p.brand || "").toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
 
-            // THE 4 CRITERIA PATHS
+            // YOUR 4 CRITERIA SEARCH LIST
             const paths = [
-                `wholesale/${b}-${n}-${s}.jpg`, // Criteria 1: Brand-Name-Spec
-                `wholesale/${n}-${s}.jpg`,      // Criteria 2: Name-Spec
-                `wholesale/${b}-${n}.jpg`,      // Criteria 3: Brand-Name
-                `wholesale/${n}.jpg`           // Criteria 4: Only Product Name
+                `wholesale/${b}-${n}-${s}.jpg`, 
+                `wholesale/${n}-${s}.jpg`,      
+                `wholesale/${b}-${n}.jpg`,      
+                `wholesale/${n}.jpg`           
             ];
 
             const imgId = `img-${b}-${n}`.replace(/[^-a-z0-9]/g, '');
@@ -755,8 +755,8 @@ async function renderFrontPage(products) {
                 <div class="btn-view">Check Sizes</div>
             </div>`;
 
-            // ASYNC LOADING TO PREVENT SITE HANGING
-            setTimeout(() => tryLoadImage(imgId, paths, p.name), 10);
+            // DELAYED LOADING TO IMPROVE SITE SPEED
+            setTimeout(() => tryLoadImage(imgId, paths, p.name), 20);
             seen.add(key);
         }
     }
@@ -772,10 +772,15 @@ function tryLoadImage(imgId, paths, fallbackName) {
         if (step < paths.length) {
             const temp = new Image();
             temp.src = paths[step];
-            temp.onload = () => { imgElement.src = paths[step]; }; // Found it!
-            temp.onerror = () => { step++; attempt(); }; // Try next path
+            temp.onload = () => { 
+                imgElement.src = paths[step]; // IMAGE FOUND
+            };
+            temp.onerror = () => { 
+                step++; 
+                attempt(); // TRY NEXT CRITERIA
+            };
         } else {
-            // Placeholder if ALL 4 CRITERIA fail
+            // FINAL FALLBACK: Placeholder if all 4 criteria fail
             imgElement.src = `https://via.placeholder.com/150?text=${encodeURIComponent(fallbackName)}`;
         }
     };
