@@ -210,23 +210,43 @@ function isMeasurement(spec) {
 
 async function loadAllData() {
     try {
-        const [pResp, sResp] = await Promise.all([fetch(productSheetURL, { cache: "no-store" }), fetch(sliderSheetURL, { cache: "no-store" })]);
-        const pText = await pResp.text(); allProducts = []; 
+        // Log the start for debugging
+        console.log("Fetching from:", productSheetURL);
+
+        const [pResp, sResp] = await Promise.all([
+            fetch(productSheetURL, { cache: "no-store" }),
+            fetch(sliderSheetURL, { cache: "no-store" })
+        ]);
+
+        if (!pResp.ok) throw new Error(`HTTP error! status: ${pResp.status}`);
+        
+        const pText = await pResp.text();
+        if (pText.includes("<!DOCTYPE html>")) {
+            throw new Error("Received HTML instead of CSV. Check if the sheet is published as CSV.");
+        }
+
         const pRows = pText.split('\n').filter(r => r.trim() !== '').slice(1);
         allProducts = pRows.map(row => {
             const cols = parseCSVLine(row); 
             let rawSpecs = (cols[3] || '').trim().replace(/^["']|["']$/g, '').replace(/""/g, '"');
             return { cat: cols[0], brand: cols[1], name: cols[2], specs: rawSpecs, mrp: cols[4] };
         });
+
         allProducts.sort((a, b) => a.cat.localeCompare(b.cat));
-        const sText = await sResp.text();
-        const sRows = sText.split('\n').filter(r => r.trim() !== '').slice(1);
-        promoData = sRows.map(row => {
-            const cols = parseCSVLine(row);
-            return { status: cols[0].trim().toLowerCase(), type: cols[1].trim().toLowerCase(), url: cols[2].trim(), label: cols[3] };
-        }).filter(i => i.status === 'active');
-        renderSlider(); renderFrontPage(allProducts); updateSyncTime();
-    } catch (e) { console.error("Load Error:", e); }
+        
+        // Render the UI
+        renderSlider();
+        renderFrontPage(allProducts);
+        updateSyncTime();
+    } catch (e) { 
+        console.error("CRITICAL LOAD ERROR:", e);
+        document.getElementById('catalog-container').innerHTML = 
+            `<div style="color:red; padding:20px; text-align:center;">
+                <h3>Data Load Failed</h3>
+                <p>${e.message}</p>
+                <small>Please ensure your Google Sheet is published as CSV.</small>
+            </div>`;
+    }
 }
 
 function renderSlider() {
@@ -267,14 +287,34 @@ function imageExists(url) { return new Promise((resolve) => { const img = new Im
 function getStableImage(img, name, spec, brand) {
     const clean = (t) => (t || '').toString().toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
     const n = clean(name), s = clean(spec), b = clean(brand);
-    const paths = [`wholesale/${n}-${s}.jpg`, `wholesale/${s}.jpg`, `wholesale/${n}.jpg`, `wholesale/${b}-${n}.jpg`];
+    
+    // Try multiple variations
+    const paths = [
+        `wholesale/${n}-${s}.jpg`, 
+        `wholesale/${s}.jpg`, 
+        `wholesale/${n}.jpg`, 
+        `wholesale/${b}-${n}.jpg`
+    ];
+
     let step = 0;
     const tryLoad = () => {
         if (step < paths.length) {
-            const temp = new Image(); temp.src = paths[step];
-            temp.onload = () => { img.src = paths[step]; img.style.opacity = "1"; };
-            temp.onerror = () => { step++; tryLoad(); };
-        } else { img.src = 'https://via.placeholder.com/150?text=' + encodeURIComponent(name); img.style.opacity = "0.5"; }
+            const temp = new Image();
+            // Force the path to be used relative to your site root
+            temp.src = paths[step]; 
+            temp.onload = () => { 
+                img.src = paths[step]; 
+                img.style.opacity = "1"; 
+            };
+            temp.onerror = () => { 
+                step++; 
+                tryLoad(); 
+            };
+        } else { 
+            // If all local paths fail, use a placeholder
+            img.src = 'https://via.placeholder.com/150?text=' + encodeURIComponent(name);
+            img.style.opacity = "0.5"; 
+        }
     };
     tryLoad();
 }
