@@ -185,14 +185,27 @@
     }
 
     /* Change Grid to 2 columns on mobile */
-    .product-grid { 
-        grid-template-columns: repeat(2, 1fr) !important; 
-        gap: 10px; 
-        padding: 10px; 
-    }
+    product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Desktop */
+    gap: 20px;
+    padding: 20px;
+    align-items: stretch; /* Ensures all cards in a row have the same height */
+}
 
     /* Adjust Card Spacing */
-    .product-card { padding: 10px; }
+    /* 2. AUTO-HEIGHT CARDS */
+.product-card {
+    background: white;
+    border: 1.5px solid #efefef;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: auto; /* CRITICAL: Allows card to grow with text */
+    min-height: 320px; /* Provides a consistent base size */
+}
     .img-holder { height: 140px; }
     .p-name { font-size: 16px; }
     .p-brand { font-size: 10px; }
@@ -256,26 +269,22 @@
     }
     /* 1. Ensure all cards have the same height */
 }
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    align-items: stretch; /* Makes all cards in a row equal height */
-}
+@media screen and (max-width: 768px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr) !important; 
+        gap: 10px !important;
+        padding: 10px !important;
+    }
 
-/* 2. Turn the card into a flex container */
-.product-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Pushes content apart */
-    height: 100%;
-    padding: 15px;
-    background: white;
-    border: 1px solid #eee;
-    border-radius: 12px;
-    text-align: center;
-}
+    .product-card {
+        min-height: 250px; 
+        padding: 10px;
+    }
 
+    .img-holder {
+        height: 110px !important; /* Smaller images for mobile */
+    }
+}
 /* 3. Push the button to the absolute bottom */
 .btn-view {
     margin-top: auto; /* This is the "magic" line that aligns the boxes */
@@ -453,12 +462,12 @@
 <div class="main-wrapper">
     <header class="catalog-header">
         <div class="logo-section">
-            <img src="logo.png" class="logo-img" alt="Hatimi Logo" onerror="this.src='https://via.placeholder.com/80'">
-            <div>
-                <h1 class="brand-name">Hatimi Hardware</h1>
-                <p class="tagline">Quality Fittings • Trusted Tools</p>
-            </div>
-        </div>
+    <img src="logo.png" class="logo-img" alt="Logo" style="cursor: pointer;" onclick="adminLogin()">
+    <div onclick="adminLogin()" style="cursor: pointer;">
+        <h1 class="brand-name">Hatimi Hardware</h1>
+        <p class="tagline">Quality Fittings • Trusted Tools</p>
+    </div>
+</div>
         <div class="action-buttons">
             <button class="icon-btn" onclick="location.reload()" title="Refresh Catalog">
                 <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#b38728" d="M12,18A6,6 0 0,1 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12A8,8 0 0,0 12,20V23L16,19L12,15V18M12,4V1L8,5L12,9V6A6,6 0 0,1 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12A8,8 0 0,0 12,4Z"/></svg>
@@ -717,62 +726,74 @@ function getStableImage(img, name, spec, brand) {
 }
 async function renderFrontPage(products) {
     const container = document.getElementById('catalog-container');
+    const seen = new Set();
     let currentCat = "", html = "";
-    const seenCards = new Set();
 
     for (const p of products) {
-        // 1. CLEAN NAMES FOR MATCHING
-        const cleanN = p.name.toLowerCase().trim().replace(/[,\s./_]+/g, '-');
-        const cleanS = p.specs.toLowerCase().trim().replace(/[,\s./_]+/g, '-');
-        
-        // 2. CHECK FOR UNIQUE VARIANT IMAGE
-        const specificPath = `wholesale/${cleanN}-${cleanS}.jpg`;
-        const hasUniqueImage = await imageExists(specificPath);
-
-        // 3. DECISION LOGIC
-        // If unique image exists, use a unique key (Separates the card)
-        // If not, use the general name (Keeps it grouped like before)
-        const groupKey = hasUniqueImage ? 
-            `${p.brand}|${p.name}|${p.specs}` : 
-            `${p.brand}|${p.name}`;
-        
-        if (!seenCards.has(groupKey)) {
+        const key = `${p.brand}|${p.name}`;
+        if (!seen.has(key)) {
             if (p.cat !== currentCat) {
                 if (html !== "") html += `</div>`;
                 currentCat = p.cat;
                 html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
             }
 
-            // Display "Name (Spec)" for separated items, just "Name" for grouped ones
-            const displayName = hasUniqueImage ? `${p.name} (${p.specs})` : p.name;
-            const safeN = p.name.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-            const safeB = p.brand.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-            
-            // If separated, tell the modal to filter to that specific spec
-            const safeS = hasUniqueImage ? p.specs.replace(/'/g, "\\'").replace(/"/g, "&quot;") : '';
+            // CLEANING NAMES FOR GITHUB FILENAMES
+            const n = p.name.toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
+            const s = (p.specs || "").toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
+            const b = (p.brand || "").toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
+
+            // YOUR 4 CRITERIA SEARCH LIST
+            const paths = [
+                `wholesale/${b}-${n}-${s}.jpg`, 
+                `wholesale/${n}-${s}.jpg`,      
+                `wholesale/${b}-${n}.jpg`,      
+                `wholesale/${n}.jpg`           
+            ];
+
+            const imgId = `img-${b}-${n}`.replace(/[^-a-z0-9]/g, '');
 
             html += `
-            <div class="product-card clickable-card" onclick="openModal('${safeN}', '${safeB}', '${safeS}')">
+            <div class="product-card" onclick="openModal('${p.name.replace(/'/g, "\\'")}', '${p.brand.replace(/'/g, "\\'")}')">
                 <div class="img-holder">
-                    <img src="https://via.placeholder.com/150" 
-                         data-n="${safeN}" 
-                         data-s="${safeS}" 
-                         data-b="${safeB}">
+                    <img id="${imgId}" loading="lazy" src="https://via.placeholder.com/150?text=..." 
+                         style="width:100%; height:100%; object-fit:contain;">
                 </div>
                 <div class="p-brand">${p.brand}</div>
-                <div class="p-name">${displayName}</div>
+                <div class="p-name">${p.name}</div>
                 <div class="btn-view">Check Sizes</div>
             </div>`;
-            
-            seenCards.add(groupKey);
+
+            // DELAYED LOADING TO IMPROVE SITE SPEED
+            setTimeout(() => tryLoadImage(imgId, paths, p.name), 20);
+            seen.add(key);
         }
     }
     container.innerHTML = html + "</div>";
-    
-    // Load the images
-    document.querySelectorAll('.img-holder img').forEach(img => {
-        getStableImage(img, img.getAttribute('data-n'), img.getAttribute('data-s'), img.getAttribute('data-b'));
-    });
+}
+
+function tryLoadImage(imgId, paths, fallbackName) {
+    let step = 0;
+    const imgElement = document.getElementById(imgId);
+    if (!imgElement) return;
+
+    const attempt = () => {
+        if (step < paths.length) {
+            const temp = new Image();
+            temp.src = paths[step];
+            temp.onload = () => { 
+                imgElement.src = paths[step]; // IMAGE FOUND
+            };
+            temp.onerror = () => { 
+                step++; 
+                attempt(); // TRY NEXT CRITERIA
+            };
+        } else {
+            // FINAL FALLBACK: Placeholder if all 4 criteria fail
+            imgElement.src = `https://via.placeholder.com/150?text=${encodeURIComponent(fallbackName)}`;
+        }
+    };
+    attempt();
 }
 async function loadCardImages(variants, containerId, safeN, safeB) {
     const container = document.getElementById(containerId);
@@ -932,6 +953,20 @@ function sendWhatsAppOrder() {
 
     const encodedMsg = encodeURIComponent(message);
     window.open(`https://wa.me/919406648766?text=${encodedMsg}`);
+}
+/* --- SECRET ADMIN LOGIN --- */
+function adminLogin() {
+    const pass = prompt("Enter Admin Password to Login:");
+    
+    if (pass === "hatimi786") {
+        // Save the access token so manager.html knows you are authorized
+        sessionStorage.setItem('managerAuth', 'true');
+        
+        // Redirect to your private manager file
+        window.location.href = "manager.html";
+    } else if (pass !== null) {
+        alert("Incorrect Password.");
+    }
 }
 loadAllData();
 </script>

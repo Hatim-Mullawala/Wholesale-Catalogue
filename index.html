@@ -462,12 +462,12 @@
 <div class="main-wrapper">
     <header class="catalog-header">
         <div class="logo-section">
-            <img src="logo.png" class="logo-img" alt="Hatimi Logo" onerror="this.src='https://via.placeholder.com/80'">
-            <div>
-                <h1 class="brand-name">Hatimi Hardware</h1>
-                <p class="tagline">Quality Fittings • Trusted Tools</p>
-            </div>
-        </div>
+    <img src="logo.png" class="logo-img" alt="Logo" style="cursor: pointer;" onclick="adminLogin()">
+    <div onclick="adminLogin()" style="cursor: pointer;">
+        <h1 class="brand-name">Hatimi Hardware</h1>
+        <p class="tagline">Quality Fittings • Trusted Tools</p>
+    </div>
+</div>
         <div class="action-buttons">
             <button class="icon-btn" onclick="location.reload()" title="Refresh Catalog">
                 <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#b38728" d="M12,18A6,6 0 0,1 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12A8,8 0 0,0 12,20V23L16,19L12,15V18M12,4V1L8,5L12,9V6A6,6 0 0,1 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12A8,8 0 0,0 12,4Z"/></svg>
@@ -953,6 +953,20 @@ function sendWhatsAppOrder() {
 
     const encodedMsg = encodeURIComponent(message);
     window.open(`https://wa.me/919406648766?text=${encodedMsg}`);
+}
+/* --- SECRET ADMIN LOGIN --- */
+function adminLogin() {
+    const pass = prompt("Enter Admin Password to Login:");
+    
+    if (pass === "hatimi786") {
+        // Save the access token so manager.html knows you are authorized
+        sessionStorage.setItem('managerAuth', 'true');
+        
+        // Redirect to your private manager file
+        window.location.href = "manager.html";
+    } else if (pass !== null) {
+        alert("Incorrect Password.");
+    }
 }
 loadAllData();
 </script>
