@@ -219,39 +219,47 @@ async function loadManagerData() {
         container.innerHTML = html + "</div>";
     }
 
+/* --- FIXED MODAL: Removes duplicate sizes --- */
 function openModal(name, brand) {
     document.getElementById('modalTitle').innerText = name;
     document.getElementById('modalBrand').innerText = brand;
     const tbody = document.getElementById('modalTableBody');
     tbody.innerHTML = "";
 
-   // ... (existing title logic)
+    // 1. Find all rows for this product
     const variants = allProducts.filter(p => 
         p.name.trim().toLowerCase() === name.trim().toLowerCase() && 
         p.brand.trim().toLowerCase() === brand.trim().toLowerCase()
     );
+    
+    // 2. THE FIX: Use a Set to track sizes we have already shown
+    const shownSizes = new Set();
 
-    // SORT SIZES NATURALLY (1/2 before 1, etc.)
-    variants.sort((a, b) => a.specs.localeCompare(b.specs, undefined, {numeric: true, sensitivity: 'base'}));
     variants.forEach(v => {
-        // SPLIT SIZES: Turns "3/4, 1, 1.5" into separate rows
+        // Split the specs string by commas
         const sizeList = v.specs.split(','); 
-        sizeList.forEach((singleSize, index) => {
+
+        sizeList.forEach(singleSize => {
             const cleanSize = singleSize.trim();
-            if (cleanSize !== "") {
+            
+            // 3. Only add the row if we haven't seen this size before
+            if (cleanSize !== "" && !shownSizes.has(cleanSize)) {
                 tbody.innerHTML += `
                     <tr style="border-bottom:1px solid #eee;">
-                        <td style="font-weight:700;">${cleanSize}</td>
-                        <td style="color: #b38728; font-weight:bold;">₹${v.mrp}</td>
+                        <td style="padding:12px; font-weight:700;">${cleanSize}</td>
+                        <td style="padding:12px; color: #b38728; font-weight:bold;">₹${v.mrp}</td>
                         <td style="text-align: right;">
-                            <span class="action-icon edit-icon" title="Edit Size/MRP" onclick="editRow('${v.brand}', '${v.name}', '${cleanSize}', '${v.mrp}')">
+                            <span class="action-icon edit-icon" title="Edit" onclick="editRow('${v.brand}', '${v.name}', '${cleanSize}', '${v.mrp}')">
                                 <svg width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/></svg>
                             </span>
-                            <span class="action-icon delete-row-icon" title="Delete Size" onclick="deleteRow('${v.brand}', '${v.name}', '${cleanSize}')">
+                            <span class="action-icon delete-row-icon" title="Delete" onclick="deleteRow('${v.brand}', '${v.name}', '${cleanSize}')">
                                 <svg width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19V4M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/></svg>
                             </span>
                         </td>
                     </tr>`;
+                
+                // Mark this size as shown
+                shownSizes.add(cleanSize);
             }
         });
     });
