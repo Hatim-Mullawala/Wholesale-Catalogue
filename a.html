@@ -981,20 +981,42 @@ function sendWhatsAppOrder() {
     const encodedMsg = encodeURIComponent(message);
     window.open(`https://wa.me/919406648766?text=${encodedMsg}`);
 }
-/* --- SECRET ADMIN LOGIN --- */
+/* --- CUSTOM LOGIN LOGIC --- */
+
+// 1. Open the professional modal instead of a prompt
 function adminLogin() {
-    const pass = prompt("Enter Admin Password to Login:");
+    document.getElementById('loginModal').style.display = 'flex';
+    document.getElementById('adminPassInput').focus();
+}
+
+// 2. Close the modal
+function closeLoginModal() {
+    document.getElementById('loginModal').style.display = 'none';
+    document.getElementById('loginError').style.display = 'none';
+    document.getElementById('adminPassInput').value = '';
+}
+
+// 3. Verify the password and redirect
+function verifyAdmin() {
+    const passInput = document.getElementById('adminPassInput');
+    const errorMsg = document.getElementById('loginError');
     
-    if (pass === "hatimi786") {
-        // Save the access token so manager.html knows you are authorized
+    if (passInput.value === "hatimi786") {
         sessionStorage.setItem('managerAuth', 'true');
-        
-        // Redirect to your private manager file
         window.location.href = "manager.html";
-    } else if (pass !== null) {
-        alert("Incorrect Password.");
+    } else {
+        errorMsg.style.display = 'block';
+        passInput.style.borderColor = '#e74c3c';
+        passInput.value = '';
     }
 }
+
+// 4. Allow "Enter" key to submit
+document.getElementById('adminPassInput')?.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        verifyAdmin();
+    }
+});
 /* --- ZOOM LOGIC: Does not affect buttons --- */
 function openZoom(event, name, imgSrc) {
     // 1. Stop the click from reaching the "Check Sizes" logic
@@ -1015,6 +1037,25 @@ loadAllData();
     <span style="position:absolute; top:20px; right:30px; color:white; font-size:40px; font-weight:bold;">&times;</span>
     <img id="enlargedImg" style="max-width:90%; max-height:85vh; border-radius:10px; box-shadow:0 0 20px rgba(0,0,0,0.5);">
     <div id="lightboxCaption" style="position:absolute; bottom:40px; color:white; font-size:20px; font-weight:bold; text-align:center; width:100%;"></div>
+</div>
+<div id="loginModal" class="modal" style="display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.8); backdrop-filter: blur(5px);">
+    <div class="modal-content" style="max-width: 400px; text-align: center; border: 2px solid var(--primary-gold); padding: 40px 30px;">
+        <span class="close-modal" onclick="closeLoginModal()">&times;</span>
+        
+        <div style="font-size: 40px; margin-bottom: 10px;">🔐</div>
+        <h2 style="color: var(--primary-gold); margin-bottom: 5px;">Admin Access</h2>
+        <p style="color: #666; font-size: 14px; margin-bottom: 25px;">Please enter your credentials to manage inventory.</p>
+        
+        <input type="password" id="adminPassInput" placeholder="Enter Password" 
+               style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; font-size: 16px; outline: none; text-align: center; box-sizing: border-box;">
+        
+        <button onclick="verifyAdmin()" 
+                style="width: 100%; background: var(--primary-gold); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s;">
+            LOGIN TO DASHBOARD
+        </button>
+        
+        <p id="loginError" style="color: #e74c3c; font-size: 13px; margin-top: 15px; display: none;">❌ Incorrect password, try again.</p>
+    </div>
 </div>
 </body>
 </html>
