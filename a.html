@@ -201,9 +201,10 @@
     border-radius: 12px;
     padding: 15px;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    height: auto; /* CRITICAL: Allows card to grow with text */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    height: 100%; /* CRITICAL: Allows card to grow with text */
     min-height: 320px; /* Provides a consistent base size */
 }
     .img-holder { height: 140px; }
@@ -451,6 +452,27 @@
 .multi-img-holder {
     scrollbar-width: thin;
     scrollbar-color: #b38728 #f0f0f0;
+}
+/* --- RESTORE ORIGINAL BUTTON SHAPE --- */
+.btn-view {
+    display: block !important;       /* Forces button to be a full row */
+    width: 100% !important;          /* Stretches to the edges of the card */
+    padding: 12px 0 !important;      /* Vertical thickness */
+    margin-top: 15px !important;     /* Space between name and button */
+    background: #b38728 !important;  /* Your Hatimi Gold */
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: bold !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    text-align: center !important;
+    box-sizing: border-box !important; /* Prevents overflow */
+}
+
+/* Hover remains smooth */
+.btn-view:hover {
+    background: #967020 !important;
 }
 </style>
 <body>
@@ -753,17 +775,16 @@ async function renderFrontPage(products) {
 
             const imgId = `img-${b}-${n}`.replace(/[^-a-z0-9]/g, '');
 
-            html += `
-            <div class="product-card" onclick="openModal('${p.name.replace(/'/g, "\\'")}', '${p.brand.replace(/'/g, "\\'")}')">
-                <div class="img-holder">
-                    <img id="${imgId}" loading="lazy" src="https://via.placeholder.com/150?text=..." 
-                         style="width:100%; height:100%; object-fit:contain;">
-                </div>
-                <div class="p-brand">${p.brand}</div>
-                <div class="p-name">${p.name}</div>
-                <div class="btn-view">Check Sizes</div>
-            </div>`;
-
+            /* --- ADDED ZOOM ONCLICK TO IMAGE ONLY --- */
+html += `
+<div class="product-card">
+    <div class="img-holder" style="cursor:zoom-in;" onclick="openZoom(event, '${p.name.replace(/'/g, "\\'")}', this.querySelector('img').src)">
+        <img id="${imgId}" src="https://via.placeholder.com/150?text=Searching...">
+    </div>
+    <div class="p-brand">${p.brand}</div>
+    <div class="p-name">${p.name}</div>
+    <button class="btn-view" onclick="openModal('${p.name.replace(/'/g, "\\'")}', '${p.brand.replace(/'/g, "\\'")}')">Check Sizes</button>
+</div>`;
             // DELAYED LOADING TO IMPROVE SITE SPEED
             setTimeout(() => tryLoadImage(imgId, paths, p.name), 20);
             seen.add(key);
@@ -974,7 +995,26 @@ function adminLogin() {
         alert("Incorrect Password.");
     }
 }
+/* --- ZOOM LOGIC: Does not affect buttons --- */
+function openZoom(event, name, imgSrc) {
+    // 1. Stop the click from reaching the "Check Sizes" logic
+    if (event) event.stopPropagation();
+
+    const lightbox = document.getElementById('imageLightbox');
+    const img = document.getElementById('enlargedImg');
+    const caption = document.getElementById('lightboxCaption');
+
+    // 2. Set the image and show it
+    img.src = imgSrc;
+    caption.innerText = name;
+    lightbox.style.display = "flex";
+}
 loadAllData();
 </script>
+<div id="imageLightbox" onclick="this.style.display='none'" style="display:none; position:fixed; z-index:10000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.9); align-items:center; justify-content:center; cursor:pointer;">
+    <span style="position:absolute; top:20px; right:30px; color:white; font-size:40px; font-weight:bold;">&times;</span>
+    <img id="enlargedImg" style="max-width:90%; max-height:85vh; border-radius:10px; box-shadow:0 0 20px rgba(0,0,0,0.5);">
+    <div id="lightboxCaption" style="position:absolute; bottom:40px; color:white; font-size:20px; font-weight:bold; text-align:center; width:100%;"></div>
+</div>
 </body>
 </html>
