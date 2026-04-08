@@ -51,84 +51,87 @@
         footer { background: white; padding: 60px 20px 30px; border-top: 4px solid var(--primary-gold); margin-top: 80px; }
         .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
         .footer-column h3 { color: var(--primary-gold); font-size: 16px; font-weight: 800; text-transform: uppercase; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-
-        /* PRINT PDF OPTIMIZATION */
-  @media print {
-    /* 1. RESET PAGE */
-    @page {
-        margin: 0.5cm; /* Small margin for printer safety */
-    }
-
-    body {
+/* --- EMERGENCY MUTE ICON RESTORE --- */
+.promo-slider-container button[onclick*="toggleMute"], 
+.promo-slider-container .mute-btn, 
+.promo-slider-container .icon-btn:has(svg) {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: absolute !important;
+    right: 20px !important;
+    bottom: 20px !important;
+    z-index: 9999 !important; /* Brings it to the very front */
+    background: rgba(0,0,0,0.5) !important; /* Semi-transparent background */
+    border-radius: 50% !important;
+    padding: 10px !important;
+}
+        /* --- PRIORITY RESTORE FOR PROMO CONTROLS --- */
+.promo-slider-container .icon-btn, 
+.promo-slider-container .mute-btn, 
+.promo-slider-container .mute-icon {
+    display: flex !important;      /* Forces it to show on the website */
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: absolute !important; /* Matches your slider's layout */
+    z-index: 100 !important;       /* Keeps it on top of the video/image */
+}
+        /* --- PROFESSIONAL GRID CATALOG --- */
+/* --- EXACT CATALOG PDF REPLICA --- */
+/* --- FINAL PDF CLEANUP --- */
+/* --- EXACT PDF CATALOG REPLICA --- */
+/* --- COMPACT CATEGORY-GROUPED PDF --- */
+/* --- FINAL PDF CLEANUP: NO BUTTONS, ONLY SIZES --- */
+@media print {
+    /* 1. THE DOUBLE-LOCK HIDE */
+    .no-print, .btn-view, .action-buttons, .icon-btn, .search-container, .side-controls {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        height: 0 !important;
         margin: 0 !important;
         padding: 0 !important;
-        background: white !important;
+        overflow: hidden !important;
     }
 
-    /* 2. HIDE WEB UI */
-    #search-bar, .search-container, .mute-toggle, #backToTop, 
-    .btn-view, .filters, .promo-slider-container, .slider-dots, 
-    button, .printer-icons-container {
-        display: none !important;
-    }
-
-    /* 3. THE REPEATING HEADER TRICK */
-    /* We use position: fixed. For it to repeat on EVERY page, it must be declared like this: */
-    .main-header {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0;
-        right: 0;
-        height: 100px;
-        display: flex !important;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background-color: white !important;
-        border-bottom: 2px solid #b38728 !important;
-        z-index: 10000;
-        -webkit-print-color-adjust: exact;
-    }
-
-    /* 4. CONTENT PADDING */
-    /* This creates space on EVERY page so the fixed header doesn't cover products */
-    #catalog-container {
+    /* 2. SHOW THE SIZES */
+    .pdf-table {
         display: block !important;
-        margin-top: 110px !important; /* This creates the gap for the header on Page 1 */
+        width: 100% !important;
+        margin-top: auto !important; /* Pushes to the very bottom of the card */
+        font-size: 9px !important;
+        color: #555 !important;
+        font-weight: bold !important;
+        text-align: center !important;
     }
+    
+    .pdf-table tr, .pdf-table td { display: inline !important; border: none !important; }
+    .pdf-table td::after { content: ", "; }
+    .pdf-table td:last-child::after { content: ""; }
 
-    /* This CSS hack forces the browser to respect the margin on Page 2, 3, etc. */
-    .category-header {
-        break-before: auto;
-        margin-top: 20px !important;
-        background: #333 !important;
-        color: white !important;
-        padding: 8px !important;
-        -webkit-print-color-adjust: exact;
-    }
-
-    /* 5. COMPACT 4-COLUMN GRID */
-    .product-grid {
-        display: grid !important;
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: 8px !important;
-    }
-
+    /* 3. CARD SIZE (Shorter like the Hand Tools image) */
     .product-card {
-        border: 1px solid #eee !important;
-        padding: 5px !important;
-        break-inside: avoid !important; /* Prevents card from cutting between pages */
-        height: 160px !important;
+        height: 170px !important; 
+        border: 1px solid #ddd !important;
+        padding: 8px !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
+        page-break-inside: avoid;
     }
 
-    .img-holder { height: 70px !important; margin-bottom: 5px !important; }
-    .img-holder img { max-height: 100% !important; }
-    .p-name { font-size: 11px !important; line-height: 1 !important; }
+    .img-holder { width: 70px !important; height: 70px !important; margin-bottom: 5px !important; }
+}
+/* Hide PDF table on the actual website */
+.pdf-table {
+    display: none !important;
 }
 
+/* Ensure the gold button stays full width on the site */
+.btn-view {
+    width: 100% !important;
+    display: block !important;
+}
         /* Back to Top Button Styling */
 #backToTop { 
     display: none; 
@@ -474,6 +477,111 @@
 .btn-view:hover {
     background: #967020 !important;
 }
+/* --- WEBSITE VIEW --- */
+.pdf-sizes-text { display: none; } /* Hide on site */
+
+/* --- PDF PRINT VIEW --- */
+@media print {
+    
+    .no-print, .action-buttons, .search-container, .side-controls { display: none !important; }
+    
+    .pdf-sizes-text { 
+        display: block !important; 
+        font-size: 9px !important; 
+        color: #666; 
+        margin-top: auto;
+        font-style: italic;
+    }
+
+    .category-group { page-break-inside: avoid; break-inside: avoid; }
+    
+    .product-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 10px !important;
+    }
+
+    .product-card {
+        height: 180px !important;
+        border: 1px solid #eee !important;
+        padding: 10px !important;
+        text-align: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .img-holder { width: 70px !important; height: 70px !important; }
+}
+/* --- HIDE PROMO IN PDF VIEW ONLY --- */
+@media print {
+    /* Target the container class of your slider */
+    .promo-slider-container, 
+    .promo-container, 
+    #promoSlider, 
+    .slider-wrapper,
+    .promo-section {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        border: none !important;
+    }
+
+    /* Pull the catalog content to the top to fill the gap */
+    #catalog-container, .category-group {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+}
+/* --- RESTORE MUTE ICON ON WEBSITE --- */
+.mute-btn, 
+.mute-icon, 
+.promo-controls,
+.action-buttons .icon-btn {
+    display: flex !important;      /* Forces it to show on the site */
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important; /* Ensures you can still click it */
+}
+
+/* --- HIDE ONLY THE SLIDER IN PDF --- */
+@media print {
+    .promo-slider-container, 
+    .promo-container, 
+    #promoSlider {
+        display: none !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+/* --- FORCE SHOW MUTE ON WEBSITE ONLY --- */
+/* --- HIDE BY DEFAULT, JS WILL SHOW IT FOR VIDEOS --- */
+.mute-btn-site {
+    display: none; /* Changed from flex to none */
+    visibility: visible;
+    opacity: 1;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.6);
+    border: none;
+    border-radius: 50%;
+    padding: 12px;
+    cursor: pointer;
+}
+
+
+/* --- ENSURE IT DISAPPEARS IN PDF --- */
+@media print {
+    .mute-btn-site, .promo-slider-container {
+        display: none !important;
+    }
+}
 </style>
 <body>
 
@@ -503,6 +611,11 @@
     <div class="slider-wrapper" id="promoSlider"></div>
     <button class="slider-btn prev" onclick="changeSlide(-1)">❮</button>
     <button class="slider-btn next" onclick="changeSlide(1)">❯</button>
+    <button id="promoMuteBtn" class="mute-btn-site" onclick="toggleMute()">
+        <svg id="muteIcon" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="white" d="M3,9V15H7L12,20V4L7,9H3M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12Z"/>
+        </svg>
+    </button>
 </div>
     <div id="catalog-container"></div>
 </div>
@@ -680,13 +793,52 @@ function updateSliderView() {
     document.querySelectorAll('.promo-video').forEach(v => { v.pause(); v.currentTime = 0; });
     setupAutoSlide();
 }
+/* --- PROFESSIONAL MUTE TOGGLE --- */
+function toggleMute() {
+    // 1. Find the video inside your promo container
+    const promoVideo = document.querySelector('.promo-slider-container video');
+    const muteIcon = document.getElementById('muteIcon'); // The SVG inside the button
 
-function toggleMute(btn) {
-    const vid = btn.previousElementSibling;
-    vid.muted = !vid.muted;
-    btn.innerText = vid.muted ? "🔊 Unmute" : "🔇 Mute";
+    if (promoVideo) {
+        // 2. Toggle the muted property
+        promoVideo.muted = !promoVideo.muted;
+
+        // 3. Update the Icon visually so the user knows it worked
+        if (promoVideo.muted) {
+            // Muted Icon (Speaker with a slash)
+            muteIcon.innerHTML = '<path fill="white" d="M3,9V15H7L12,20V4L7,9H3M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12Z"/>';
+            console.log("Video Muted");
+        } else {
+            // Unmuted Icon (Speaker with waves)
+            muteIcon.innerHTML = '<path fill="white" d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18.03,19.86 21,16.28 21,12C21,7.72 18.03,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12Z"/>';
+            console.log("Video Unmuted");
+        }
+    } else {
+        console.error("Mute Error: No video found in .promo-slider-container");
+    }
+}
+/* --- HIDE MUTE ON IMAGES / SHOW ON VIDEOS --- */
+function updateMuteButtonVisibility() {
+    const promoContainer = document.querySelector('.promo-slider-container');
+    const muteBtn = document.querySelector('.mute-btn-site');
+    
+    if (!promoContainer || !muteBtn) return;
+
+    // 1. Check if the current visible slide contains a <video>
+    const hasVideo = promoContainer.querySelector('video') !== null;
+
+    if (hasVideo) {
+        // Show button for videos
+        muteBtn.style.display = 'flex';
+    } else {
+        // Hide button for images
+        muteBtn.style.display = 'none';
+    }
 }
 
+// 2. RUN THIS whenever the slider changes (e.g., in your slider's "afterChange" event)
+// If you are using a simple loop, just call it inside your transition function.
+updateMuteButtonVisibility();
 function imageExists(url) {
     return new Promise((resolve) => {
         const img = new Image();
@@ -748,51 +900,62 @@ function getStableImage(img, name, spec, brand) {
 }
 async function renderFrontPage(products) {
     const container = document.getElementById('catalog-container');
+    if (!container) return;
+
     const seen = new Set();
     let currentCat = "", html = "";
 
     for (const p of products) {
         const key = `${p.brand}|${p.name}`;
+        
         if (!seen.has(key)) {
+            // 1. CATEGORY GROUPING
             if (p.cat !== currentCat) {
-                if (html !== "") html += `</div>`;
+                if (html !== "") html += `</div></div>`; 
                 currentCat = p.cat;
-                html += `<div class="category-header">${currentCat}</div><div class="product-grid">`;
+                html += `
+                <div class="category-group">
+                    <div class="category-header">${currentCat}</div>
+                    <div class="product-grid">`;
             }
 
-            // CLEANING NAMES FOR GITHUB FILENAMES
+            // 2. GET SIZES
+            const variants = allProducts.filter(v => 
+                v.name.trim().toLowerCase() === p.name.trim().toLowerCase() && 
+                v.brand.trim().toLowerCase() === p.brand.trim().toLowerCase()
+            );
+            const sizeList = variants.map(v => `<span>${v.specs}</span>`).join(', ');
+
+            // 3. IMAGE IDS
             const n = p.name.toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
-            const s = (p.specs || "").toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
             const b = (p.brand || "").toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
-
-            // YOUR 4 CRITERIA SEARCH LIST
-            const paths = [
-                `wholesale/${b}-${n}-${s}.jpg`, 
-                `wholesale/${n}-${s}.jpg`,      
-                `wholesale/${b}-${n}.jpg`,      
-                `wholesale/${n}.jpg`           
-            ];
-
             const imgId = `img-${b}-${n}`.replace(/[^-a-z0-9]/g, '');
+            const paths = [`wholesale/${b}-${n}.jpg`, `wholesale/${n}.jpg` ];
 
-            /* --- ADDED ZOOM ONCLICK TO IMAGE ONLY --- */
-html += `
-<div class="product-card">
-    <div class="img-holder" style="cursor:zoom-in;" onclick="openZoom(event, '${p.name.replace(/'/g, "\\'")}', this.querySelector('img').src)">
-        <img id="${imgId}" src="https://via.placeholder.com/150?text=Searching...">
-    </div>
-    <div class="p-brand">${p.brand}</div>
-    <div class="p-name">${p.name}</div>
-    <button class="btn-view" onclick="openModal('${p.name.replace(/'/g, "\\'")}', '${p.brand.replace(/'/g, "\\'")}')">Check Sizes</button>
-</div>`;
-            // DELAYED LOADING TO IMPROVE SITE SPEED
-            setTimeout(() => tryLoadImage(imgId, paths, p.name), 20);
+            // 4. HTML CARD
+            html += `
+            <div class="product-card">
+                <div class="img-holder" onclick="openZoom(event, '${p.name.replace(/'/g, "\\'")}', this.querySelector('img').src)">
+                    <img id="${imgId}" src="https://via.placeholder.com/150?text=Loading...">
+                </div>
+                <div class="p-brand">${p.brand}</div>
+                <div class="p-name">${p.name}</div>
+                
+                <div class="pdf-sizes-text">${sizeList}</div>
+
+                <div class="no-print">
+                    <button class="btn-view" onclick="openModal('${p.name.replace(/'/g, "\\'")}', '${p.brand.replace(/'/g, "\\'")}')">
+                        Check Sizes
+                    </button>
+                </div>
+            </div>`;
+
+            setTimeout(() => { if(typeof tryLoadImage === 'function') tryLoadImage(imgId, paths, p.name); }, 20);
             seen.add(key);
         }
     }
-    container.innerHTML = html + "</div>";
+    container.innerHTML = html + "</div></div>";
 }
-
 function tryLoadImage(imgId, paths, fallbackName) {
     let step = 0;
     const imgElement = document.getElementById(imgId);
