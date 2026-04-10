@@ -805,10 +805,20 @@ async function loadAllData() {
         
         // 2. Process Products with Sorting
         const pText = await pResp.text();
-        const pRows = pText.split('\n').filter(r => r.trim() !== '').slice(1);
+        const pRows = pText.split(/\r?\n/).filter(r => r.trim() !== '').slice(1);
+        
         allProducts = pRows.map(row => {
-            const c = row.split(',').map(v => v.trim().replace(/"/g, ''));
-            return { cat: c[0] || "Uncategorized", brand: c[1] || "No Brand", name: c[2] || "Unnamed", specs: c[3] || "", mrp: c[5] || "0" };
+            // THE FIX: We use your custom function to safely read the commas!
+            const c = parseCSVLine(row); 
+            
+            return { 
+                cat: c[0] ? c[0].replace(/"/g, '').trim() : "Uncategorized", 
+                brand: c[1] ? c[1].replace(/"/g, '').trim() : "No Brand", 
+                name: c[2] ? c[2].replace(/"/g, '').trim() : "Unnamed", 
+                // We only remove quotes from the edges so the commas stay perfectly intact
+                specs: c[3] ? c[3].replace(/(^"|"$)/g, '').trim() : "", 
+                mrp: c[5] ? c[5].replace(/"/g, '').trim() : "0" 
+            };
         });
 
         // Alphabetical Sort
@@ -819,17 +829,24 @@ async function loadAllData() {
 
         // 3. Process Slider Data
         const sText = await sResp.text();
-        const sRows = sText.split('\n').filter(r => r.trim() !== '').slice(1);
+        const sRows = sText.split(/\r?\n/).filter(r => r.trim() !== '').slice(1);
         promoData = sRows.map(row => {
-            const c = row.split(',').map(v => v.trim().replace(/"/g, ''));
-            return { status: c[0].toLowerCase(), type: c[1].toLowerCase(), url: `wholesale/${c[2]}`, label: c[3] };
+            const c = parseCSVLine(row); // Upgraded this one to be safe too!
+            return { 
+                status: c[0] ? c[0].toLowerCase().replace(/"/g, '').trim() : '', 
+                type: c[1] ? c[1].toLowerCase().replace(/"/g, '').trim() : '', 
+                url: c[2] ? `wholesale/${c[2].replace(/"/g, '').trim()}` : '', 
+                label: c[3] ? c[3].replace(/"/g, '').trim() : ''
+            };
         }).filter(i => i.status === 'active');
 
         // 4. Start the Page
         renderSlider();
         renderFrontPage(allProducts);
         updateSyncTime();
-    } catch (e) { console.error("Load failed:", e); }
+    } catch (e) { 
+        console.error("Load failed:", e); 
+    }
 }
 function renderSlider() {
     const slider = document.getElementById('promoSlider');
@@ -991,70 +1008,92 @@ async function renderFrontPage(products) {
                 if (html !== "") html += `</div></div>`; 
                 currentCat = p.cat;
                 html += `
-                <div class="category-group">
-                    <div class="category-header">${currentCat}</div>
-                    <div class="product-grid">`;
+                <div class="category-group" style="margin-bottom: 30px;">
+                    <h2 class="category-header" style="color: #b38728; margin-top: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; font-size: 22px;">${currentCat}</h2>
+                    <div class="product-grid">`; 
             }
 
-            // 2. GET SIZES
+            // 2. GET SIZES (Splits commas and wraps in <span> for PDF)
             const variants = allProducts.filter(v => 
-                v.name.trim().toLowerCase() === p.name.trim().toLowerCase() && 
-                v.brand.trim().toLowerCase() === p.brand.trim().toLowerCase()
+                String(v.name || "").trim().toLowerCase() === String(p.name || "").trim().toLowerCase() && 
+                String(v.brand || "").trim().toLowerCase() === String(p.brand || "").trim().toLowerCase()
             );
-            const sizeList = variants.map(v => `<span>${v.specs}</span>`).join(', ');
+            
+            let allSizes = [];
+            variants.forEach(v => {
+                if(v.specs) {
+                    String(v.specs).split(',').forEach(s => {
+                        if(s.trim() !== "") allSizes.push(s.trim());
+                    });
+                }
+            });
+            const sizeList = [...new Set(allSizes)].map(s => `<span>${s}</span>`).join(', ');
 
-            // 3. IMAGE IDS
-            const n = p.name.toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
-            const b = (p.brand || "").toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
+            // 3. IMAGE IDS & SAFE PLACEHOLDERS
+            const n = String(p.name || "").toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
+            const b = String(p.brand || "").toLowerCase().trim().replace(/[,\s./_]+/g, '-').replace(/-+/g, '-');
             const imgId = `img-${b}-${n}`.replace(/[^-a-z0-9]/g, '');
             const paths = [`wholesale/${b}-${n}.jpg`, `wholesale/${n}.jpg` ];
+            const safeText = encodeURIComponent(p.name || "Hatimi Hardware");
 
             // 4. HTML CARD
             html += `
             <div class="product-card">
-                <div class="img-holder" onclick="openZoom(event, '${p.name.replace(/'/g, "\\'")}', this.querySelector('img').src)">
-                    <img id="${imgId}" src="https://via.placeholder.com/150?text=Loading...">
+                <div class="img-holder" onclick="openZoom(event, '${String(p.name || "").replace(/'/g, "\\'")}', this.querySelector('img').src)" style="cursor: zoom-in;">
+                    <img id="${imgId}" 
+                         src="https://placehold.co/300x300/f8fafc/b38728?text=${safeText}" 
+                         onerror="this.onerror=null; this.src='https://placehold.co/300x300/f8fafc/b38728?text=${safeText}'" 
+                         alt="${p.name}" style="max-height: 110px; max-width: 90%; object-fit: contain;">
                 </div>
-                <div class="p-brand">${p.brand}</div>
-                <div class="p-name">${p.name}</div>
                 
-                <div class="pdf-sizes-text">${sizeList}</div>
+                <div class="p-brand" style="color:#b38728; font-weight:900; font-size:11px; text-transform:uppercase; letter-spacing:1px; margin-top:5px;">${p.brand}</div>
+                <div class="p-name product-name" style="font-size:15px; font-weight:700; color:#1e293b; height:40px; display:flex; align-items:center; justify-content:center; margin-bottom:5px;">${p.name}</div>
+                
+                <div class="pdf-sizes-text" style="font-size:13px; color:#64748b; margin-bottom:15px; font-weight:500;">
+                    ${sizeList || "<span>Single Size</span>"}
+                </div>
 
                 <div class="no-print">
-                    <button class="btn-view" onclick="openModal('${p.name.replace(/'/g, "\\'")}', '${p.brand.replace(/'/g, "\\'")}')">
+                    <button class="btn-view" onclick="openModal('${String(p.name || "").replace(/'/g, "\\'")}', '${String(p.brand || "").replace(/'/g, "\\'")}')" style="background:#b38728; color:white; border:none; width:100%; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer; text-transform:uppercase;">
                         Check Sizes
                     </button>
                 </div>
             </div>`;
 
+            // 5. IMAGE LOADER
             setTimeout(() => { if(typeof tryLoadImage === 'function') tryLoadImage(imgId, paths, p.name); }, 20);
             seen.add(key);
         }
     }
-    container.innerHTML = html + "</div></div>";
+    
+    if (html !== "") html += "</div></div>"; 
+    container.innerHTML = html;
 }
-function tryLoadImage(imgId, paths, fallbackName) {
-    let step = 0;
+function tryLoadImage(imgId, paths, productName) {
     const imgElement = document.getElementById(imgId);
     if (!imgElement) return;
 
-    const attempt = () => {
-        if (step < paths.length) {
-            const temp = new Image();
-            temp.src = paths[step];
-            temp.onload = () => { 
-                imgElement.src = paths[step]; // IMAGE FOUND
-            };
-            temp.onerror = () => { 
-                step++; 
-                attempt(); // TRY NEXT CRITERIA
-            };
+    let currentPathIndex = 0;
+
+    // This checks each path (like wholesale/brand-name.jpg)
+    function loadNext() {
+        if (currentPathIndex < paths.length) {
+            imgElement.src = paths[currentPathIndex];
+            currentPathIndex++;
         } else {
-            // FINAL FALLBACK: Placeholder if all 4 criteria fail
-            imgElement.src = `https://via.placeholder.com/150?text=${encodeURIComponent(fallbackName)}`;
+            // If ALL real photos fail, use the safe Hatimi Gold placeholder!
+            // No more broken "150?text=" links.
+            const safeText = encodeURIComponent(productName || "Hatimi Hardware");
+            imgElement.src = `https://placehold.co/300x300/f8fafc/b38728?text=${safeText}`;
+            imgElement.onerror = null; // Prevents infinite crashing loops
         }
-    };
-    attempt();
+    }
+
+    // If an image fails to load, try the next one in the list
+    imgElement.onerror = loadNext;
+    
+    // Start the checking process
+    loadNext(); 
 }
 async function loadCardImages(variants, containerId, safeN, safeB) {
     const container = document.getElementById(containerId);
@@ -1100,38 +1139,51 @@ async function loadCardImages(variants, containerId, safeN, safeB) {
         container.innerHTML = `<div style="color: #999; font-size: 12px;">No images in /wholesale</div>`;
     }
 }
-function openModal(name, brand) {
+function openModal(encN, encB) {
+    // 1. Decodes the safe text from the front page
+    const name = decodeURIComponent(encN);
+    const brand = decodeURIComponent(encB);
+    
     document.getElementById('modalTitle').innerText = name;
     document.getElementById('modalBrand').innerText = brand;
     const tbody = document.getElementById('modalTableBody');
-    tbody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>Sorting Hatimi Inventory...</td></tr>";
+    if (!tbody) return;
+    tbody.innerHTML = "";
 
-    // 1. Find the matching product
+    // 2. Find the correct product
     const variants = allProducts.filter(p => {
-        const pName = String(p.name || "").trim();
-        const pBrand = String(p.brand || "N/A").trim();
-        return pName === name.trim() && pBrand === brand.trim();
+        const pName = String(p.name || "").trim().toLowerCase();
+        const pBrand = String(p.brand || "N/A").trim().toLowerCase();
+        return pName === name.trim().toLowerCase() && pBrand === brand.trim().toLowerCase();
     });
 
-    // --- THE MISSING LINE THAT CAUSED YOUR ERROR ---
-    let collectedSizes = []; 
-
-    // 2. Collect all sizes from comma-separated specs
+    // 3. THE BULLETPROOF COMMA SPLITTER
+    let collectedSizes = [];
     variants.forEach((v, idx) => {
-        const sizeList = String(v.specs || "").split(','); 
+        // This aggressively splits commas, spaces, newlines, and mobile commas
+        const sizeList = String(v.specs || "").split(/[,，،\n|]+/);
+        
+        // This splits your MRP column exactly the same way
+        const priceList = String(v.mrp || "0").split(/[,，،\n|]+/);
+
         sizeList.forEach((singleSize, sIdx) => {
             const cleanS = singleSize.trim();
             if (cleanS !== "") {
-                collectedSizes.push({
-                    cleanS: cleanS,
-                    v: v,
-                    rowId: `row-${idx}-${sIdx}`
+                // Matches the 1st size to the 1st price, 2nd to 2nd, etc. 
+                // If there is only 1 price, it uses that for all sizes safely.
+                const matchedPrice = priceList[sIdx] ? priceList[sIdx].trim() : priceList[0].trim();
+                
+                collectedSizes.push({ 
+                    cleanS: cleanS, 
+                    v: v, 
+                    matchedMRP: matchedPrice, 
+                    rowId: `row-${idx}-${sIdx}` 
                 });
             }
         });
     });
 
-    // 3. Hardware Math Sorter
+    // 4. Hardware Math Sorter (Keeps 3g before 1.8kg)
     function getBaseValue(sizeStr) {
         const match = sizeStr.toLowerCase().replace(/['"]/g, '').match(/^([\d.]+)\s*([a-z]+)?/);
         if (!match) return { val: 0, valid: false };
@@ -1145,7 +1197,6 @@ function openModal(name, brand) {
         return { val: num * mult, valid: true };
     }
 
-    // This is where the error was happening!
     collectedSizes.sort((a, b) => {
         const valA = getBaseValue(a.cleanS);
         const valB = getBaseValue(b.cleanS);
@@ -1153,50 +1204,37 @@ function openModal(name, brand) {
         return a.cleanS.localeCompare(b.cleanS, undefined, { numeric: true });
     });
 
-   // 4. Render the Full Professional Customer Table
-    // 4. Render the Full Professional Customer Table
-    tbody.innerHTML = "";
+    // 5. Build the rows
     const shownSizes = new Set();
-    
     collectedSizes.forEach(item => {
         if (!shownSizes.has(item.cleanS)) {
-            const safeMRP = parseFloat(item.v.mrp || 0);
-
+            const safeMRP = parseFloat(item.matchedMRP || 0);
+            
             tbody.innerHTML += `
             <tr style="border-bottom:1px solid #eee; text-align: left;">
                 <td style="padding:15px 12px;">
                     <input type="checkbox" class="row-select" onchange="updateRowTotal(this)">
                 </td>
-                <td style="padding:15px 12px; font-weight:700; color:#333;">
-                    ${item.cleanS}
-                </td>
-                <td style="padding:15px 12px; color: #888;">
-                    ₹<span class="row-mrp-val">${safeMRP}</span>
-                </td>
+                <td style="padding:15px 12px; font-weight:700; color:#333;">${item.cleanS}</td>
+                <td style="padding:15px 12px; color: #888;">₹<span class="row-mrp-val">${safeMRP}</span></td>
                 <td style="padding:15px 12px;">
-                    <input type="number" class="row-disc" value="0" min="0" max="100" 
-                           style="width:55px; padding:6px; border:1px solid #666; border-radius:4px; text-align:center;" 
-                           oninput="updateRowTotal(this)"> %
+                    <input type="number" class="row-disc" value="0" min="0" max="100" style="width:55px; padding:6px; border:1px solid #666; border-radius:4px; text-align:center;" oninput="updateRowTotal(this)"> %
                 </td>
                 <td style="padding:15px 12px; white-space: nowrap;">
-                    <input type="number" class="row-qty" value="1" min="1" 
-                           style="width:55px; padding:6px; border:1px solid #ccc; border-radius:4px; text-align:center;" 
-                           oninput="updateRowTotal(this)">
+                    <input type="number" class="row-qty" value="1" min="1" style="width:55px; padding:6px; border:1px solid #ccc; border-radius:4px; text-align:center;" oninput="updateRowTotal(this)">
                     <span class="row-unit-text" style="color:#666; font-size:14px; margin-left:5px;">pcs</span>
                 </td>
-                <td style="padding:15px 12px; text-align:right; font-weight:bold; color:#b38728;" class="row-total">
-                    ₹0
-                </td>
+                <td style="padding:15px 12px; text-align:right; font-weight:bold; color:#b38728;" class="row-total">₹0</td>
             </tr>`;
             shownSizes.add(item.cleanS);
         }
     });
 
-    // Reset top controls every time a new product is opened
-    document.getElementById('bulkDiscountInput').value = 0;
-    document.getElementById('bulkUnitSelect').value = 'pcs';
-    calculateGrandTotal();
-
+    // 6. Reset Top Controls & Display
+    if(document.getElementById('bulkDiscountInput')) document.getElementById('bulkDiscountInput').value = 0;
+    if(document.getElementById('bulkUnitSelect')) document.getElementById('bulkUnitSelect').value = 'pcs';
+    if(typeof calculateGrandTotal === 'function') calculateGrandTotal();
+    
     document.getElementById('priceModal').style.display = "flex";
 }
 // 5. PRICE & IMAGE HELPERS
