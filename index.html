@@ -33,27 +33,44 @@
     gap: 12px; 
     padding: 15px 0; 
 }
-@media (max-width: 768px) {
-    .premium-header {
-        flex-direction: column;
-        padding: 10px;
-        gap: 10px;
-    }
-    .nav-section {
-        width: 100%;
-        justify-content: center;
-    }
-    .nav-pill {
-        flex: 1; /* Makes buttons equal width on mobile */
-        padding: 8px 5px;
-        font-size: 11px;
-        text-align: center;
-    }
-}
-@media (min-width: 768px) { 
-    .product-grid { grid-template-columns: repeat(3, 1fr); } /* 3 on tablet */
+/* --- PREMIUM HEADER STYLES --- */
+.premium-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 30px; background: #fff;
+    border-bottom: 2px solid #b38728;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    margin-bottom: 20px;
 }
 
+.brand-section { display: flex; align-items: center; gap: 15px; }
+.brand-logo { height: 55px; object-fit: contain; } 
+.brand-text h2 { margin: 0; font-size: 24px; font-weight: 900; color: #b38728; line-height: 1; letter-spacing: 0.5px; }
+.brand-text p { margin: 4px 0 0 0; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 1px; }
+
+.nav-section { 
+    display: flex; gap: 5px; background: #f8fafc; padding: 6px; 
+    border-radius: 50px; border: 1px solid #e2e8f0; 
+}
+.nav-pill {
+    background: transparent; border: none; padding: 10px 20px; border-radius: 40px;
+    font-weight: 800; font-size: 13px; color: #64748b; cursor: pointer; 
+    transition: all 0.3s ease; text-transform: uppercase; text-decoration: none;
+}
+.nav-pill:hover { color: #1e293b; background: #f1f5f9; }
+
+/* The Gold Highlight Rule */
+.nav-pill.active { 
+    background: #b38728 !important; 
+    color: white !important; 
+    box-shadow: 0 4px 10px rgba(179, 135, 40, 0.3); 
+}
+
+/* Mobile Fix */
+@media (max-width: 768px) {
+    .premium-header { flex-direction: column; padding: 15px 10px; gap: 15px; }
+    .nav-section { flex-wrap: wrap; justify-content: center; width: 100%; }
+    .nav-pill { padding: 8px 12px; font-size: 11px; flex: 1; text-align: center; }
+}
 @media (min-width: 1024px) { 
     .product-grid { 
         grid-template-columns: repeat(5, 1fr); /* 5 on desktop */
