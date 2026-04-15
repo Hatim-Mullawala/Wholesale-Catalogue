@@ -20,10 +20,39 @@
         /* BRANDING */
         .brand-name { margin: 0; font-size: 34px; font-weight: 800; color: #b38728; text-transform: uppercase; line-height: 1; }
         .tagline { margin: 0; font-size: 17px; color: #444; font-weight: 700; }
+/* --- 1. THE STICKY SEARCH BAR --- */
+.search-container { 
+    background: #fff; padding: 15px 0; display: flex; justify-content: center; 
+    border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 10000; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+}
+.search-box { 
+    width: 60%; max-width: 700px; padding: 12px 25px; 
+    border: 2px solid #b38728; border-radius: 50px; 
+    font-size: 16px; outline: none; transition: 0.3s;
+}
+.search-box:focus { box-shadow: 0 0 10px rgba(179,135,40,0.1); }
 
-        .action-buttons { display: flex; gap: 15px; }
-        .icon-btn { background: white; border: 1px solid #f0f0f0; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+/* --- 2. THE ACTION ICONS (Refined Circle Design) --- */
+.action-section { display: flex; gap: 12px; }
+.icon-btn {
+    width: 44px; height: 44px; border-radius: 50%; /* Perfect Circle */
+    background: #fff; border: 1px solid #e2e8f0;
+    display: flex; justify-content: center; align-items: center; 
+    cursor: pointer; color: #b38728;
+    transition: all 0.3s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.icon-btn:hover { 
+    border-color: #b38728; background: #fffbeb; 
+    transform: translateY(-2px); 
+}
+.icon-btn svg { width: 18px; height: 18px; }
 
+/* --- Mobile Fix for Header (Puts tabs below logo on phones) --- */
+@media (max-width: 768px) {
+    .premium-header { flex-direction: column; padding: 10px; gap: 15px; }
+    .search-box { width: 90%; }
+}
         /* PRODUCT GRID */
         .category-header { background: #222; color: #fff; padding: 15px 25px; font-size: 18px; font-weight: 700; text-transform: uppercase; margin-top: 50px; border-left: 10px solid var(--primary-gold); border-radius: 4px; }
         /* PREMIUM CUSTOMER GRID - 5 IN A ROW */
@@ -688,6 +717,7 @@
 
 <div class="main-wrapper">
     <div class="premium-header no-print">
+    
     <div class="brand-section">
         <img src="logo.png" alt="Hatimi Hardware" class="brand-logo">
         <div class="brand-text">
@@ -697,14 +727,27 @@
     </div>
 
     <div class="nav-section">
-        <button class="nav-pill" onclick="window.location.href='https://hatim-mullawala.github.io/Furniture-Fittings/'">🛋️ Furniture</button>
-        <button class="nav-pill active" onclick="window.location.href='https://hatim-mullawala.github.io/Wholesale-Catalogue/'">📦 Wholesale</button>
-        <button class="nav-pill" onclick="window.location.href='https://hatim-mullawala.github.io/Hatimi-Hardware-Catalogue/'">🛠️ Tools</button>
+        <button id="nav-furniture" class="nav-pill" onclick="window.location.href='https://hatim-mullawala.github.io/Furniture-Fittings/'">🛋️ Furniture</button>
+        <button id="nav-wholesale" class="nav-pill active" onclick="window.location.href='https://hatim-mullawala.github.io/Wholesale-Catalogue/'">📦 Wholesale</button>
+        <button id="nav-tools" class="nav-pill" onclick="window.location.href='https://hatim-mullawala.github.io/Hatimi-Hardware-Catalogue/'">🛠️ Tools</button>
     </div>
 
     <div class="action-section">
-        <button class="icon-btn" onclick="location.reload()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 1 0 2.13-5.88L21 8"/></svg></button>
-        <button class="icon-btn" onclick="window.print()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button>
+        
+        <button class="icon-btn" onclick="location.reload()" title="Refresh Catalog">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 2v6h-6"></path>
+                <path d="M3 12a9 9 0 1 0 2.13-5.88L21 8"></path>
+            </svg>
+        </button>
+        
+        <button class="icon-btn" onclick="window.print()" title="Print Catalog">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+        </button>
     </div>
 </div>
     <div class="promo-slider-container">
